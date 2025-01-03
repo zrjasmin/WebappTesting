@@ -1,0 +1,72 @@
+@use "global";
+
+.sidebar {
+	display: none;
+	width: 16rem;
+	background-color: global.$sidebar-color;
+	padding: 1.5rem;
+	color: global.$light-text-color;
+	position: relative;
+	height: 100vh;
+	
+}
+
+.logo {
+	display: flex;
+	margin-bottom: 5rem;
+	color: global.$light-text-color;
+	
+	.company-name {
+		color: global.$light-text-color;
+	}
+	
+	i::before {
+		padding-right: 1rem;
+		color: global.$light-text-color;;
+		font-size: 25px;
+	}
+}
+
+
+.sidebar-links {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+
+	li {
+		
+		margin-bottom: 2.5rem; 
+		
+	}
+	
+	li:hover {
+		transition: all 0.5s ease;
+		span, i::before {
+				font-weight: 700;
+				}
+	}
+	
+	a {
+		text-decoration: none;
+		
+		span, i::before {
+			color: global.$light-text-color;
+			padding-right: 0.5rem;
+
+		}
+	}
+	
+}
+
+@media screen and (min-width: 992px) {
+	.sidebar {
+		display: block;
+	}
+	
+}
+
+
+
+
+	
+		

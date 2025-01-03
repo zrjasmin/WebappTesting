@@ -1,0 +1,96 @@
+/*colors*/
+$heading-color: #1F2C37;
+$text-color: #909497;
+$light-text-color: #D5DBDF;
+$body-color: #F8FAFB;
+$card-color: #ffffff;
+$accent-color: #6A66E0;
+$sidebar-color: #353440;
+$topbar-color: #E9E8F1;
+
+/*general styles*/
+html {
+  	font-size: 100%;
+  	box-sizing: border-box;
+	
+}
+
+body {
+	margin: 0;
+	background-color: $body-color;
+			};
+	
+*,
+*::after,
+*::before {
+    box-sizing: inherit;
+  }
+  
+/*layout*/
+.flex {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.mobile-hidden {
+	display: none;
+}
+
+
+
+@media screen and (min-width: 768px) {
+	.mobile-hidden {
+		display: block;
+	}
+}
+@media screen and (min-width: 992px) {
+	.desktop-hidden {
+		display: none;
+	}
+	
+	.wrapper {
+		display: flex;
+		width: 100%;
+	}
+	.layout-aside {
+		flex-grow: 1;
+	}
+}
+
+
+
+
+
+/*topbar*/
+.topbar {
+	padding: 1rem;
+	background-color: $topbar-color;
+	
+	.current-page {
+		i::before {
+			font-size: 30px;
+			margin-right: 5px;
+		}
+	}
+	
+	.current-user {
+		gap: 0.7rem;
+	}
+	
+	@media screen and (min-width: 768px) {
+		padding: 1rem 2rem;
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+

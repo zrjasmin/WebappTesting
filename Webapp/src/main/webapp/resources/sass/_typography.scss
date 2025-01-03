@@ -1,0 +1,38 @@
+@use "global";
+
+h1, h2, h3, h4, p, a, span {
+	font-family: "Inter", sans-serif;
+	font-weight: 400;
+	color: global.$heading-color;
+	margin: 0px;
+	}
+	  
+ 	h1 {
+		font-size: 36px;
+	}
+		
+	h2 {
+		font-size: 30px;
+	}
+	h3 {
+		font-size: 20px;
+		font-weight: 600;
+	}
+	h4 {
+		font-size: 16px;
+		color: #494B53;
+	}
+	p {
+		font-size: 16px;
+		color: global.$text-color
+		
+	}
+	
+	a {
+		text-decoration: none;
+		color:#1F2C37;
+	}
+		
+	.bold {
+		font-weight: 700;
+		}

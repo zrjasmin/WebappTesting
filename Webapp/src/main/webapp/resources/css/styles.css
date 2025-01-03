@@ -1,0 +1,182 @@
+@charset "UTF-8";
+/*colors*/
+/*general styles*/
+html {
+  font-size: 100%;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #F8FAFB;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
+/*layout*/
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-hidden {
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .mobile-hidden {
+    display: block;
+  }
+}
+@media screen and (min-width: 992px) {
+  .desktop-hidden {
+    display: none;
+  }
+  .wrapper {
+    display: flex;
+    width: 100%;
+  }
+  .layout-aside {
+    flex-grow: 1;
+  }
+}
+/*topbar*/
+.topbar {
+  padding: 1rem;
+  background-color: #E9E8F1;
+}
+.topbar .current-page i::before {
+  font-size: 30px;
+  margin-right: 5px;
+}
+.topbar .current-user {
+  gap: 0.7rem;
+}
+@media screen and (min-width: 768px) {
+  .topbar {
+    padding: 1rem 2rem;
+  }
+}
+
+h1, h2, h3, h4, p, a, span {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  color: #1F2C37;
+  margin: 0px;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  font-size: 30px;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 16px;
+  color: #494B53;
+}
+
+p {
+  font-size: 16px;
+  color: #909497;
+}
+
+a {
+  text-decoration: none;
+  color: #1F2C37;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.sidebar {
+  display: none;
+  width: 16rem;
+  background-color: #353440;
+  padding: 1.5rem;
+  color: #D5DBDF;
+  position: relative;
+  height: 100vh;
+}
+
+.logo {
+  display: flex;
+  margin-bottom: 5rem;
+  color: #D5DBDF;
+}
+.logo .company-name {
+  color: #D5DBDF;
+}
+.logo i::before {
+  padding-right: 1rem;
+  color: #D5DBDF;
+  font-size: 25px;
+}
+
+.sidebar-links {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+.sidebar-links li {
+  margin-bottom: 2.5rem;
+}
+.sidebar-links li:hover {
+  transition: all 0.5s ease;
+}
+.sidebar-links li:hover span, .sidebar-links li:hover i::before {
+  font-weight: 700;
+}
+.sidebar-links a {
+  text-decoration: none;
+}
+.sidebar-links a span, .sidebar-links a i::before {
+  color: #D5DBDF;
+  padding-right: 0.5rem;
+}
+
+@media screen and (min-width: 992px) {
+  .sidebar {
+    display: block;
+  }
+}
+.desktop-up, .tablet-up {
+  display: none;
+}
+
+/*sichtbar auf tablet und kleiner*/
+@media screen and (max-width: 767px) {
+  .tablet-down {
+    display: block;
+  }
+}
+/*sichtbar auf tablet und größer*/
+@media screen and (min-width: 768px) {
+  .tablet-up {
+    display: block;
+  }
+  .tablet-down {
+    display: none;
+  }
+}
+/*sichtbar auf desktop und größer*/
+@media screen and (min-width: 992px) {
+  .desktop-up {
+    display: block;
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */

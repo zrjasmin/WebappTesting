@@ -1,0 +1,30 @@
+.desktop-up, .tablet-up {
+	display: none;
+}
+
+/*sichtbar auf tablet und kleiner*/
+@media screen and (max-width: 767px) {
+	.tablet-down {
+		display: block;
+	}
+	
+	
+}
+
+/*sichtbar auf tablet und größer*/
+@media screen and (min-width: 768px) {
+	.tablet-up {
+		display: block;
+	}
+	.tablet-down {
+			display: none;
+		}
+	
+	
+}
+/*sichtbar auf desktop und größer*/
+@media screen and (min-width: 992px) {
+	.desktop-up {
+		display: block;
+	}
+}
