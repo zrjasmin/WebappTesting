@@ -7,14 +7,39 @@
      
  <ui:composition template="WEB-INF/template/template.xhtml">
  	<ui:define name="title">Anforderungen</ui:define>
+ 	
+ 	<ui:define name="pagename">Anforderungen</ui:define>
  	<ui:define name="content">
  			
+ 	<h:panelGrid columns="2">
+ 		<h:outputLabel value="Bezeichnung" for="bez"/>
+ 		<h:outputText id="bez" value="bez"/>
+ 	</h:panelGrid>
  		
- 		
- 		
-		    
-		    
-		   
+ 
+	<h3></h3>
+	<h3>h</h3>
+	
+	<div class="card">
+		<h:form id="form">
+			<p:dataView var="anforderung" value="#{anforderungService.anforderungen}" rows="12" paginator="true"
+	                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+	                    gridIcon="pi pi-th-large" listIcon="pi pi-bars"
+	                    layout="grid" gridRowStyleClass="lg:col-6 xl:col-4" flex="true">
+	        	<p:dataViewGridItem>
+	        		<div class="product-grid-item card border-1">
+	        			<h:outputText value="Hallo"/>
+	        			<h:outputText value="#{anforderung.anfNr}"/>
+	        		</div>
+	        	</p:dataViewGridItem>
+	            <p:dataViewListItem>
+	           		 <div class="product-list-item">
+	           		 	<h:outputText value="#{anforderung.anfNr}"/>
+	           		 </div>
+	            </p:dataViewListItem>
+	         </p:dataView>
+		</h:form>
+	</div>
  		
 		
 		

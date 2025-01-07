@@ -2,14 +2,9 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 @Entity
 @Named
@@ -17,38 +12,40 @@ import jakarta.persistence.OneToMany;
 public class Anforderung {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int anfId;
+	private long anfId;
+	
 	private String anfNr;
 	private String anfBezeichnung;
 	private String anfBeschreibung;
 	private String anfZiel;
-
 	private String anfRisiko;
+	@OneToMany(mappedBy ="anforderung", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Akzeptanzkriterium> anfKriterien;
 	
-	private Mitarbeiter erstelltVon;
-	@OneToMany
-	private List<Akzeptanzkriterien> anfAkzeptanz;
 	
 	
 	
 	public Anforderung() {}
 	
-	public Anforderung(String anfNr, String anfBezeichnung, String anfBeschreibung) {
+	public Anforderung(String anfNr, String anfBezeichnung) {
 		this.anfNr = anfNr;
 		this.anfBezeichnung = anfBezeichnung;
 		this.anfBeschreibung = anfBeschreibung;
 		
 	}
 	
-	public Anforderung(String anfNr, String anfBezeichnung, String anfBeschreibung, String anfZiel, String anfRisiko,List<Akzeptanzkriterien> anfKriterien) {
+	public Anforderung(String anfNr, String anfBezeichnung, String anfBeschreibung, String anfZiel, String anfRisiko) {
 		this.anfNr = anfNr;
 		this.anfBezeichnung = anfBezeichnung;
 		this.anfBeschreibung = anfBeschreibung;
 		this.setAnfZiel(anfZiel);
 		this.setAnfRisiko(anfRisiko);
-		this.anfAkzeptanz = new ArrayList<>(anfKriterien);
 		
 		}
+	
+	public long getId() {
+		return anfId;
+	}
 
 	public String getAnfNr() {
 		return anfNr;
@@ -89,21 +86,13 @@ public class Anforderung {
 	public void setAnfRisiko(String anfRisiko) {
 		this.anfRisiko = anfRisiko;
 	}
-	
-	public void addAkzeptanzkriterium(Akzeptanzkriterien kriterium) {
-		anfAkzeptanz.add(kriterium);
-    }
 
-    public List<Akzeptanzkriterien> getAkzeptanzkriterien() {
-        return anfAkzeptanz;
-    }
-
-	public Mitarbeiter getErstelltVon() {
-		return erstelltVon;
+	public List<Akzeptanzkriterium> getAnfKriterien() {
+		return anfKriterien;
 	}
 
-	public void setErstelltVon(Mitarbeiter erstelltVon) {
-		this.erstelltVon = erstelltVon;
+	public void setAnfKriterien(List<Akzeptanzkriterium> anfKriterien) {
+		this.anfKriterien = anfKriterien;
 	}
 	
 	

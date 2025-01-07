@@ -11,7 +11,7 @@
             <!-- Database connection settings -->
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/webapp" />
             <property name="jakarta.persistence.jdbc.user" value="root" />
-            <property name="jakarta.persistence.jdbc.password" value="" />
+            <property name="jakarta.persistence.jdbc.password" value="laura4002891" />
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
 
             
@@ -23,6 +23,7 @@
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.highlight_sql" value="true" />
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
        </properties>
 
     </persistence-unit>

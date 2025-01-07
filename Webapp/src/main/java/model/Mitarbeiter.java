@@ -1,64 +1,96 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 @Entity
 @Named
 @RequestScoped
 public class Mitarbeiter {
 	
-	private int mitarbeiterID;
-	private String mitarbeiterVorname;
-	private String mitarbeiterNachname;
+	public enum Rolle {
+		TESTER, 
+		RE,
+		TESTERSTELLER,
+		TESTMANAGER
+	}
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long mitarbeiterId;
+	private String mitarbeiterVorn;
+	private String mitarbeiterNach;
 	private String mitarbeiterEmail;
-	private String mitarbeiterTel;
-	private String mitarbeiterBild;
-	private String mitarbeiterRolle;
+	private String mitarbeiterUrl;
+	private Rolle mitarbeiterRolle;
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "mitarbeiter_id")
+	private List<Anforderung> erstellteAnf;
 	
 	
-	public int getMitarbeiterID() {
-		return mitarbeiterID;
+	public Mitarbeiter() {}
+	
+	public Mitarbeiter(String Vorname, String Nachname, String Email, String BildUrl, Rolle rolle) {
+		this.mitarbeiterVorn = Vorname;
+		this.mitarbeiterNach = Nachname;
+		this.mitarbeiterEmail = Email;
+		this.mitarbeiterUrl = BildUrl;
+		this.mitarbeiterRolle = rolle;
 	}
-	public void setMitarbeiterID(int mitarbeiterID) {
-		this.mitarbeiterID = mitarbeiterID;
+	
+	public Mitarbeiter(String Vorname, String Nachname, String Email, String BildUrl, Rolle rolle, model.Anforderung erstelltAnf) {
+		this.mitarbeiterVorn = Vorname;
+		this.mitarbeiterNach = Nachname;
+		this.mitarbeiterEmail = Email;
+		this.mitarbeiterUrl = BildUrl;
+		this.mitarbeiterRolle = rolle;
 	}
-	public String getMitarbeiterVorname() {
-		return mitarbeiterVorname;
+	
+	public long getMitarbeiterId() {
+		return mitarbeiterId;
 	}
-	public void setMitarbeiterVorname(String mitarbeiterVorname) {
-		this.mitarbeiterVorname = mitarbeiterVorname;
+
+	public String getMitarbeiterVorn() {
+		return mitarbeiterVorn;
 	}
-	public String getMitarbeiterNachname() {
-		return mitarbeiterNachname;
+
+	public void setMitarbeiterVorn(String mitarbeiterVorn) {
+		this.mitarbeiterVorn = mitarbeiterVorn;
 	}
-	public void setMitarbeiterNachname(String mitarbeiterNachname) {
-		this.mitarbeiterNachname = mitarbeiterNachname;
+
+	public String getMitarbeiterNach() {
+		return mitarbeiterNach;
 	}
+
+	public void setMitarbeiterNach(String mitarbeiterNach) {
+		this.mitarbeiterNach = mitarbeiterNach;
+	}
+
 	public String getMitarbeiterEmail() {
 		return mitarbeiterEmail;
 	}
+
 	public void setMitarbeiterEmail(String mitarbeiterEmail) {
 		this.mitarbeiterEmail = mitarbeiterEmail;
 	}
-	public String getMitarbeiterTel() {
-		return mitarbeiterTel;
+
+	public String getMitarbeiterUrl() {
+		return mitarbeiterUrl;
 	}
-	public void setMitarbeiterTel(String mitarbeiterTel) {
-		this.mitarbeiterTel = mitarbeiterTel;
+
+	public void setMitarbeiterUrl(String mitarbeiterUrl) {
+		this.mitarbeiterUrl = mitarbeiterUrl;
 	}
-	public String getMitarbeiterBild() {
-		return mitarbeiterBild;
-	}
-	public void setMitarbeiterBild(String mitarbeiterBild) {
-		this.mitarbeiterBild = mitarbeiterBild;
-	}
-	public String getMitarbeiterRolle() {
+
+	public Rolle getMitarbeiterRolle() {
 		return mitarbeiterRolle;
 	}
-	public void setMitarbeiterRolle(String mitarbeiterRolle) {
+
+	public void setMitarbeiterRolle(Rolle mitarbeiterRolle) {
 		this.mitarbeiterRolle = mitarbeiterRolle;
 	}
-	
 }
