@@ -1,50 +1,47 @@
 package service;
 
 import java.util.ArrayList;
-
 import java.util.Arrays;
 import java.util.List;
 
+import dao.AnforderungDao;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.*;
+import model.Anforderung;
+
+import java.io.Serializable;
 
 @Named
-
-public class AnforderungService {
+@ViewScoped
+public class AnforderungService implements Serializable{
 	
-	dao.AnforderungDao anfDao;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	public static List<model.Anforderung> anforderungen = Arrays.asList(new model.Anforderung("m", "m"),
-			new model.Anforderung("h1", "h2"));
-	
-	
-	
-	
-	
+	@Inject
+	controller.Try shop;
 	
 	
 	
-	public AnforderungService() {
-		
+	
+	public model.Anforderung getAnforderung(int index) {
+		return shop.getAnfListe().get(index);
 	}
 	
-	public List<model.Anforderung> getAnforderungen() {
-		return anforderungen;
+	public void addAnf(String i, String j) {
+		shop.getAnfListe().add(new Anforderung(i, j));
 	}
 	
 	
 	
-
-
-	
-	
-	
 	
 
-	
 	
 	
 }

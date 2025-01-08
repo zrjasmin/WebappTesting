@@ -18,26 +18,30 @@
  		
  
 	<h3></h3>
-	<h3>h</h3>
+	<h3>k</h3>
+	
 	
 	<div class="card">
 		<h:form id="form">
-			<p:dataView var="anforderung" value="#{anforderungService.anforderungen}" rows="12" paginator="true"
+			<p:dataView var="anf" value="#{shop.anfListe}" rows="12" paginator="true"
 	                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 	                    gridIcon="pi pi-th-large" listIcon="pi pi-bars"
 	                    layout="grid" gridRowStyleClass="lg:col-6 xl:col-4" flex="true">
+	                    
 	        	<p:dataViewGridItem>
 	        		<div class="product-grid-item card border-1">
 	        			<h:outputText value="Hallo"/>
-	        			<h:outputText value="#{anforderung.anfNr}"/>
+	        			<h:outputText value="#{anf.anfNr}"/>
 	        		</div>
 	        	</p:dataViewGridItem>
 	            <p:dataViewListItem>
 	           		 <div class="product-list-item">
-	           		 	<h:outputText value="#{anforderung.anfNr}"/>
+	           			 <h:outputText value="Hallo"/>
+	           		 		<h:outputText value="#{anf.anfNr}"/>
 	           		 </div>
 	            </p:dataViewListItem>
 	         </p:dataView>
+	         <p:commandButton value="Submit" action="#{anforderungService.addAnf('h1', 'h2')}"/>
 		</h:form>
 	</div>
  		

@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,8 +21,13 @@ import model.Anforderung;
 
 @Named
 @ApplicationScoped
-public class AnforderungDao {
+public class AnforderungDao implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private EntityManagerFactory emf =Persistence.createEntityManagerFactory("webapp");
 	
 	private EntityManager em = emf.createEntityManager();
@@ -43,8 +49,12 @@ public class AnforderungDao {
 	}*/
 	
 	public List<model.Anforderung> findAll() {
-		Query abfrage = em.createQuery("select a from Anforderung a");
+
+		Query abfrage = em.createQuery("select a from Anforderung a", model.Anforderung.class);
 		List<model.Anforderung> anforderugen = abfrage.getResultList();
+		for(model.Anforderung anf : anforderugen) {
+			System.out.println(anf);
+		}
 		return anforderugen;
 	}
 	
