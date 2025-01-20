@@ -20,9 +20,16 @@
  				 <p:outputLabel for="beschreibung" value="Beschreibung"/>
  				 <p:inputText id="beschreibung" value="#{anforderungController.neueAnf.anfBeschreibung}"/>
  				 
- 				 <p:outputLabel for="kriterium" value="Akzeptanzkriterium"/>
- 				 <p:inputText id="kriterium" value="#{anforderungController.neueAnf.anfKriterien}"/>
+ 				 <p:outputLabel value="Akzeptanzkriterien"/>
+ 				 <ui:repeat value="#{anforderungController.neueKriterien}" var="kriterium">
+ 				 	<p:inputText value="#{kriterium.akzeptanzBeschr}"/>
  				 
+ 				 </ui:repeat>
+ 				 <h:commandButton value="Neues Kriterium hinzufügen" action="#{anforderungController.addKriterium()}" />
+ 				 
+ 			
+ 				
+ 				
  				<h:commandButton value="Anforderung speichern" action="#{anforderungController.createNeueAnforderung}" />
  			</p:panelGrid>
  			</h:form>

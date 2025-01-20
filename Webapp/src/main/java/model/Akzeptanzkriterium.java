@@ -13,6 +13,10 @@ public class Akzeptanzkriterium {
 	private int akzeptanzID;
 	private String akzeptanzBeschr;
 	
+	@ManyToOne
+	@JoinColumn(name="anforderung_id") 
+	private Anforderung anforderung;
+	
 	public Akzeptanzkriterium() {
 		
 	}
@@ -33,7 +37,12 @@ public class Akzeptanzkriterium {
 		this.akzeptanzBeschr = akzeptanzBeschr;
 	}
 	
-
+	public Anforderung getAnforderung() {
+		return anforderung;
+	}
+	
+	public void setAnforderung(model.Anforderung anforderung) {
+		this.anforderung = anforderung;	}
 
 	
 }

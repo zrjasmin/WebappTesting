@@ -84,29 +84,15 @@ public class AnforderungDao implements Serializable{
 		EntityManager em = JpaUtil.getEntityManager();
 		em.getTransaction().begin();
 		anf.setErsteller(em.find(model.Mitarbeiter.class, mitarbeiterID));
-		
 		em.persist(anf);
+		
+		/*Kriterien zur passenden Anforderung speichern*/
+		for(model.Akzeptanzkriterium kriterium : anf.getAnfKriterien()) {
+			kriterium.setAnforderung(anf);
+			em.persist(kriterium);
+		}
 		em.getTransaction().commit();
 		em.close();
-	}
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	public void addKriterium(model.Anforderung anfID, model.Akzeptanzkriterium kriterium) {
-		/*em.getTransaction().begin();
-		model.Anforderung anf = em.find(model.Anforderung.class, anfID);
-		kriterium.setAnfoderung(anf);
-		anf.getAnfKriterien().add(kriterium);
-		em.persist(kriterium);
-		em.getTransaction().commit();
-			*/	
 	}
 	
 
@@ -123,25 +109,6 @@ public class AnforderungDao implements Serializable{
 				
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	public model.Akzeptanzkriterium hinzuAkzept(Integer anfId, model.Akzeptanzkriterium akzeptanz){
-		EntityManager em = JpaUtil.getEntityManager();
-		model.Anforderung anforderung = findAnf(anfId);
-		
-		em.getTransaction().begin();
-		em.persist(akzeptanz);
-		em.getTransaction().commit();
-		em.close();
-		return akzeptanz;
-		
-	}
-
 	
 	public model.Anforderung findAnf(Integer id) {
 		EntityManager em = JpaUtil.getEntityManager();

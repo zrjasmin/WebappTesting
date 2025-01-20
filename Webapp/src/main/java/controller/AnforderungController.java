@@ -1,5 +1,7 @@
 package controller;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
@@ -22,6 +24,7 @@ public class AnforderungController implements Serializable {
 	
 	private model.Anforderung selectedAnf;
 	private model.Anforderung neueAnf = new model.Anforderung();
+	private List<model.Akzeptanzkriterium> neueKriterien = new ArrayList<model.Akzeptanzkriterium>();
 
 	public AnforderungController() {
 		
@@ -70,19 +73,27 @@ public class AnforderungController implements Serializable {
 	public model.Anforderung getNeueAnf() {
 		return neueAnf;
 	}
-	
+
 	public void setNeueAnf(model.Anforderung neueAnf) {
 		this.neueAnf = neueAnf;
 	}
+	
+	public List<model.Akzeptanzkriterium> getNeueKriterien() {
+		return neueKriterien;
+	}
+	
+	public void addKriterium() {
+		neueKriterien.add(new model.Akzeptanzkriterium());
+	}
+	
 	
 
 	
 	
 	public void createNeueAnforderung() {
-	
-		
-		service.speichern(neueAnf);
+		service.speichern(neueAnf, neueKriterien);
 		neueAnf = new model.Anforderung();
+		neueKriterien = new ArrayList<model.Akzeptanzkriterium>();
 	}
 	
 	

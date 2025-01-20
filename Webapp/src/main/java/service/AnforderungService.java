@@ -12,6 +12,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.*;
+import model.Akzeptanzkriterium;
 import model.Anforderung;
 import model.Mitarbeiter.Rolle;
 
@@ -46,9 +47,19 @@ public class AnforderungService implements Serializable{
 	public  AnforderungService() {
 		anfDao = new dao.AnforderungDao();
 		arbeiterService = new service.MitarbeiterService();
-		
+		/*
+		model.Akzeptanzkriterium k1 = new model.Akzeptanzkriterium("Alle Produkte müssen mit Bild, Name und Preis angezeigt werden");
+		model.Akzeptanzkriterium k2 = new model.Akzeptanzkriterium("Die Produkte sollen nach Kategorien filterbar sein");
+		kriterien.add(k1);
+		kriterien.add(k2);
+		model.Anforderung a1 = new model.Anforderung("AR-004", "Produktkatalog anzeigen","Die Plattform soll einen Katalog aller verfügbaren Produkte anzeigen", 
+				" Benutzern ermöglichen, Produkte zu durchsuchen und auszuwählen.", "Hoch", kriterien );
+		anfListe.add(a1);
 		
 		anfListe.addAll(getAnfListe());
+		
+		anfDao.saveAnf(2, a1);
+		*/
 	
 	}
 	
@@ -66,8 +77,11 @@ public class AnforderungService implements Serializable{
 		this.anf = anforderung;
 	}
 	
-	public void speichern(model.Anforderung neuerArtikel) {
+	
+	public void speichern(model.Anforderung neuerArtikel, List<model.Akzeptanzkriterium> kriterien) {
 		model.Mitarbeiter currentMitarbeiter = arbeiterService.getAktuellerMitarbeiter();
+		neuerArtikel.setAnfKriterien(kriterien);
+		
 		
 		anfDao.saveAnf(currentMitarbeiter.getMitarbeiterId(), neuerArtikel);
 	

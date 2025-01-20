@@ -30,7 +30,7 @@ public class Mitarbeiter {
 	private String mitarbeiterEmail;
 	private String mitarbeiterUrl;
 	private Rolle mitarbeiterRolle;
-	private String password;
+	
 	
 	@OneToMany(mappedBy ="ersteller", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Anforderung> erstellteAnf;
@@ -38,13 +38,12 @@ public class Mitarbeiter {
 	
 	public Mitarbeiter() {}
 	
-	public Mitarbeiter(String Vorname, String Nachname, String Email, String BildUrl, Rolle rolle, String password) {
+	public Mitarbeiter(String Vorname, String Nachname, String Email, String BildUrl, Rolle rolle) {
 		this.mitarbeiterVorn = Vorname;
 		this.mitarbeiterNach = Nachname;
 		this.mitarbeiterEmail = Email;
 		this.mitarbeiterUrl = BildUrl;
 		this.mitarbeiterRolle = rolle;
-		this.password = password;
 	}
 	
 	public Mitarbeiter(String Vorname, String Nachname, String Email, String BildUrl, Rolle rolle, model.Anforderung erstelltAnf) {
@@ -108,12 +107,6 @@ public class Mitarbeiter {
 		this.erstellteAnf = anforderungen;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
+	
 	
 }

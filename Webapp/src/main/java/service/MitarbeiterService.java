@@ -38,6 +38,11 @@ public class MitarbeiterService implements Serializable{
 	public MitarbeiterService() {
 		arbeiterDao = new dao.MitarbeiterDao();
 		
+		/*model.Mitarbeiter m1 = new model.Mitarbeiter("Markus", "Müller", "h", "h", Rolle.TESTER);
+		model.Mitarbeiter m2 = new model.Mitarbeiter("Jasmin", "Zimmer", "h", "h", Rolle.TESTER);
+		arbeiterListe.add(m1);
+		arbeiterListe.add(m2);*/
+		
 		arbeiterListe.addAll(addToListe());
 		arbeiterDao.saveAllMitarbeiter(arbeiterListe);
 		setAktuellerMitarbeiter(arbeiterListe.get(0));
