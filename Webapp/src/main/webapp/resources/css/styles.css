@@ -24,6 +24,10 @@ body {
   align-items: center;
 }
 
+.content-wrapper {
+  margin: 1rem;
+}
+
 .mobile-hidden {
   display: none;
 }
@@ -177,6 +181,71 @@ a {
   .desktop-up {
     display: block;
   }
+}
+.header-text p {
+  margin-bottom: 1rem;
+}
+
+.grid-view {
+  display: block;
+}
+@media screen and (min-width: 768px) {
+  .grid-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media screen and (min-width: 992px) {
+  .grid-view {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.grid-card {
+  border: 1px solid purple;
+  padding: 1rem;
+  margin: 1rem;
+}
+.grid-card .anf_top {
+  margin-bottom: 1rem;
+}
+.grid-card .anf_top .chip {
+  font-size: 10px;
+}
+.grid-card .anf_content {
+  margin-bottom: 1rem;
+}
+.grid-card .anf_content h4 {
+  margin-bottom: 0.5rem;
+}
+.grid-card .anf_bottom {
+  justify-content: flex-start;
+}
+.grid-card .anf_bottom p {
+  padding-right: 10px;
+}
+
+.list-item {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+}
+.list-item .anf-info h4 {
+  margin-bottom: 10px;
+}
+.list-item .tags {
+  position: relative;
+  margin-right: 0;
+  margin-left: auto;
+}
+.list-item .tags .chip, .list-item .tags .custom-chip {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.list-item .anf-ersteller .avatar {
+  position: relative;
+  margin-right: 0;
+  margin-left: auto;
 }
 
 /*# sourceMappingURL=styles.css.map */

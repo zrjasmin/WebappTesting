@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+     
+ <ui:composition template="WEB-INF/template/template.xhtml">
+ 	<ui:define name="title">Details: Anforderung</ui:define>
+ 	
+ 	<ui:define name="pagename">Details: Anforderungen</ui:define>
+ 	<ui:define name="content">
+ 		<div class="flex button-container">
+	 		<p:linkButton outcome="/anforderungen.xhtml" styleClass="ui-button-flat" value="zurück" ajax="false" icon="pi pi-angle-left"></p:linkButton>
+	 		<p:commandButton action="#{anforderungController.edit()}" value="Bearbeiten" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
+	 		<p:commandButton value="Löschen" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
+ 		</div>
+ 		
+ 		<p:card>
+ 			<div class="flex">
+ 				 <h:outputText value="#{anforderungController.selectedAnf.anfNr}"/>
+ 				 <div class="anf-ersteller flex">
+	   		 	 	<p class="tablet-up">Erstellt von </p>
+   		 	 		<p:avatar label="U" styleClass="mr-2 avatar" style="background-color:#9c27b0; color:#fff" shape="circle"  id="list-Ersteller"/>
+   		 			<!-- mitarbeiter to String nochmal überarbeiten -> kein zugriff -->
+      		 	</div>
+
+ 			</div>
+	 		<h3>#{anforderungController.selectedAnf.anfBezeichnung}</h3>
+	 		<div class="detail-content">
+	 			<h4>Beschreibung</h4>
+	 			<h:outputText value="#{anforderungController.selectedAnf.anfBeschreibung}"/>
+	 			
+	 			<h4>Ziel/Absicht</h4>
+	 			<h:outputText value="#{anforderungController.selectedAnf.anfZiel}"/>
+	 			
+	 			<h4>Akzeptanzkriterien</h4>
+	 			<h:outputText value="#{anforderungController.selectedAnf.anfBezeichnung}"/>
+	 			
+	 			<h4>Voraussetzungen</h4>
+	 			<p:dataList value="#{anforderungController.selectedAnf.anfKriterien}" var="kriterium">
+	 				<div class="product-list-item">
+	 					<h:outputText value="#{kriterium.akzeptanzBeschr}"/>
+	 				</div>
+	 			
+	 			</p:dataList>
+	 			<h:outputText value="#{anforderungController.selectedAnf.anfBezeichnung}"/>
+	 			
+	 			<h4>Testmethodik</h4>
+	 			<h:outputText value="#{anforderungController.selectedAnf.anfBezeichnung}"/>
+	 		</div>
+		        
+		    
+	    
+	 		
+	 		
+ 		</p:card>
+ 		
+ 		
+
+ 		
+ 		
+ 		
+ 	</ui:define>
+ </ui:composition>
+     
+      
+</html>

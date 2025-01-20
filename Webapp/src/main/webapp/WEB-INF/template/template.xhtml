@@ -2,7 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      
       
  <ui:composition>
 <h:head>
@@ -68,10 +70,13 @@
 				</div>
 				
 				<div class="current-user flex">
-					<p:avatar size="medium" shape="circle">
-						<p:graphicImage />
-					</p:avatar>
-					<p class="mobile-hidden">Jasmin Zimmer</p>
+					<h:form>
+						<p:selectOneMenu id="arbeiter" value="#{mitarbeiterService.aktuellerMitarbeiter.mitarbeiterVorn}" style="width:220px">
+		                    <f:selectItem itemLabel="Wähle einen Mitarbeiter" itemValue="" noSelectionOption="true"/>
+		                    <f:selectItems value="#{mitarbeiterService.mitarbeiterString}"/>
+	                	</p:selectOneMenu>
+					</h:form>
+
 				</div>
 			</div>
 			
@@ -83,6 +88,10 @@
 		</div>
 		 		 	
 	  </div>
+	  
+	  
+	  
+	  
 	    
 	  
 </h:body>

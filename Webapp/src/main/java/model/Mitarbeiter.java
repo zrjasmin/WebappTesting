@@ -12,34 +12,39 @@ import jakarta.persistence.*;
 public class Mitarbeiter {
 	
 	public enum Rolle {
-		TESTER, 
-		RE,
-		TESTERSTELLER,
-		TESTMANAGER
+		TESTER("Tester"), 
+		RE("RE"),
+		TESTERSTELLER("Testersteller"),
+		TESTMANAGER("Testmanager");
+
+		Rolle(String name) {
+			// TODO Auto-generated constructor stub
+		}
 	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long mitarbeiterId;
+	private Integer mitarbeiterId;
 	private String mitarbeiterVorn;
 	private String mitarbeiterNach;
 	private String mitarbeiterEmail;
 	private String mitarbeiterUrl;
 	private Rolle mitarbeiterRolle;
+	private String password;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "mitarbeiter_id")
+	@OneToMany(mappedBy ="ersteller", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Anforderung> erstellteAnf;
 	
 	
 	public Mitarbeiter() {}
 	
-	public Mitarbeiter(String Vorname, String Nachname, String Email, String BildUrl, Rolle rolle) {
+	public Mitarbeiter(String Vorname, String Nachname, String Email, String BildUrl, Rolle rolle, String password) {
 		this.mitarbeiterVorn = Vorname;
 		this.mitarbeiterNach = Nachname;
 		this.mitarbeiterEmail = Email;
 		this.mitarbeiterUrl = BildUrl;
 		this.mitarbeiterRolle = rolle;
+		this.password = password;
 	}
 	
 	public Mitarbeiter(String Vorname, String Nachname, String Email, String BildUrl, Rolle rolle, model.Anforderung erstelltAnf) {
@@ -50,7 +55,7 @@ public class Mitarbeiter {
 		this.mitarbeiterRolle = rolle;
 	}
 	
-	public long getMitarbeiterId() {
+	public Integer getMitarbeiterId() {
 		return mitarbeiterId;
 	}
 
@@ -85,6 +90,7 @@ public class Mitarbeiter {
 	public void setMitarbeiterUrl(String mitarbeiterUrl) {
 		this.mitarbeiterUrl = mitarbeiterUrl;
 	}
+	
 
 	public Rolle getMitarbeiterRolle() {
 		return mitarbeiterRolle;
@@ -93,4 +99,21 @@ public class Mitarbeiter {
 	public void setMitarbeiterRolle(Rolle mitarbeiterRolle) {
 		this.mitarbeiterRolle = mitarbeiterRolle;
 	}
+	
+	public List<Anforderung> getErstellteAnf() {
+		return erstellteAnf;
+	}
+	
+	public void setErstellteAnf(List<Anforderung> anforderungen) {
+		this.erstellteAnf = anforderungen;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
 }

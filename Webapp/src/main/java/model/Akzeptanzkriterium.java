@@ -13,15 +13,16 @@ public class Akzeptanzkriterium {
 	private int akzeptanzID;
 	private String akzeptanzBeschr;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name ="anfId")
-	private Anforderung anforderung;
+	public Akzeptanzkriterium() {
+		
+	}
 	
+
 	public Akzeptanzkriterium(String beschreibung) {
 		this.akzeptanzBeschr = beschreibung;
 	}
 	
-	public long getId() {
+	public int getId() {
 		return akzeptanzID;
 	}
 	
@@ -32,12 +33,7 @@ public class Akzeptanzkriterium {
 		this.akzeptanzBeschr = akzeptanzBeschr;
 	}
 	
-	public Anforderung getAnforderung() {
-		return anforderung;
-	}
-	
-	public void setAnfoderung(Anforderung anfId) {
-		this.anforderung = anfId;
-	}
+
+
 	
 }

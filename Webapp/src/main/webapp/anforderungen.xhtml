@@ -10,46 +10,103 @@
  	
  	<ui:define name="pagename">Anforderungen</ui:define>
  	<ui:define name="content">
- 			
- 	<h:panelGrid columns="2">
- 		<h:outputLabel value="Bezeichnung" for="bez"/>
- 		<h:outputText id="bez" value="bez"/>
- 	</h:panelGrid>
- 		
- 
-	<h3></h3>
-	<h3>k</h3>
+ 	<div class="content-wrapper">
+ 	<div class="header-text">
+	 	<p>Auf dieser Seite können Sie die spezifischen Anforderungen für das Testen von 
+		 	Komponenten dokumentieren. Bitte geben Sie alle relevanten Details an, um eine klare 
+		 	Grundlage für den Testprozess zu schaffen.</p>
+		 <p:linkButton outcome="#{anforderungController.create()}" value="neue Anforderung"/>
+ 	</div>
+ 	
+	 
 	
 	
-	<div class="card">
+	
+	<div class="anf-view card">
 		<h:form id="form">
-			<p:dataView var="anf" value="#{shop.anfListe}" rows="12" paginator="true"
+			<p:dataView var="anf" value="#{anforderungService.anfListe}" rows="12" paginator="true"
 	                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-	                    gridIcon="pi pi-th-large" listIcon="pi pi-bars"
-	                    layout="grid" gridRowStyleClass="lg:col-6 xl:col-4" flex="true">
+	                    layout="grid" gridIcon="pi pi-th-large" listIcon="pi pi-bars"
+	                     flex="true">
 	                    
 	        	<p:dataViewGridItem>
-	        		<div class="product-grid-item card border-1">
-	        			<h:outputText value="Hallo"/>
-	        			<h:outputText value="#{anf.anfNr}"/>
+	        		<div class="grid-card">
+	        		 	<div class="anf_top flex">
+	        		 		<div class="tags">
+	        		 			<p:chip label="#{anf.anfNr}" styleClass="mr-2 chip"/>
+	        		 			<p:chip label="#{anf.anfNr}" styleClass="mr-2 custom-chip" icon="pi pi-info-circle"/>
+	        		 		</div>
+	        		 		<!-- Aktion hinzufügen -> bearbeiten oder Löschen -->
+	        		 		<p:commandButton id="edit-menu" icon="pi pi-ellipsis-h" type="button" styleClass="rounded-button ui-button-flat" />
+	        		 		<p:overlayPanel for="edit-menu" style="width:200px">
+	        		 		  	<p:menu>	
+	        		 		  		<p:menuitem value="Bearbeiten"  ajax="false" icon="pi pi-pencil"/>
+	        		 		  		<p:menuitem value="Löschen"  ajax="false" icon="pi pi-trash"/>
+	        		 		  	</p:menu>
+	        		 		</p:overlayPanel>
+	        		 	</div>
+	        		 	
+	        		 	 <div class="anf_content">
+	        		 	 	<h4 class="bold">#{anf.anfBezeichnung}</h4>
+	        		 	 	<p>#{anf.anfBeschreibung}</p>
+	        		 	 	<p>#{anf.anfId}</p>
+	        		 	 	<p:commandButton action="#{anforderungController.loadDetails(anf.anfId)}" value="more details" ajax="false"/>
+	        		 	 </div>
+	        		 	 
+	        		 	 <div class="anf_bottom flex">
+	        		 	 		<p>Erstellt von </p>
+	        		 	 		<p:avatar label="U" styleClass="mr-2" style="background-color:#9c27b0; color:#fff" shape="circle"  id="Ersteller"/>
+	        		 	 		<p:overlayPanel for="Ersteller" style="width:150px" showEvent="mouseover" hideEvent="mouseout" autoHide="false">
+	        		 	 			<p>#{anf.ersteller.mitarbeiterVorn} #{anf.ersteller.mitarbeiterNach}</p>
+	        		 	 		</p:overlayPanel>
+	        		 	 </div>
+	        			
 	        		</div>
 	        	</p:dataViewGridItem>
+	        	
+	        	
+	        	
 	            <p:dataViewListItem>
-	           		 <div class="product-list-item">
-	           			 <h:outputText value="Hallo"/>
-	           		 		<h:outputText value="#{anf.anfNr}"/>
+	           		 <div class="list-item">
+	           		 	<div class="anf-info">
+	           		 		<h4 class="bold">#{anf.anfBezeichnung}</h4>
+	        		 	 	<p>#{anf.anfBeschreibung}</p>
+	           		 	</div>
+	           		 	<div class="mobile-view">
+		           		 	<div class="tags">
+			           		 	<p:chip label="#{anf.anfNr}" styleClass="mr-2 chip"/>
+			        		 	<p:chip label="#{anf.anfRisiko}" styleClass="mr-2 custom-chip" icon="pi pi-info-circle"/>
+		        		 	</div>
+		        		 	<div class="anf-ersteller flex">
+	        		 	 		<p class="tablet-up">Erstellt von </p>
+	        		 	 		<p:avatar label="U" styleClass="mr-2 avatar" style="background-color:#9c27b0; color:#fff" shape="circle"  id="list-Ersteller"/>
+	        		 	 		<p:overlayPanel for="list-Ersteller" style="width:150px" showEvent="mouseover" hideEvent="mouseout" autoHide="false">
+	        		 	 			<p>#{anf.ersteller.mitarbeiterVorn} #{anf.ersteller.mitarbeiterNach}</p>
+	        		 	 		</p:overlayPanel>
+		        		 	</div>
+	           		 	</div>
+	           
 	           		 </div>
 	            </p:dataViewListItem>
 	         </p:dataView>
-	         <p:commandButton value="Submit" action="#{anforderungService.addAnf('h1', 'h2')}"/>
 		</h:form>
+		
+		<h:form>
+			<h:panelGrid columns="2">
+				<p:outputLabel for="anfNr" value="Anforderung-Nummer"/>
+				<p:inputText id="anfNr" value="#{anforderungService.anf.anfNr}"/>
+     			 
+     			 <p:outputLabel for="anfBezeichnung" value="Bezeichnung"/>
+     			 <p:inputText id="anfBezeichnung" value="#{anforderungService.anf.anfBezeichnung}"/>
+     			 
+     			 <h:commandButton value="speichern"/>
+			</h:panelGrid>
+			
+		</h:form>
+		
 	</div>
- 		
+ 	</div>	
 		
-		
-		
-		
- 		
  	</ui:define>
  </ui:composition>
      

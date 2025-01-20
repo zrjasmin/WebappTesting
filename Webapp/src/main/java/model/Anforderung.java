@@ -1,49 +1,61 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import jakarta.persistence.*;
 
 @Entity
 @Named
-@RequestScoped
-public class Anforderung {
+public class Anforderung implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long anfId;
+	private Integer anfId;
 	
 	private String anfNr;
 	private String anfBezeichnung;
 	private String anfBeschreibung;
 	private String anfZiel;
 	private String anfRisiko;
-	@OneToMany(mappedBy ="anforderung", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Akzeptanzkriterium> anfKriterien;
 	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<model.Akzeptanzkriterium> anfKriterien;
+	
+	@ManyToOne(optional = false)
+	@JoinColumn(name="ersteller_id", nullable=false)
+	private Mitarbeiter ersteller;
 	
 	
 	
 	public Anforderung() {}
 	
-	public Anforderung(String anfNr, String anfBezeichnung) {
+	public Anforderung(String anfNr, String anfBezeichnung,String anfBeschreibung, String anfZiel, String anfRisiko) {
 		this.anfNr = anfNr;
 		this.anfBezeichnung = anfBezeichnung;
 		this.anfBeschreibung = anfBeschreibung;
+		this.anfZiel = anfZiel;
+		this.anfRisiko = anfRisiko;
 		
 	}
 	
-	public Anforderung(String anfNr, String anfBezeichnung, String anfBeschreibung, String anfZiel, String anfRisiko) {
+	public Anforderung(String anfNr, String anfBezeichnung, String anfBeschreibung, String anfZiel, String anfRisiko, List<Akzeptanzkriterium> anfKriterien) {
 		this.anfNr = anfNr;
 		this.anfBezeichnung = anfBezeichnung;
 		this.anfBeschreibung = anfBeschreibung;
-		this.setAnfZiel(anfZiel);
-		this.setAnfRisiko(anfRisiko);
+		this.anfZiel = anfZiel;
+		this.anfRisiko = anfRisiko;
+		this.anfKriterien = anfKriterien;
+
 		
 		}
 	
-	public long getId() {
+	public Integer getAnfId() {
 		return anfId;
 	}
 
@@ -93,6 +105,14 @@ public class Anforderung {
 
 	public void setAnfKriterien(List<Akzeptanzkriterium> anfKriterien) {
 		this.anfKriterien = anfKriterien;
+	}
+	
+	public Mitarbeiter getErsteller() {
+		return ersteller;
+	}
+	
+	public void setErsteller(Mitarbeiter ersteller) {
+		this.ersteller = ersteller;
 	}
 	
 	

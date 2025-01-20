@@ -18,6 +18,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import model.Anforderung;
+import service.AnforderungService;
 
 @Named
 @ApplicationScoped
@@ -28,59 +29,130 @@ public class AnforderungDao implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private EntityManagerFactory emf =Persistence.createEntityManagerFactory("webapp");
+	@Inject
+	JpaUtil jpaUtil;
 	
-	private EntityManager em = emf.createEntityManager();
-	CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+	CriteriaBuilder criteriaBuilder;
 	
 	public AnforderungDao() {
+		try {
+			EntityManager em = JpaUtil.getEntityManager();
+			criteriaBuilder = em.getCriteriaBuilder();
+			
+			long count = getAnfCount();
+            System.err.println("Wir haben " + count+ " Artikeln.");
+            
+            if(count == 0) {
+                System.err.println("Initialisierung der Daten.");
+                EntityTransaction t = em.getTransaction();
+                t.begin();
+               
+                for(model.Anforderung anforderung : service.AnforderungService.anfListe) {
+                	em.persist(anforderung);
+                }
+                
+                t.commit();
+                em.close();
+                
+            }
+		
+		} catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException(e);
+	    }
+		
+	}
 	
+	public long getAnfCount() {
+		EntityManager em = JpaUtil.getEntityManager();
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+        cq.select(criteriaBuilder.count(cq.from(model.Anforderung.class)));
+        return em.createQuery(cq).getSingleResult();
 	}
 	
 	
-	
-
-	
-	
-/*	public List<model.Anforderung> getAnfListe() {
-		Query q = em.createQuery("select a from Anforderung a");
-		List<model.Anforderung> anforderugen = q.getResultList();
-		return anforderugen;
-	}*/
-	
+	/*alle Anforderungen auslesen*/
 	public List<model.Anforderung> findAll() {
-
+		EntityManager em = JpaUtil.getEntityManager();
 		Query abfrage = em.createQuery("select a from Anforderung a", model.Anforderung.class);
-		List<model.Anforderung> anforderugen = abfrage.getResultList();
-		for(model.Anforderung anf : anforderugen) {
-			System.out.println(anf);
-		}
-		return anforderugen;
+		List<model.Anforderung> anforderungen = abfrage.getResultList();
+		return anforderungen;
 	}
-	
-	public model.Anforderung hinzuAnf(model.Anforderung anf) {
+
+	/*speichert Anforderung und deren Ersteller*/
+	public void saveAnf(long mitarbeiterID, model.Anforderung anf) {
+		EntityManager em = JpaUtil.getEntityManager();
 		em.getTransaction().begin();
+		anf.setErsteller(em.find(model.Mitarbeiter.class, mitarbeiterID));
+		
 		em.persist(anf);
 		em.getTransaction().commit();
-		return anf;
+		em.close();
 	}
 	
-	public model.Akzeptanzkriterium hinzuAkzept(Long anfId, model.Akzeptanzkriterium akzeptanz){
+
+	
+	
+	
+	
+	
+	
+	
+	
+	public void addKriterium(model.Anforderung anfID, model.Akzeptanzkriterium kriterium) {
+		/*em.getTransaction().begin();
+		model.Anforderung anf = em.find(model.Anforderung.class, anfID);
+		kriterium.setAnfoderung(anf);
+		anf.getAnfKriterien().add(kriterium);
+		em.persist(kriterium);
+		em.getTransaction().commit();
+			*/	
+	}
+	
+
+	public void addMitarbeiter(model.Anforderung anforderung, model.Mitarbeiter erstellerID) {
+		EntityManager em = JpaUtil.getEntityManager();
+		em.getTransaction().begin();
+		model.Mitarbeiter ersteller = em.find(model.Mitarbeiter.class, erstellerID);
+		
+		anforderung.setErsteller(ersteller);
+		ersteller.getErstellteAnf().add(anforderung);
+		em.persist(anforderung);
+		em.getTransaction().commit();
+		em.close();
+				
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	public model.Akzeptanzkriterium hinzuAkzept(Integer anfId, model.Akzeptanzkriterium akzeptanz){
+		EntityManager em = JpaUtil.getEntityManager();
 		model.Anforderung anforderung = findAnf(anfId);
 		
 		em.getTransaction().begin();
 		em.persist(akzeptanz);
 		em.getTransaction().commit();
+		em.close();
 		return akzeptanz;
+		
 	}
 
 	
-	public model.Anforderung findAnf(Long id) {
-		return em.find(model.Anforderung.class, id);
+	public model.Anforderung findAnf(Integer id) {
+		EntityManager em = JpaUtil.getEntityManager();
+		model.Anforderung anf = em.find(model.Anforderung.class, id);
+		em.close();
+		return anf;
 	}
 	
 	public model.Anforderung updateAnf(model.Anforderung anf) {
-		model.Anforderung anfToUpdate = findAnf(anf.getId());
+		EntityManager em = JpaUtil.getEntityManager();
+		model.Anforderung anfToUpdate = findAnf(anf.getAnfId());
 		
 		em.getTransaction().begin();
 		anfToUpdate.setAnfNr(anf.getAnfNr());
@@ -89,6 +161,7 @@ public class AnforderungDao implements Serializable{
 		anfToUpdate.setAnfRisiko(anf.getAnfRisiko());
 		anfToUpdate.setAnfKriterien(anf.getAnfKriterien());
 		em.getTransaction().commit();
+		em.close();
 		return anfToUpdate;
 		}
 
@@ -98,8 +171,10 @@ public class AnforderungDao implements Serializable{
 
 
 	public model.Anforderung getAnfAtIndex(int pos) {
+		EntityManager em = JpaUtil.getEntityManager();
 		CriteriaQuery<model.Anforderung> cq = criteriaBuilder.createQuery(model.Anforderung.class);
 		Root<model.Anforderung> variableRoot = cq.from(model.Anforderung.class);
+		em.close();
 		return em.createQuery(cq).setMaxResults(1).setFirstResult(pos).getSingleResult();
 	}
 	

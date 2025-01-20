@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+     
+ <ui:composition template="WEB-INF/template/template.xhtml">
+ 	<ui:define name="title">Bearbeiten: Anforderung</ui:define>
+ 	
+ 	<ui:define name="pagename">Anforderung bearbeiten</ui:define>
+ 	<ui:define name="content">
+ 		<p:card>
+ 			<h2>Halloooo</h2>
+ 			<h:form>
+ 			<p:panelGrid columns="2">
+ 				 <p:outputLabel for="bezeichnung" value="Bezeichnung"/>
+ 				 <p:inputText id="bezeichnung" value="#{anforderungController.neueAnf.anfBezeichnung}"/>
+ 				  
+ 				 <p:outputLabel for="beschreibung" value="Beschreibung"/>
+ 				 <p:inputText id="beschreibung" value="#{anforderungController.neueAnf.anfBeschreibung}"/>
+ 				 
+ 				 <p:outputLabel for="kriterium" value="Akzeptanzkriterium"/>
+ 				 <p:inputText id="kriterium" value="#{anforderungController.neueAnf.anfKriterien}"/>
+ 				 
+ 				<h:commandButton value="Anforderung speichern" action="#{anforderungController.createNeueAnforderung}" />
+ 			</p:panelGrid>
+ 			</h:form>
+ 		</p:card>
+ 		
+ 		
+ 	</ui:define>
+ </ui:composition>
+     
+      
+</html>
