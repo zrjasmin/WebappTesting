@@ -71,13 +71,13 @@
 				
 				<div class="current-user flex">
 					<h:form>
-						<p:selectOneMenu id="arbeiter" value="#{mitarbeiterService.aktuellerMitarbeiter.mitarbeiterVorn}" style="width:220px">
-		                    <f:selectItem itemLabel="Wähle einen Mitarbeiter" itemValue="" noSelectionOption="true"/>
-		                    <f:selectItems value="#{mitarbeiterService.mitarbeiterString}"/>
+						<p:selectOneMenu id="select" value="#{mitarbeiterService.aktuellerMitarbeiter}">
+		      		        <f:selectItems value="#{mitarbeiterService.arbeiterListe}" var="arbeiter" itemValue="#{arbeiter}" />
 	                	</p:selectOneMenu>
+	            		<h:commandButton value="hier klicken" action="#{mitarbeiterService.onChange}"/>
 					</h:form>
-
-				</div>
+					
+					</div>
 			</div>
 			
 			 		 	

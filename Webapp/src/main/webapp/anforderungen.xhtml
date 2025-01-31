@@ -15,7 +15,6 @@
 	 	<p>Auf dieser Seite können Sie die spezifischen Anforderungen für das Testen von 
 		 	Komponenten dokumentieren. Bitte geben Sie alle relevanten Details an, um eine klare 
 		 	Grundlage für den Testprozess zu schaffen.</p>
-		 <p:linkButton outcome="#{anforderungController.create()}" value="neue Anforderung"/>
  	</div>
  	
 	 
@@ -24,12 +23,17 @@
 	
 	<div class="anf-view card">
 		<h:form id="form">
+			
 			<p:dataView var="anf" value="#{anforderungService.anfListe}" rows="12" paginator="true"
 	                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 	                    layout="grid" gridIcon="pi pi-th-large" listIcon="pi pi-bars"
 	                     flex="true">
 	                    
 	        	<p:dataViewGridItem>
+	        	<div class="ui-dataview-header ui-widget-header ui-helper-clearfix ui-corner-top">
+				           				 <p:linkButton outcome="#{anforderungController.bearbeiten()}" value="neue Anforderung"/>
+			
+			</div>
 	        		<div class="grid-card">
 	        		 	<div class="anf_top flex">
 	        		 		<div class="tags">

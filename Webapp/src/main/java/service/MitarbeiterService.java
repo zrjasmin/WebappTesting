@@ -18,7 +18,7 @@ import model.Mitarbeiter.Rolle;
 import java.io.Serializable;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class MitarbeiterService implements Serializable{
 
 	/**
@@ -36,17 +36,14 @@ public class MitarbeiterService implements Serializable{
 	
 	
 	public MitarbeiterService() {
-		arbeiterDao = new dao.MitarbeiterDao();
-		
-		/*model.Mitarbeiter m1 = new model.Mitarbeiter("Markus", "Müller", "h", "h", Rolle.TESTER);
-		model.Mitarbeiter m2 = new model.Mitarbeiter("Jasmin", "Zimmer", "h", "h", Rolle.TESTER);
-		arbeiterListe.add(m1);
-		arbeiterListe.add(m2);*/
-		
+		arbeiterDao = new dao.MitarbeiterDao();	
+		arbeiterListe.clear();
 		arbeiterListe.addAll(addToListe());
-		arbeiterDao.saveAllMitarbeiter(arbeiterListe);
-		setAktuellerMitarbeiter(arbeiterListe.get(0));
-		convertMitarbeiterString();
+		System.out.println(arbeiterListe);
+		aktuellerMitarbeiter = arbeiterListe.get(0);
+		System.out.println(aktuellerMitarbeiter);
+	
+		
 		
 	}
 	/*alle Mitarbeiter aus Datenbank auslesen*/
@@ -72,32 +69,35 @@ public class MitarbeiterService implements Serializable{
 		return aktuellerMitarbeiter;
 	}
 	
-	public void setAktuellerMitarbeiter (model.Mitarbeiter aktuellerMitarbeiter) {
-		this.aktuellerMitarbeiter = aktuellerMitarbeiter;
-	}
+	public void setAktuellerMitarbeiter(model.Mitarbeiter neuerMitarbeiter) {
+		System.out.println("Änderung");
+		System.out.println(neuerMitarbeiter);
+		System.out.println("davor " + aktuellerMitarbeiter);
+		this.aktuellerMitarbeiter = neuerMitarbeiter;
+		System.out.println("danach "+  aktuellerMitarbeiter);
+
+		/*System.out.println(aktuellerMitarbeiter.getMitarbeiterVorn());*/
+		}
 	
 	public List<String> getMitarbeiterString() {
 		return mitarbeiterString;
 	}
 	
+
 	
-	/*Mitarbeiter Daten als String konvertieren*/
-	public void convertMitarbeiterString() {
-		for(model.Mitarbeiter arbeiter : arbeiterListe) {
-			String name = arbeiter.getMitarbeiterVorn() + " " + arbeiter.getMitarbeiterNach();
-			mitarbeiterString.add(name);
-			
-		}
+
+	public void onChange() {
+        System.out.println("Aktueller Mitarbeiter: ");
+
+	    if (aktuellerMitarbeiter != null) {
+	        System.out.println("Aktueller Mitarbeiter: " + aktuellerMitarbeiter.getMitarbeiterVorn());
+	    } else {
+	        System.out.println("Kein Mitarbeiter ausgewählt.");
+	    }
 	}
 	
 	
-	
-	
-	public static void main(String[]args) {
-		MitarbeiterService service = new MitarbeiterService();
-		
-	
-	}
+
 	
 	
 	

@@ -35,6 +35,12 @@ public class Mitarbeiter {
 	@OneToMany(mappedBy ="ersteller", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Anforderung> erstellteAnf;
 	
+	@OneToMany(mappedBy ="testfallErsteller", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Testfall> erstellterTestfall;
+	
+	@OneToMany(mappedBy ="testfallTester", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Testfall> zugeordneteTests;
+	
 	
 	public Mitarbeiter() {}
 	

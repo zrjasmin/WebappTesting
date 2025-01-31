@@ -8,6 +8,8 @@ import dao.AnforderungDao;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.validator.ValidatorException;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -79,15 +81,29 @@ public class AnforderungService implements Serializable{
 	
 	
 	public void speichern(model.Anforderung neuerArtikel, List<model.Akzeptanzkriterium> kriterien) {
+		
 		model.Mitarbeiter currentMitarbeiter = arbeiterService.getAktuellerMitarbeiter();
 		neuerArtikel.setAnfKriterien(kriterien);
+		neuerArtikel.setAnfNr(generateNumber());
 		
 		
 		anfDao.saveAnf(currentMitarbeiter.getMitarbeiterId(), neuerArtikel);
 	
 	}
 	
-
+	public String generateNumber() {
+		int size = anfDao.findAll().size();
+		String anfNummer;
+		if(String.valueOf(size).length() == 2) {
+			anfNummer = "AR-0" + size;
+		} else {
+			anfNummer = "AR-"+size;
+		}
+		return anfNummer;
+	}
+	
+	/*Validierung der Eingabemaske*/
+	
 
 	
 	

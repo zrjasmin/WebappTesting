@@ -43,8 +43,10 @@ public class AnforderungController implements Serializable {
 	public String create() {
 		return "edit.xhtml";
 	}
-	public String edit() {
-		return "edit.xhtml";
+	public String bearbeiten() {
+		
+		
+		return "/edit.xhtml";
 	}
 	
 	public model.Anforderung getSelectedAnf() {
@@ -70,6 +72,7 @@ public class AnforderungController implements Serializable {
 		return "anforderungen?faces-redirect=true";
 	}
 	
+	
 	public model.Anforderung getNeueAnf() {
 		return neueAnf;
 	}
@@ -86,10 +89,7 @@ public class AnforderungController implements Serializable {
 		neueKriterien.add(new model.Akzeptanzkriterium());
 	}
 	
-	
 
-	
-	
 	public void createNeueAnforderung() {
 		service.speichern(neueAnf, neueKriterien);
 		neueAnf = new model.Anforderung();

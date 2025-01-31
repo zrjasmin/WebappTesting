@@ -12,7 +12,7 @@
  	<ui:define name="content">
  		<div class="flex button-container">
 	 		<p:linkButton outcome="/anforderungen.xhtml" styleClass="ui-button-flat" value="zurück" ajax="false" icon="pi pi-angle-left"></p:linkButton>
-	 		<p:commandButton action="#{anforderungController.edit()}" value="Bearbeiten" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
+	 		<p:linkButton outcome="#{anforderungController.bearbeiten(selectedAnf)}" value="Bearbeiten" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
 	 		<p:commandButton value="Löschen" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
  		</div>
  		

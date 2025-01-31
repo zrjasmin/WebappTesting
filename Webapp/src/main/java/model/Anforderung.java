@@ -2,7 +2,10 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
@@ -30,6 +33,8 @@ public class Anforderung implements Serializable {
 	@ManyToOne(optional = false)
 	@JoinColumn(name="ersteller_id", nullable=false)
 	private Mitarbeiter ersteller;
+	@ManyToMany(mappedBy = "anforderung")
+	private Set<Testfall> testfall = new HashSet<>();
 	
 	
 	
@@ -114,6 +119,8 @@ public class Anforderung implements Serializable {
 	public void setErsteller(Mitarbeiter ersteller) {
 		this.ersteller = ersteller;
 	}
+	
+	
 	
 	
 	
