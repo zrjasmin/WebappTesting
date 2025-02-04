@@ -16,13 +16,14 @@
 		 	Komponenten dokumentieren. Bitte geben Sie alle relevanten Details an, um eine klare 
 		 	Grundlage für den Testprozess zu schaffen.</p>
  	</div>
- 	
-	 
-	
+ 	<h:form>
+	 	
+	</h:form>
 	
 	
 	<div class="anf-view card">
 		<h:form id="form">
+				  <p:commandLink action="#{anforderungController.bearbeiten('neu')}" value="neue Anforderung"/>
 			
 			<p:dataView var="anf" value="#{anforderungService.anfListe}" rows="12" paginator="true"
 	                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
@@ -31,7 +32,6 @@
 	                    
 	        	<p:dataViewGridItem>
 	        	<div class="ui-dataview-header ui-widget-header ui-helper-clearfix ui-corner-top">
-				           				 <p:linkButton outcome="#{anforderungController.bearbeiten()}" value="neue Anforderung"/>
 			
 			</div>
 	        		<div class="grid-card">

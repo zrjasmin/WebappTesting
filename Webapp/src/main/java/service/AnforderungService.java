@@ -99,6 +99,7 @@ public class AnforderungService implements Serializable{
 		} else {
 			anfNummer = "AR-"+size;
 		}
+		System.out.println("anfNummer "+anfNummer);
 		return anfNummer;
 	}
 	

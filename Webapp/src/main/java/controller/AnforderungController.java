@@ -23,7 +23,6 @@ public class AnforderungController implements Serializable {
 	dao.AnforderungDao anfDao;
 	
 	private model.Anforderung selectedAnf;
-	private model.Anforderung neueAnf = new model.Anforderung();
 	private List<model.Akzeptanzkriterium> neueKriterien = new ArrayList<model.Akzeptanzkriterium>();
 
 	public AnforderungController() {
@@ -43,10 +42,24 @@ public class AnforderungController implements Serializable {
 	public String create() {
 		return "edit.xhtml";
 	}
-	public String bearbeiten() {
+	
+	
+	public String bearbeiten(String anf) {
+		System.out.println("Anforderung wird bearbeitet");
+		
+		if(anf.contains("neu") ) {
+			setSelectedAnf(new model.Anforderung());
+			System.out.println("Anforderung ist neu");
+			selectedAnf.setAnfNr(service.generateNumber());;
+			System.out.println(selectedAnf.getAnfNr());
+		} else {
+			neueKriterien.clear();
+			neueKriterien.addAll(selectedAnf.getAnfKriterien());
+			System.out.println("Anforderung " + selectedAnf.getAnfId());
+		}
 		
 		
-		return "/edit.xhtml";
+		return "edit.xhtml?faces-redirect=true";
 	}
 	
 	public model.Anforderung getSelectedAnf() {
@@ -60,10 +73,13 @@ public class AnforderungController implements Serializable {
 	
 	
 	public String loadDetails(Integer anfId) {
+		System.out.println("Anforderung wird geladen");
 		if(selectedAnf == null) {
 			selectedAnf = new model.Anforderung();	
+			
 		}
-		setSelectedAnf(anfDao.findAnf(anfId));		
+		setSelectedAnf(anfDao.findAnf(anfId));	
+		System.out.println(selectedAnf.getAnfId());
 		
 		return "/detail.xhtml?faces-redirect=true";
 	}
@@ -72,13 +88,18 @@ public class AnforderungController implements Serializable {
 		return "anforderungen?faces-redirect=true";
 	}
 	
-	
-	public model.Anforderung getNeueAnf() {
-		return neueAnf;
-	}
+	public String showAnfNr() {
+		String nummer;
+		if(selectedAnf == null) {
+			nummer = service.generateNumber();
+			System.out.println("nummer "+nummer);
 
-	public void setNeueAnf(model.Anforderung neueAnf) {
-		this.neueAnf = neueAnf;
+			
+		} else {
+			nummer = selectedAnf.getAnfNr();
+		}
+		
+		return nummer;
 	}
 	
 	public List<model.Akzeptanzkriterium> getNeueKriterien() {
@@ -91,8 +112,8 @@ public class AnforderungController implements Serializable {
 	
 
 	public void createNeueAnforderung() {
-		service.speichern(neueAnf, neueKriterien);
-		neueAnf = new model.Anforderung();
+		service.speichern(selectedAnf, neueKriterien);
+		selectedAnf = new model.Anforderung();
 		neueKriterien = new ArrayList<model.Akzeptanzkriterium>();
 	}
 	

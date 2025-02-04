@@ -10,10 +10,11 @@
  	
  	<ui:define name="pagename">Details: Anforderungen</ui:define>
  	<ui:define name="content">
+ 	<h:form>
  		<div class="flex button-container">
 	 		<p:linkButton outcome="/anforderungen.xhtml" styleClass="ui-button-flat" value="zurück" ajax="false" icon="pi pi-angle-left"></p:linkButton>
-	 		<p:linkButton outcome="#{anforderungController.bearbeiten(selectedAnf)}" value="Bearbeiten" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
-	 		<p:commandButton value="Löschen" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
+	 		<p:commandLink action="#{anforderungController.bearbeiten('bestehend')}" value="Bearbeiten" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
+	 		<p:commandLink value="Löschen" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
  		</div>
  		
  		<p:card>
@@ -56,7 +57,7 @@
 	 		
  		</p:card>
  		
- 		
+ 		</h:form>
 
  		
  		

@@ -11,29 +11,28 @@
  	<ui:define name="pagename">Anforderung bearbeiten</ui:define>
  	<ui:define name="content">
  		<p:card>
- 			<h2>Halloooo</h2>
  			<h:form>
  			<p:panelGrid columns="1">
  				
  				<p:outputLabel value="Anforderungsnummer"/>
- 				<h:outputText value="#{anforderungService.generateNumber()}"/>
+ 				<h:outputText value="#{anforderungController.showAnfNr()}"/>
  				 
  				 <p:outputLabel for="bezeichnung" value="Bezeichnung"/>
  				 <div>
-	 				  <p:inputText id="bezeichnung" value="#{anforderungController.neueAnf.anfBezeichnung}" required="true" size="50" requiredMessage="Bitte einen Namen eingeben">
+	 				  <p:inputText id="bezeichnung" value="#{anforderungController.selectedAnf.anfBezeichnung}" required="true" size="50" requiredMessage="Bitte einen Namen eingeben">
 	 				  	 <f:validateRegex pattern="^[a-zA-Z]+$"/>
 	 				  </p:inputText>
 	 				  <p:message for="bezeichnung"/>
  				 </div>
  				
  				 <p:outputLabel for="beschreibung" value="Beschreibung"/>
- 				 <p:inputTextarea id="beschreibung" value="#{anforderungController.neueAnf.anfBeschreibung}" required="true"  rows="5" cols="55"  requiredMessage="Bitte einen Beschreibung eingeben"/>
+ 				 <p:inputTextarea id="beschreibung" value="#{anforderungController.selectedAnf.anfBeschreibung}" required="true"  rows="5" cols="55"  requiredMessage="Bitte einen Beschreibung eingeben"/>
  				 
  				 <p:outputLabel for="ziel" value="Ziel/Absicht"/>
- 				 <p:inputTextarea id="ziel" value="#{anforderungController.neueAnf.anfZiel}" required="true" rows="3" cols="55" maxlength="150"/>
+ 				 <p:inputTextarea id="ziel" value="#{anforderungController.selectedAnf.anfZiel}" required="true" rows="3" cols="55" maxlength="150"/>
  				 
  				 <p:outputLabel for="risiko" value="Risiko/Kritikalität" />
-	             <p:selectOneMenu id="risiko" value="#{anforderungController.neueAnf.anfRisiko}"
+	             <p:selectOneMenu id="risiko" value="#{anforderungController.selectedAnf.anfRisiko}"
 	                                hideNoSelectionOption="#{not empty selectOneMenuView.hideNoSelectOption}">
 	                    <p:ajax update="@this" process="@this"/>
 	                    <f:selectItem itemLabel="Wähle eins" itemValue="#{null}" noSelectionOption="true"/>

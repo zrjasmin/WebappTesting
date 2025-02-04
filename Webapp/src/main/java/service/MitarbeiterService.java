@@ -39,9 +39,7 @@ public class MitarbeiterService implements Serializable{
 		arbeiterDao = new dao.MitarbeiterDao();	
 		arbeiterListe.clear();
 		arbeiterListe.addAll(addToListe());
-		System.out.println(arbeiterListe);
 		aktuellerMitarbeiter = arbeiterListe.get(0);
-		System.out.println(aktuellerMitarbeiter);
 	
 		
 		
