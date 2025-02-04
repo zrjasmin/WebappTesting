@@ -127,6 +127,7 @@ public class AnforderungDao implements Serializable{
 		anfToUpdate.setAnfBeschreibung(anf.getAnfBeschreibung());
 		anfToUpdate.setAnfRisiko(anf.getAnfRisiko());
 		anfToUpdate.setAnfKriterien(anf.getAnfKriterien());
+		em.merge(anfToUpdate);
 		em.getTransaction().commit();
 		em.close();
 		return anfToUpdate;
@@ -143,6 +144,29 @@ public class AnforderungDao implements Serializable{
 		Root<model.Anforderung> variableRoot = cq.from(model.Anforderung.class);
 		em.close();
 		return em.createQuery(cq).setMaxResults(1).setFirstResult(pos).getSingleResult();
+	}
+	
+	public boolean exist(Integer id) {
+		boolean exist;
+		try {
+			if(id == null) {
+				exist =false;
+			} else {
+				EntityManager em = JpaUtil.getEntityManager();
+				em.getTransaction().begin();
+				model.Anforderung anf = em.find(Anforderung.class, id);
+				System.out.println(anf);
+				exist = (anf != null);
+				em.getTransaction().commit();
+			}
+			
+			
+			
+		} catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException(e);
+	    }
+		return exist;
 	}
 	
 	

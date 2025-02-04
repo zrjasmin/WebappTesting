@@ -38,20 +38,13 @@ public class AnforderungController implements Serializable {
 		
 	}
 	
-	
-	public String create() {
-		return "edit.xhtml";
-	}
-	
-	
 	public String bearbeiten(String anf) {
 		System.out.println("Anforderung wird bearbeitet");
 		
-		if(anf.contains("neu") ) {
+		if(anf.contains("neu")) {
 			setSelectedAnf(new model.Anforderung());
-			System.out.println("Anforderung ist neu");
 			selectedAnf.setAnfNr(service.generateNumber());;
-			System.out.println(selectedAnf.getAnfNr());
+
 		} else {
 			neueKriterien.clear();
 			neueKriterien.addAll(selectedAnf.getAnfKriterien());
@@ -112,6 +105,7 @@ public class AnforderungController implements Serializable {
 	
 
 	public void createNeueAnforderung() {
+		System.out.println(selectedAnf.getAnfBezeichnung());
 		service.speichern(selectedAnf, neueKriterien);
 		selectedAnf = new model.Anforderung();
 		neueKriterien = new ArrayList<model.Akzeptanzkriterium>();

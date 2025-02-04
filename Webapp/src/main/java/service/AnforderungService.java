@@ -81,14 +81,16 @@ public class AnforderungService implements Serializable{
 	
 	
 	public void speichern(model.Anforderung neuerArtikel, List<model.Akzeptanzkriterium> kriterien) {
-		
-		model.Mitarbeiter currentMitarbeiter = arbeiterService.getAktuellerMitarbeiter();
-		neuerArtikel.setAnfKriterien(kriterien);
-		neuerArtikel.setAnfNr(generateNumber());
-		
-		
-		anfDao.saveAnf(currentMitarbeiter.getMitarbeiterId(), neuerArtikel);
-	
+		System.out.println("Anforderung zum speicher");
+		 
+		if(anfDao.exist(neuerArtikel.getAnfId())) {
+			 anfDao.updateAnf(neuerArtikel);
+		} else {
+			model.Mitarbeiter currentMitarbeiter = arbeiterService.getAktuellerMitarbeiter();
+			neuerArtikel.setAnfKriterien(kriterien);
+			neuerArtikel.setAnfNr(generateNumber());
+			anfDao.saveAnf(currentMitarbeiter.getMitarbeiterId(), neuerArtikel);
+		}
 	}
 	
 	public String generateNumber() {
@@ -102,6 +104,8 @@ public class AnforderungService implements Serializable{
 		System.out.println("anfNummer "+anfNummer);
 		return anfNummer;
 	}
+	
+	
 	
 	/*Validierung der Eingabemaske*/
 	
