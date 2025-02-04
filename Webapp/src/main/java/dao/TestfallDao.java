@@ -32,17 +32,18 @@ public class TestfallDao implements Serializable{
 		return testfälle;
 	}
 	
-	public void saveAnf(long mitarbeiterID, model.Testfall testfall) {
+	public void saveTest(long mitarbeiterID, model.Testfall testfall) {
 		EntityManager em = JpaUtil.getEntityManager();
 		em.getTransaction().begin();
 		testfall.setTestfallErsteller(em.find(model.Mitarbeiter.class, mitarbeiterID));
 		em.persist(testfall);
 		
 		/*Kriterien zur passenden Anforderung speichern*/
+		/*
 		for(model.Testschritt schritte : testfall.getTestschritte() ) {
 			schritte.setTestfall(testfall);
 			em.persist(schritte);
-		}
+		}*/
 		em.getTransaction().commit();
 		em.close();
 	}
