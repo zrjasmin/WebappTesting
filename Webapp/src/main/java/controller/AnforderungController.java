@@ -16,7 +16,7 @@ import jakarta.persistence.OptimisticLockException;
 
 
 @Named
-@ViewScoped
+@SessionScoped
 public class AnforderungController implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -144,13 +144,13 @@ public class AnforderungController implements Serializable {
 	
 	
 	
-	public void neueAnfSpeichern() {
-		System.out.println("speichern Anforderungnummer:" + selectedAnf.getAnfNr());
-		//selectedAnf = new model.Anforderung();
-		System.out.println("neue Anf");
-		//anfDao.saveAnf(1, selectedAnf);
-		//System.out.println("gespeicherte Id: " + selectedAnf.getAnfId());
-		// return "/detail.xhtml?faces-redirect=true&id="+ selectedAnf.getAnfId();
+	public String neueAnfSpeichern() {
+		Integer redirectLink;
+		
+		anfDao.saveAnf(1, selectedAnf);
+		redirectLink = selectedAnf.getAnfId();
+		selectedAnf = new model.Anforderung();
+		return "/detail.xhtml?faces-redirect=true&id="+ redirectLink;
 		}
 	
 	
