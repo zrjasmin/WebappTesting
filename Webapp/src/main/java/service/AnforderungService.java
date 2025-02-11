@@ -2,6 +2,7 @@ package service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import dao.AnforderungDao;
@@ -79,29 +80,29 @@ public class AnforderungService implements Serializable{
 		this.anf = anforderung;
 	}
 	
-	
-	public void speichern(model.Anforderung neuerArtikel, List<model.Akzeptanzkriterium> kriterien) {
-		System.out.println("Anforderung zum speicher");
-		 
-		if(anfDao.exist(neuerArtikel.getAnfId())) {
-			 anfDao.updateAnf(neuerArtikel);
-		} else {
-			model.Mitarbeiter currentMitarbeiter = arbeiterService.getAktuellerMitarbeiter();
-			neuerArtikel.setAnfKriterien(kriterien);
-			neuerArtikel.setAnfNr(generateNumber());
-			anfDao.saveAnf(currentMitarbeiter.getMitarbeiterId(), neuerArtikel);
-		}
+	//erstellt neue Anforderung
+	public void anfErstellen(model.Anforderung neuerArtikel, List<model.Akzeptanzkriterium> kriterien) {
+		Integer currentMitarbeiter = arbeiterService.getAktuellerMitarbeiter().getMitarbeiterId();
+		neuerArtikel.setAnfKriterien(kriterien);
+		neuerArtikel.setAnfNr(generateNumber());
+		anfDao.saveAnf(currentMitarbeiter, neuerArtikel);
 	}
+	
+	//updatet bestehende Anforderung
+	public void anfUpdaten(model.Anforderung anf, List<model.Akzeptanzkriterium> kriterien) {
+		System.out.println("wir updatet die Anforderung");
+		anf.setAnfKriterien(kriterien);
+		
+		anfDao.updateAnf(anf);
+	}
+	
+	
+
 	
 	public String generateNumber() {
 		int size = anfDao.findAll().size();
 		String anfNummer;
-		if(String.valueOf(size).length() == 2) {
-			anfNummer = "AR-0" + size;
-		} else {
-			anfNummer = "AR-"+size;
-		}
-		System.out.println("anfNummer "+anfNummer);
+		anfNummer = String.format("AR-%03d", size);
 		return anfNummer;
 	}
 	

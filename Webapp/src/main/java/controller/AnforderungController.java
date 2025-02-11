@@ -1,4 +1,5 @@
 package controller;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -6,13 +7,16 @@ import java.util.List;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.NavigationHandler;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.persistence.OptimisticLockException;
 
 
 @Named
-@SessionScoped 
+@SessionScoped
 public class AnforderungController implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -38,12 +42,16 @@ public class AnforderungController implements Serializable {
 		
 	}
 	
+	
+	
 	public String bearbeiten(String anf) {
-		System.out.println("Anforderung wird bearbeitet");
-		
 		if(anf.contains("neu")) {
 			setSelectedAnf(new model.Anforderung());
 			selectedAnf.setAnfNr(service.generateNumber());;
+			if(neueKriterien != null) {
+				neueKriterien.clear();
+			}
+			
 
 		} else {
 			neueKriterien.clear();
@@ -64,8 +72,10 @@ public class AnforderungController implements Serializable {
 	}
 	
 	
-	
+	/*
 	public String loadDetails(Integer anfId) {
+		
+		
 		System.out.println("Anforderung wird geladen");
 		if(selectedAnf == null) {
 			selectedAnf = new model.Anforderung();	
@@ -76,6 +86,16 @@ public class AnforderungController implements Serializable {
 		
 		return "/detail.xhtml?faces-redirect=true";
 	}
+	*/
+	
+	public String selectAnforderung(Integer id) {
+		selectedAnf = anfDao.findAnf(id);
+		
+		System.out.println("ausgewählte Anforderung: " + selectedAnf.getAnfId());
+		return "detail?faces-redirect=true&id=" + selectedAnf.getAnfId();
+			
+	}
+	
 	
 	public String zurueck() {
 		return "anforderungen?faces-redirect=true";
@@ -86,8 +106,6 @@ public class AnforderungController implements Serializable {
 		if(selectedAnf == null) {
 			nummer = service.generateNumber();
 			System.out.println("nummer "+nummer);
-
-			
 		} else {
 			nummer = selectedAnf.getAnfNr();
 		}
@@ -103,13 +121,41 @@ public class AnforderungController implements Serializable {
 		neueKriterien.add(new model.Akzeptanzkriterium());
 	}
 	
+	
+	
+	
+	public String updateOrCreate(){
+		Integer anfId;
+		String pagename;
+		
+		//updatet bestehende Anforderung
+		if(anfDao.exist(selectedAnf.getAnfId())) {
+			System.out.println("wir müssen die anforderungen updaten");
+			service.anfUpdaten(selectedAnf, neueKriterien);
+			
+			anfId = selectedAnf.getAnfId();
+		} else  { 
+			// erstellt neue Anforderung
+	
+			service.anfErstellen(selectedAnf, neueKriterien);
+			anfId = selectedAnf.getAnfId();
+			selectedAnf = new model.Anforderung();
+			neueKriterien = new ArrayList<model.Akzeptanzkriterium>();
+			
+		}		
+		pagename = "/detail.xhtml?id="+ anfId.toString();
+		return pagename;
 
-	public void createNeueAnforderung() {
-		System.out.println(selectedAnf.getAnfBezeichnung());
-		service.speichern(selectedAnf, neueKriterien);
-		selectedAnf = new model.Anforderung();
-		neueKriterien = new ArrayList<model.Akzeptanzkriterium>();
 	}
+	
+	public String deleteKriterium(model.Akzeptanzkriterium kriterium) {
+		neueKriterien.remove(kriterium);
+		anfDao.deleteKriteriumFromAnf(kriterium, getSelectedAnf());
+		return "";
+	}
+	
+	
+	
 	
 	
 

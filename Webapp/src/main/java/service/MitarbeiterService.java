@@ -38,10 +38,20 @@ public class MitarbeiterService implements Serializable{
 	public MitarbeiterService() {
 		arbeiterDao = new dao.MitarbeiterDao();	
 		arbeiterListe.clear();
+		/*
+		model.Mitarbeiter m1 = new model.Mitarbeiter("fsd", "dsf", "f", "df", Rolle.RE);
+		model.Mitarbeiter m2 = new model.Mitarbeiter("fsd", "dsf", "f", "df", Rolle.RE);
+		model.Mitarbeiter m3 = new model.Mitarbeiter("fsd", "dsf", "f", "df", Rolle.RE);
+		model.Mitarbeiter m4 = new model.Mitarbeiter("fsd", "dsf", "f", "df", Rolle.RE);
+		saveMitarbeiter(m1);
+		saveMitarbeiter(m2);
+		saveMitarbeiter(m3);
+		saveMitarbeiter(m4);
+		*/
 		arbeiterListe.addAll(addToListe());
 		aktuellerMitarbeiter = arbeiterListe.get(0);
 	
-		
+	
 		
 	}
 	/*alle Mitarbeiter aus Datenbank auslesen*/

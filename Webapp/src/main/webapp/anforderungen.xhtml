@@ -54,7 +54,9 @@
 	        		 	 	<h4 class="bold">#{anf.anfBezeichnung}</h4>
 	        		 	 	<p>#{anf.anfBeschreibung}</p>
 	        		 	 	<p>#{anf.anfId}</p>
-	        		 	 	<p:commandButton action="#{anforderungController.loadDetails(anf.anfId)}" value="more details" ajax="false"/>
+	        		 	 	<p:commandButton action="#{anforderungController.selectAnforderung(anf.anfId)}" value="more details" ajax="false">
+	        		 	 		
+	        		 	 	</p:commandButton>
 	        		 	 </div>
 	        		 	 
 	        		 	 <div class="anf_bottom flex">
@@ -95,18 +97,6 @@
 	         </p:dataView>
 		</h:form>
 		
-		<h:form>
-			<h:panelGrid columns="2">
-				<p:outputLabel for="anfNr" value="Anforderung-Nummer"/>
-				<p:inputText id="anfNr" value="#{anforderungService.anf.anfNr}"/>
-     			 
-     			 <p:outputLabel for="anfBezeichnung" value="Bezeichnung"/>
-     			 <p:inputText id="anfBezeichnung" value="#{anforderungService.anf.anfBezeichnung}"/>
-     			 
-     			 <h:commandButton value="speichern"/>
-			</h:panelGrid>
-			
-		</h:form>
 		
 	</div>
  	</div>	

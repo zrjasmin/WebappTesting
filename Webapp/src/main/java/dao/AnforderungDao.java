@@ -91,6 +91,7 @@ public class AnforderungDao implements Serializable{
 			kriterium.setAnforderung(anf);
 			em.persist(kriterium);
 		}
+		
 		em.getTransaction().commit();
 		em.close();
 	}
@@ -118,6 +119,7 @@ public class AnforderungDao implements Serializable{
 	}
 	
 	public model.Anforderung updateAnf(model.Anforderung anf) {
+		System.out.println("wird updaten in der Datenbank");
 		EntityManager em = JpaUtil.getEntityManager();
 		model.Anforderung anfToUpdate = findAnf(anf.getAnfId());
 		
@@ -126,6 +128,17 @@ public class AnforderungDao implements Serializable{
 		anfToUpdate.setAnfBezeichnung(anf.getAnfBezeichnung());
 		anfToUpdate.setAnfBeschreibung(anf.getAnfBeschreibung());
 		anfToUpdate.setAnfRisiko(anf.getAnfRisiko());
+		
+		for(model.Akzeptanzkriterium kriterium : anf.getAnfKriterien()) {
+			if(em.find(model.Akzeptanzkriterium.class, kriterium.getId()) != null) {
+				System.out.println("eine bearbeites Kriterium");
+				updateKriterium(kriterium);
+			} else {
+				System.out.println("eine neues Kriterium");
+				addKriterium(kriterium, anf);
+			}}
+			
+			
 		anfToUpdate.setAnfKriterien(anf.getAnfKriterien());
 		em.merge(anfToUpdate);
 		em.getTransaction().commit();
@@ -133,6 +146,19 @@ public class AnforderungDao implements Serializable{
 		return anfToUpdate;
 		}
 
+	public model.Akzeptanzkriterium updateKriterium(model.Akzeptanzkriterium kriterium) {
+		EntityManager em = JpaUtil.getEntityManager();
+		model.Akzeptanzkriterium kriteriumToUpdate = em.find(model.Akzeptanzkriterium.class, kriterium.getId());
+		if(kriteriumToUpdate != null) {
+			em.getTransaction().begin();
+			kriteriumToUpdate.setAkzeptanzBeschr(kriterium.getAkzeptanzBeschr());
+			em.merge(kriteriumToUpdate);
+			em.getTransaction().commit();
+			em.close();
+		}
+		
+		return kriteriumToUpdate;
+	}
 
 
 
@@ -169,6 +195,33 @@ public class AnforderungDao implements Serializable{
 		return exist;
 	}
 	
+	public void addKriterium(model.Akzeptanzkriterium kriterium, model.Anforderung anf) {
+		EntityManager em = JpaUtil.getEntityManager();
+		em.getTransaction().begin();
+			kriterium.setAnforderung(anf);
+			em.persist(kriterium);
+		em.getTransaction().commit();
+		em.close();
+		System.out.println("kriterium wurde in DB gepspeichert");
+	}
+	
+	public void deleteKriteriumFromAnf(model.Akzeptanzkriterium kriterium, model.Anforderung anf) {
+		EntityManager em = JpaUtil.getEntityManager();
+		em.getTransaction().begin();
+			anf = em.merge(anf);
+			kriterium = em.merge(kriterium);
+		em.getTransaction().commit();
+		
+		anf.getAnfKriterien().remove(kriterium);
+		
+		em.getTransaction().begin();
+			em.merge(anf);
+			em.remove(kriterium);
+		em.getTransaction().commit();
+		em.close();
+		
+		
+	}
 	
 	
 
