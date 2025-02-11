@@ -223,6 +223,13 @@ public class AnforderungDao implements Serializable{
 		
 	}
 	
+	public Integer getNextId() {
+		EntityManager em = JpaUtil.getEntityManager();
+		Query query = em.createNativeQuery(
+				"SELECT next_val FROM 'anforderung_seq'");
+		return ((Integer) query.getSingleResult()).intValue();
+	}
+	
 	
 
 	

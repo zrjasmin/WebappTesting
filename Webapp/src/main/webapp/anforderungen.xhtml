@@ -23,7 +23,7 @@
 	
 	<div class="anf-view card">
 		<h:form id="form">
-				  <p:commandLink action="#{anforderungController.bearbeiten('neu')}" value="neue Anforderung"/>
+				  <p:commandLink action="#{anforderungController.neueAnfErstellen}" value="neue Anforderung"/>
 			
 			<p:dataView var="anf" value="#{anforderungService.anfListe}" rows="12" paginator="true"
 	                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
