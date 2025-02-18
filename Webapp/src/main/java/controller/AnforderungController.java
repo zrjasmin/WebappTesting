@@ -99,6 +99,7 @@ public class AnforderungController implements Serializable {
 	
 	public void addKriterium() {
 		neueKriterien.add(new model.Akzeptanzkriterium());
+		System.out.println("neues kriterium erstellt");
 	}
 	
 	
@@ -107,50 +108,42 @@ public class AnforderungController implements Serializable {
 	
 	
 	public String updateOrCreate(){	
-		
-		//updatet bestehende Anforderung
-		if(anfDao.exist(selectedAnf.getAnfId())) {
+		String redirect;
+		if(selectedAnf.getAnfId() == null || anfDao.exist(selectedAnf.getAnfId())) {
+			redirect = neueAnfSpeichern();
+		} else {
 			System.out.println("wir müssen die anforderungen updaten");
 			service.anfUpdaten(selectedAnf, neueKriterien);
-			
+			redirect =  "detail?faces-redirect=true&id=" + selectedAnf.getAnfId();
 		
-		} else  { 
-			// erstellt neue Anforderung
-	
-			service.anfErstellen(selectedAnf, neueKriterien);
-			selectedAnf = new model.Anforderung();
-			neueKriterien = new ArrayList<model.Akzeptanzkriterium>();
-			
-		}		
-		return "/detail.xhtml?faces-redirect=true&id="+ selectedAnf.getAnfId();
-
+		}
+		return redirect;
 	}
 	
 
-	
-	
-	
-	
+
+	//wechselt zur Bearbeiten Seite (neue Anforderung)
 	public String neueAnfErstellen() {
 		selectedAnf = new model.Anforderung();
-		System.out.println("neue Anforderung:" + selectedAnf.getAnfId());
 		selectedAnf.setAnfNr(service.generateNumber());
 		if(neueKriterien != null) {
 			neueKriterien.clear();
 		}
-		System.out.println("neue Anforderungnummer:" + selectedAnf.getAnfNr());
+		System.out.println(selectedAnf.getAnfId());
 		return "edit.xhtml?faces-redirect=true";
 	}
 	
-	
-	
+
+	//Speichert neue Anforderung
 	public String neueAnfSpeichern() {
 		Integer redirectLink;
-		
-		anfDao.saveAnf(1, selectedAnf);
+		System.out.println("neue Anforderung wird erstellt");
+		service.anfErstellen(selectedAnf, neueKriterien);
 		redirectLink = selectedAnf.getAnfId();
 		selectedAnf = new model.Anforderung();
-		return "/detail.xhtml?faces-redirect=true&id="+ redirectLink;
+		neueKriterien = new ArrayList<model.Akzeptanzkriterium>();
+		
+		return "/detail.xhtml?faces-redirect=true&id=" + redirectLink;
 		}
 	
 	

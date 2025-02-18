@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 public class Akzeptanzkriterium {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int akzeptanzID;
+	private Integer akzeptanzID;
 	private String akzeptanzBeschr;
 	
 	@ManyToOne
@@ -26,7 +26,7 @@ public class Akzeptanzkriterium {
 		this.akzeptanzBeschr = beschreibung;
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		return akzeptanzID;
 	}
 	

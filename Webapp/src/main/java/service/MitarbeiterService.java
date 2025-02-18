@@ -37,6 +37,7 @@ public class MitarbeiterService implements Serializable{
 	
 	public MitarbeiterService() {
 		arbeiterDao = new dao.MitarbeiterDao();	
+		
 		arbeiterListe.clear();
 		/*
 		model.Mitarbeiter m1 = new model.Mitarbeiter("fsd", "dsf", "f", "df", Rolle.RE);
@@ -49,6 +50,7 @@ public class MitarbeiterService implements Serializable{
 		saveMitarbeiter(m4);
 		*/
 		arbeiterListe.addAll(addToListe());
+		
 		aktuellerMitarbeiter = arbeiterListe.get(0);
 	
 	

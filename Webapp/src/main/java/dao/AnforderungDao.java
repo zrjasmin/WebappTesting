@@ -3,8 +3,10 @@ package dao;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.hibernate.annotations.processing.Find;
 
@@ -79,20 +81,44 @@ public class AnforderungDao implements Serializable{
 		return anforderungen;
 	}
 
+	
+	
 	/*speichert Anforderung und deren Ersteller*/
 	public void saveAnf(long mitarbeiterID, model.Anforderung anf) {
 		EntityManager em = JpaUtil.getEntityManager();
 		em.getTransaction().begin();
-		anf.setErsteller(em.find(model.Mitarbeiter.class, mitarbeiterID));
-		em.persist(anf);
 		
-		/*Kriterien zur passenden Anforderung speichern*/
-		for(model.Akzeptanzkriterium kriterium : anf.getAnfKriterien()) {
-			kriterium.setAnforderung(anf);
-			em.persist(kriterium);
+		try {
+			//Mitarbeiter festlegen
+			anf.setErsteller(em.find(model.Mitarbeiter.class, mitarbeiterID));
+			
+			if(anf.getAnfId() == null || em.find(model.Anforderung.class, anf.getAnfId()) == null) {
+				em.persist(anf);
+			} else {
+				em.merge(anf);
+			}
+			
+			for(model.Akzeptanzkriterium kriterium : anf.getAnfKriterien()) {
+				kriterium.setAnforderung(anf);
+				model.Akzeptanzkriterium bestehendesKriterium; 
+				
+				if(kriterium.getId() == null ||  em.find(model.Akzeptanzkriterium.class, kriterium.getId()) == null) {
+					addKriterium(kriterium, anf);
+				} else {
+					bestehendesKriterium = em.find(model.Akzeptanzkriterium.class, kriterium.getId());
+					updateKriterium(bestehendesKriterium, kriterium);
+				}
+			}
+			em.getTransaction().commit();
+				
+		} catch (Exception e) {
+			if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback bei Fehlern
+	        }
+	        e.printStackTrace();
 		}
+	
 		
-		em.getTransaction().commit();
 		em.close();
 	}
 	
@@ -121,37 +147,60 @@ public class AnforderungDao implements Serializable{
 	public model.Anforderung updateAnf(model.Anforderung anf) {
 		System.out.println("wird updaten in der Datenbank");
 		EntityManager em = JpaUtil.getEntityManager();
-		model.Anforderung anfToUpdate = findAnf(anf.getAnfId());
+		model.Anforderung anfToUpdate = null; 
 		
-		em.getTransaction().begin();
-		anfToUpdate.setAnfNr(anf.getAnfNr());
-		anfToUpdate.setAnfBezeichnung(anf.getAnfBezeichnung());
-		anfToUpdate.setAnfBeschreibung(anf.getAnfBeschreibung());
-		anfToUpdate.setAnfRisiko(anf.getAnfRisiko());
 		
-		for(model.Akzeptanzkriterium kriterium : anf.getAnfKriterien()) {
-			if(em.find(model.Akzeptanzkriterium.class, kriterium.getId()) != null) {
-				System.out.println("eine bearbeites Kriterium");
-				updateKriterium(kriterium);
-			} else {
-				System.out.println("eine neues Kriterium");
-				addKriterium(kriterium, anf);
-			}}
+		try {
+			em.getTransaction().begin();
+			anfToUpdate =  findAnf(anf.getAnfId());
+			if (anfToUpdate == null) {
+	            throw new IllegalArgumentException("Anforderung nicht gefunden: " + anf.getAnfId());
+	        }
+			
+			anfToUpdate.setAnfNr(anf.getAnfNr());
+			anfToUpdate.setAnfBezeichnung(anf.getAnfBezeichnung());
+			anfToUpdate.setAnfBeschreibung(anf.getAnfBeschreibung());
+			anfToUpdate.setAnfRisiko(anf.getAnfRisiko());
+			
+			List<model.Akzeptanzkriterium> kriterien = new ArrayList<>();
+			for(model.Akzeptanzkriterium kriterium : anf.getAnfKriterien()) {
+				model.Akzeptanzkriterium bestehendesKriterium = em.find(model.Akzeptanzkriterium.class, kriterium.getId());
+				
+				if(bestehendesKriterium != null) {
+					System.out.println("eine bearbeites Kriterium");
+					updateKriterium(bestehendesKriterium, kriterium);
+					kriterien.add(bestehendesKriterium);
+				} else {
+					System.out.println("eine neues Kriterium");
+					addKriterium(kriterium, anf);
+					kriterien.add(kriterium);
+				}
+			}
+			
+			anfToUpdate.setAnfKriterien(kriterien);
+			em.merge(anfToUpdate);
+			em.getTransaction().commit();
 			
 			
-		anfToUpdate.setAnfKriterien(anf.getAnfKriterien());
-		em.merge(anfToUpdate);
-		em.getTransaction().commit();
+			
+		} catch (Exception  e) {
+			if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback bei Fehlern
+	        }
+			e.printStackTrace(); 
+		}
 		em.close();
 		return anfToUpdate;
+		
+	
 		}
 
-	public model.Akzeptanzkriterium updateKriterium(model.Akzeptanzkriterium kriterium) {
+	public model.Akzeptanzkriterium updateKriterium(model.Akzeptanzkriterium altKriterium, model.Akzeptanzkriterium neuKriterium) {
 		EntityManager em = JpaUtil.getEntityManager();
-		model.Akzeptanzkriterium kriteriumToUpdate = em.find(model.Akzeptanzkriterium.class, kriterium.getId());
+		model.Akzeptanzkriterium kriteriumToUpdate = em.find(model.Akzeptanzkriterium.class, altKriterium.getId());
 		if(kriteriumToUpdate != null) {
 			em.getTransaction().begin();
-			kriteriumToUpdate.setAkzeptanzBeschr(kriterium.getAkzeptanzBeschr());
+			kriteriumToUpdate = neuKriterium;
 			em.merge(kriteriumToUpdate);
 			em.getTransaction().commit();
 			em.close();
