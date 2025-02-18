@@ -105,7 +105,7 @@ public class AnforderungService implements Serializable{
 		
 		if(maxNr != null) {
 			String number = maxNr.substring(3);
-			nextNumber = Integer.parseInt(number + 1);
+			nextNumber = Integer.parseInt(number) + 1;
 		}
 
 		

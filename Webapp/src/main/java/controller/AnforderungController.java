@@ -148,11 +148,11 @@ public class AnforderungController implements Serializable {
 	
 	public String deleteAnf() {
 		anfDao.deleteAnf(selectedAnf);
-		return "/anforderung.xhtml";
+		return "/anforderung.xhtml?faces-redirect=true";
 	}
 	
 	
-	public String bearbeiten(String anf) {
+	public String bearbeiten() {
 			neueKriterien.clear();
 			neueKriterien.addAll(selectedAnf.getAnfKriterien());
 			System.out.println("Anforderung " + selectedAnf.getAnfId());
