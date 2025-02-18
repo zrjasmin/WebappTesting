@@ -100,10 +100,16 @@ public class AnforderungService implements Serializable{
 
 	
 	public String generateNumber() {
-		int size = anfDao.findAll().size();
-		String anfNummer;
-		anfNummer = String.format("AR-%03d", size);
-		return anfNummer;
+		String maxNr = anfDao.maxAnfNr();
+		int nextNumber = 1;
+		
+		if(maxNr != null) {
+			String number = maxNr.substring(3);
+			nextNumber = Integer.parseInt(number + 1);
+		}
+
+		
+		return String.format("AR-%03d", nextNumber);
 	}
 	
 	

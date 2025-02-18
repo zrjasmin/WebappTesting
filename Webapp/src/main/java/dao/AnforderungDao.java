@@ -201,6 +201,24 @@ public class AnforderungDao implements Serializable{
 	
 		}
 	
+	public void deleteAnf(model.Anforderung anf) {
+		EntityManager em = JpaUtil.getEntityManager();
+		em.getTransaction().begin();
+		try {
+		model.Anforderung löschendeAnf = em.find(model.Anforderung.class, anf.getAnfId());
+		if(löschendeAnf != null) {
+			em.remove(löschendeAnf);
+		} 
+		em.getTransaction().commit();
+		} catch(Exception e) {
+			if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback bei Fehlern
+	        }
+	        e.printStackTrace();
+		}
+		 em.close();
+	}
+	
 	public void addKriterium(model.Akzeptanzkriterium kriterium, model.Anforderung anf) {
 		EntityManager em = JpaUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -240,8 +258,8 @@ public class AnforderungDao implements Serializable{
 		em.getTransaction().commit();
 		em.close();
 		
+		
 	}
-	
 
 	public model.Anforderung getAnfAtIndex(int pos) {
 		EntityManager em = JpaUtil.getEntityManager();
@@ -251,6 +269,31 @@ public class AnforderungDao implements Serializable{
 		return em.createQuery(cq).setMaxResults(1).setFirstResult(pos).getSingleResult();
 	}
 	
+	public boolean exist(Integer id) {
+		boolean exist;
+		try {
+			if(id == null) {
+				exist =false;
+			} else {
+				EntityManager em = JpaUtil.getEntityManager();
+				em.getTransaction().begin();
+				model.Anforderung anf = em.find(Anforderung.class, id);
+				System.out.println(anf);
+				exist = (anf != null);
+				em.getTransaction().commit();
+			}
+			
+			
+			
+		} catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException(e);
+	    }
+		return exist;
+	}
+	
+
+	
 	public Integer getNextId() {
 		EntityManager em = JpaUtil.getEntityManager();
 		Query query = em.createNativeQuery(
@@ -258,5 +301,12 @@ public class AnforderungDao implements Serializable{
 		return ((Integer) query.getSingleResult()).intValue();
 	}
 	
+	public String maxAnfNr() {
+		EntityManager em = JpaUtil.getEntityManager();
+		Query query = em.createQuery("SELECT MAX(a.anfNr) FROM Anforderung a");
+		String maxNr =(String) query.getSingleResult();
+		return maxNr;
+	}
+
 	
 }
