@@ -65,6 +65,25 @@ public class AnforderungDao implements Serializable{
 		
 	}
 	
+	
+	
+	public void addMitarbeiter(model.Anforderung anforderung, model.Mitarbeiter erstellerID) {
+		EntityManager em = JpaUtil.getEntityManager();
+		em.getTransaction().begin();
+		model.Mitarbeiter ersteller = em.find(model.Mitarbeiter.class, erstellerID);
+		
+		anforderung.setErsteller(ersteller);
+		ersteller.getErstellteAnf().add(anforderung);
+		em.persist(anforderung);
+		em.getTransaction().commit();
+		em.close();
+				
+	}
+	
+	
+	
+	
+	
 	public long getAnfCount() {
 		EntityManager em = JpaUtil.getEntityManager();
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
@@ -79,6 +98,14 @@ public class AnforderungDao implements Serializable{
 		Query abfrage = em.createQuery("select a from Anforderung a", model.Anforderung.class);
 		List<model.Anforderung> anforderungen = abfrage.getResultList();
 		return anforderungen;
+	}
+	
+	//bestimmte Anforderung finden
+	public model.Anforderung findAnf(Integer id) {
+		EntityManager em = JpaUtil.getEntityManager();
+		model.Anforderung anf = em.find(model.Anforderung.class, id);
+		em.close();
+		return anf;
 	}
 
 	
@@ -123,27 +150,6 @@ public class AnforderungDao implements Serializable{
 	}
 	
 
-	public void addMitarbeiter(model.Anforderung anforderung, model.Mitarbeiter erstellerID) {
-		EntityManager em = JpaUtil.getEntityManager();
-		em.getTransaction().begin();
-		model.Mitarbeiter ersteller = em.find(model.Mitarbeiter.class, erstellerID);
-		
-		anforderung.setErsteller(ersteller);
-		ersteller.getErstellteAnf().add(anforderung);
-		em.persist(anforderung);
-		em.getTransaction().commit();
-		em.close();
-				
-	}
-	
-	
-	public model.Anforderung findAnf(Integer id) {
-		EntityManager em = JpaUtil.getEntityManager();
-		model.Anforderung anf = em.find(model.Anforderung.class, id);
-		em.close();
-		return anf;
-	}
-	
 	public model.Anforderung updateAnf(model.Anforderung anf) {
 		System.out.println("wird updaten in der Datenbank");
 		EntityManager em = JpaUtil.getEntityManager();
@@ -194,6 +200,16 @@ public class AnforderungDao implements Serializable{
 		
 	
 		}
+	
+	public void addKriterium(model.Akzeptanzkriterium kriterium, model.Anforderung anf) {
+		EntityManager em = JpaUtil.getEntityManager();
+		em.getTransaction().begin();
+			kriterium.setAnforderung(anf);
+			em.persist(kriterium);
+		em.getTransaction().commit();
+		em.close();
+		System.out.println("kriterium wurde in DB gepspeichert");
+	}
 
 	public model.Akzeptanzkriterium updateKriterium(model.Akzeptanzkriterium altKriterium, model.Akzeptanzkriterium neuKriterium) {
 		EntityManager em = JpaUtil.getEntityManager();
@@ -207,51 +223,6 @@ public class AnforderungDao implements Serializable{
 		}
 		
 		return kriteriumToUpdate;
-	}
-
-
-
-
-
-	public model.Anforderung getAnfAtIndex(int pos) {
-		EntityManager em = JpaUtil.getEntityManager();
-		CriteriaQuery<model.Anforderung> cq = criteriaBuilder.createQuery(model.Anforderung.class);
-		Root<model.Anforderung> variableRoot = cq.from(model.Anforderung.class);
-		em.close();
-		return em.createQuery(cq).setMaxResults(1).setFirstResult(pos).getSingleResult();
-	}
-	
-	public boolean exist(Integer id) {
-		boolean exist;
-		try {
-			if(id == null) {
-				exist =false;
-			} else {
-				EntityManager em = JpaUtil.getEntityManager();
-				em.getTransaction().begin();
-				model.Anforderung anf = em.find(Anforderung.class, id);
-				System.out.println(anf);
-				exist = (anf != null);
-				em.getTransaction().commit();
-			}
-			
-			
-			
-		} catch (Exception e) {
-	        e.printStackTrace();
-	        throw new RuntimeException(e);
-	    }
-		return exist;
-	}
-	
-	public void addKriterium(model.Akzeptanzkriterium kriterium, model.Anforderung anf) {
-		EntityManager em = JpaUtil.getEntityManager();
-		em.getTransaction().begin();
-			kriterium.setAnforderung(anf);
-			em.persist(kriterium);
-		em.getTransaction().commit();
-		em.close();
-		System.out.println("kriterium wurde in DB gepspeichert");
 	}
 	
 	public void deleteKriteriumFromAnf(model.Akzeptanzkriterium kriterium, model.Anforderung anf) {
@@ -269,7 +240,15 @@ public class AnforderungDao implements Serializable{
 		em.getTransaction().commit();
 		em.close();
 		
-		
+	}
+	
+
+	public model.Anforderung getAnfAtIndex(int pos) {
+		EntityManager em = JpaUtil.getEntityManager();
+		CriteriaQuery<model.Anforderung> cq = criteriaBuilder.createQuery(model.Anforderung.class);
+		Root<model.Anforderung> variableRoot = cq.from(model.Anforderung.class);
+		em.close();
+		return em.createQuery(cq).setMaxResults(1).setFirstResult(pos).getSingleResult();
 	}
 	
 	public Integer getNextId() {
@@ -278,10 +257,6 @@ public class AnforderungDao implements Serializable{
 				"SELECT next_val FROM 'anforderung_seq'");
 		return ((Integer) query.getSingleResult()).intValue();
 	}
-	
-	
-
-	
 	
 	
 }
