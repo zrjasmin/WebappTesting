@@ -30,6 +30,11 @@ public class Anforderung implements Serializable {
 	@OneToMany(mappedBy="anforderung", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<model.Akzeptanzkriterium> anfKriterien = new ArrayList<>();
 	
+	@ManyToOne
+	@JoinColumn(name="ersteller") 
+	private Arbeiter mitarbeiter;
+	
+	
 	//@ManyToOne(optional = false)
 	//@JoinColumn(name="ersteller_id", nullable=false)
 	//private Mitarbeiter ersteller;

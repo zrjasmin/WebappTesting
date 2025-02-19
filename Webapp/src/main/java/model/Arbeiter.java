@@ -1,0 +1,78 @@
+package model;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.inject.Named;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+@Entity
+@Named
+public class Arbeiter implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer arbeiterId;
+	private String vorname;
+	private String nachname;
+	private String email;
+	private String bildUrl;
+	
+	@OneToMany(mappedBy="mitarbeiter", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<model.Anforderung> anforderungen = new ArrayList<>();
+
+	public Arbeiter() {
+		
+	}
+	
+	public Arbeiter(String vorname, String nachname, String email, String url) {
+		this.vorname = vorname;
+		this.nachname = nachname;
+		this.email = email;
+		this.bildUrl = url;
+	}
+	
+	public Integer getArbeiterId() {
+		return arbeiterId;
+	}
+	
+	public String getVorname() {
+		return vorname;
+	}
+
+	public void setVorname(String vorname) {
+		this.vorname = vorname;
+	}
+
+	public String getNachname() {
+		return nachname;
+	}
+
+	public void setNachname(String nachname) {
+		this.nachname = nachname;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getBildUrl() {
+		return bildUrl;
+	}
+
+	public void setBildUrl(String bildUrl) {
+		this.bildUrl = bildUrl;
+	}
+}

@@ -68,18 +68,18 @@
 					</H3>
 					
 				</div>
-				<!--  
+				
 				<div class="current-user flex">
 					<h:form>
-						<p:selectOneMenu id="select" value="#{mitarbeiterService.aktuellerMitarbeiter}" onchange="#{mitarbeiterService.change()}">
+						<p:selectOneMenu id="select" value="#{arbeiterService.aktuellerMitarbeiter}" >
 							<f:selectItem itemLabel="Bitte wählen..." itemValue="" />
-		      		        <f:selectItems value="#{mitarbeiterService.arbeiterListe}" var="arbeiter" itemValue="#{arbeiter}" itemLabel="#{arbeiter.mitarbeiterVorn}"/>
+		      		        <f:selectItems value="#{arbeiterService.arbeiterListe}" var="mitarbeiter"  itemLabel="#{mitarbeiter.vorname}" itemValue="#{mitarbeiter}"/>
 	                	</p:selectOneMenu>
 	            		
 					</h:form>
 					
 					</div>
-				-->
+				
 			</div>
 			
 			 		 	

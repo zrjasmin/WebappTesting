@@ -19,8 +19,6 @@ public class AnforderungService implements Serializable{
 	@Inject
 	private dao.AnforderungDao anfDao;
 	
-	
-	
 	@Inject 
 	private controller.AnforderungController controller;
 	
@@ -33,9 +31,11 @@ public class AnforderungService implements Serializable{
 	
 
 	public  AnforderungService() {
-		anfDao = new dao.AnforderungDao();
-	//	arbeiterService = new service.MitarbeiterService();
 		
+		anfDao = new dao.AnforderungDao();
+		
+		//	arbeiterService = new service.MitarbeiterService();
+		/*
 		model.Akzeptanzkriterium k1 = new model.Akzeptanzkriterium("Alle Produkte müssen mit Bild, Name und Preis angezeigt werden");
 		model.Akzeptanzkriterium k2 = new model.Akzeptanzkriterium("Die Produkte sollen nach Kategorien filterbar sein");
 		kriterien.add(k1);
@@ -43,10 +43,10 @@ public class AnforderungService implements Serializable{
 		model.Anforderung a1 = new model.Anforderung("AR-004", "Produktkatalog anzeigen","Die Plattform soll einen Katalog aller verfügbaren Produkte anzeigen", 
 				" Benutzern ermöglichen, Produkte zu durchsuchen und auszuwählen.", "Hoch", kriterien );
 		anfListe.add(a1);
-		
+		*/
 		anfListe.addAll(getAnfListe());
 		
-		anfDao.saveAnf(2, a1);
+		//anfDao.saveAnf(2, a1);
 		
 	
 	}
