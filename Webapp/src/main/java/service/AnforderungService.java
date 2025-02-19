@@ -1,24 +1,10 @@
 package service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-
-import dao.AnforderungDao;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.validator.ValidatorException;
-import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.persistence.*;
-import model.Akzeptanzkriterium;
-import model.Anforderung;
-import model.Mitarbeiter.Rolle;
-
 import java.io.Serializable;
 
 @Named
@@ -33,8 +19,7 @@ public class AnforderungService implements Serializable{
 	@Inject
 	private dao.AnforderungDao anfDao;
 	
-	@Inject 
-	private service.MitarbeiterService arbeiterService;
+	
 	
 	@Inject 
 	private controller.AnforderungController controller;
@@ -49,8 +34,8 @@ public class AnforderungService implements Serializable{
 
 	public  AnforderungService() {
 		anfDao = new dao.AnforderungDao();
-		arbeiterService = new service.MitarbeiterService();
-		/*
+	//	arbeiterService = new service.MitarbeiterService();
+		
 		model.Akzeptanzkriterium k1 = new model.Akzeptanzkriterium("Alle Produkte müssen mit Bild, Name und Preis angezeigt werden");
 		model.Akzeptanzkriterium k2 = new model.Akzeptanzkriterium("Die Produkte sollen nach Kategorien filterbar sein");
 		kriterien.add(k1);
@@ -62,7 +47,7 @@ public class AnforderungService implements Serializable{
 		anfListe.addAll(getAnfListe());
 		
 		anfDao.saveAnf(2, a1);
-		*/
+		
 	
 	}
 	
@@ -82,10 +67,10 @@ public class AnforderungService implements Serializable{
 	
 	//erstellt neue Anforderung
 	public void anfErstellen(model.Anforderung neuerArtikel, List<model.Akzeptanzkriterium> kriterien) {
-		Integer currentMitarbeiter = arbeiterService.getAktuellerMitarbeiter().getMitarbeiterId();
+		//Integer currentMitarbeiter = arbeiterService.getAktuellerMitarbeiter().getMitarbeiterId();
 		neuerArtikel.setAnfKriterien(kriterien);
 		neuerArtikel.setAnfNr(generateNumber());
-		anfDao.saveAnf(currentMitarbeiter, neuerArtikel);
+		anfDao.saveAnf(1, neuerArtikel);
 	}
 	
 	//updatet bestehende Anforderung

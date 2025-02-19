@@ -67,13 +67,13 @@ public class AnforderungDao implements Serializable{
 	
 	
 	
-	public void addMitarbeiter(model.Anforderung anforderung, model.Mitarbeiter erstellerID) {
+	public void addMitarbeiter(model.Anforderung anforderung) {
 		EntityManager em = JpaUtil.getEntityManager();
 		em.getTransaction().begin();
-		model.Mitarbeiter ersteller = em.find(model.Mitarbeiter.class, erstellerID);
+		/*model.Mitarbeiter ersteller = em.find(model.Mitarbeiter.class, erstellerID);
 		
 		anforderung.setErsteller(ersteller);
-		ersteller.getErstellteAnf().add(anforderung);
+		ersteller.getErstellteAnf().add(anforderung);*/
 		em.persist(anforderung);
 		em.getTransaction().commit();
 		em.close();
@@ -117,7 +117,7 @@ public class AnforderungDao implements Serializable{
 		
 		try {
 			//Mitarbeiter festlegen
-			anf.setErsteller(em.find(model.Mitarbeiter.class, mitarbeiterID));
+			//anf.setErsteller(em.find(model.Mitarbeiter.class, mitarbeiterID));
 			
 			if(anf.getAnfId() == null || em.find(model.Anforderung.class, anf.getAnfId()) == null) {
 				em.persist(anf);

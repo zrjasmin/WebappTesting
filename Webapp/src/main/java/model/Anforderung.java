@@ -30,11 +30,11 @@ public class Anforderung implements Serializable {
 	@OneToMany(mappedBy="anforderung", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<model.Akzeptanzkriterium> anfKriterien = new ArrayList<>();
 	
-	@ManyToOne(optional = false)
-	@JoinColumn(name="ersteller_id", nullable=false)
-	private Mitarbeiter ersteller;
-	@ManyToMany(mappedBy = "anforderung")
-	private Set<Testfall> testfall = new HashSet<>();
+	//@ManyToOne(optional = false)
+	//@JoinColumn(name="ersteller_id", nullable=false)
+	//private Mitarbeiter ersteller;
+//	@ManyToMany(mappedBy = "anforderung")
+	//private Set<Testfall> testfall = new HashSet<>();
 	
 	
 	
@@ -112,13 +112,13 @@ public class Anforderung implements Serializable {
 		this.anfKriterien = anfKriterien;
 	}
 	
-	public Mitarbeiter getErsteller() {
+	/*public Mitarbeiter getErsteller() {
 		return ersteller;
 	}
 	
 	public void setErsteller(Mitarbeiter ersteller) {
 		this.ersteller = ersteller;
-	}
+	}*/
 	
 	
 	

@@ -35,7 +35,7 @@ public class TestfallDao implements Serializable{
 	public void saveTest(long mitarbeiterID, model.Testfall testfall) {
 		EntityManager em = JpaUtil.getEntityManager();
 		em.getTransaction().begin();
-		testfall.setTestfallErsteller(em.find(model.Mitarbeiter.class, mitarbeiterID));
+	//	testfall.setTestfallErsteller(em.find(model.Mitarbeiter.class, mitarbeiterID));
 		em.persist(testfall);
 		
 		/*Kriterien zur passenden Anforderung speichern*/

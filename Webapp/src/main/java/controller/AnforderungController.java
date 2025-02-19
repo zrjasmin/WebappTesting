@@ -45,9 +45,6 @@ public class AnforderungController implements Serializable {
 		return service.getAnfListe().get(index);
 	}
 	
-	public void saveMitarbeiter() {
-		
-	}
 	
 	
 	public model.Anforderung getSelectedAnf() {

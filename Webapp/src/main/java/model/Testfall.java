@@ -42,7 +42,7 @@ public class Testfall implements Serializable{
 	@OneToMany(mappedBy="testfall", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<model.Testschritt> testschritte = new HashSet<>();
 	
-	@ManyToOne(optional = false)
+	/*@ManyToOne(optional = false)
 	@JoinColumn(name="ersteller_id", nullable=false)
 	private Mitarbeiter testfallErsteller;
 	
@@ -55,7 +55,7 @@ public class Testfall implements Serializable{
 	joinColumns= {@JoinColumn(name="testfall_id")}, 
 	inverseJoinColumns = {@JoinColumn(name="anf_id")})
 	private Set<Anforderung> anforderung = new HashSet<>();
-	
+	*/
 	
 	
 	public Testfall() {
@@ -98,7 +98,7 @@ public class Testfall implements Serializable{
 	public void setTestfallErgebnis(String testfallErgebnis) {
 		this.testfallErgebnis = testfallErgebnis;
 	}
-	public Mitarbeiter getTestfallErsteller() {
+	/*public Mitarbeiter getTestfallErsteller() {
 		return testfallErsteller;
 	}
 	public void setTestfallErsteller(Mitarbeiter testfallErsteller) {
@@ -115,7 +115,7 @@ public class Testfall implements Serializable{
 	}
 	public void setAnforderung(Set<Anforderung> anforderung) {
 		this.anforderung = anforderung;
-	}
+	}*/
 	
 	public Set<Testschritt> getTestschritte() {
 		return testschritte;
