@@ -75,4 +75,17 @@ public class Arbeiter implements Serializable {
 	public void setBildUrl(String bildUrl) {
 		this.bildUrl = bildUrl;
 	}
+	
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (!(obj instanceof model.Arbeiter)) return false;
+
+	    model.Arbeiter other = (model.Arbeiter) obj;
+
+	    return this.arbeiterId == other.arbeiterId; // Vergleich nach ID
+	}
+
+	
 }

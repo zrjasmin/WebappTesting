@@ -1,6 +1,8 @@
 package dao;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -60,10 +62,22 @@ public class ArbeiterDao implements Serializable{
         return em.createQuery(cq).getSingleResult();
 	}
 	
-	public List<model.Arbeiter> alleArbeiter() {
+	public Map<Integer, model.Arbeiter> alleArbeiter() {
 		EntityManager em = JpaUtil.getEntityManager();
-		Query abfrage = em.createQuery("select a from Arbeiter a", model.Arbeiter.class);
-		List<model.Arbeiter> arbeiter = abfrage.getResultList();
+        HashMap<Integer, Arbeiter> arbeiterMap = new HashMap<>();
+		List<model.Arbeiter> abfrage = em.createQuery("select a from Arbeiter a", model.Arbeiter.class).getResultList();
+		
+		for(model.Arbeiter ar : abfrage) {
+			arbeiterMap.put(ar.getArbeiterId(), ar);
+		}
+		
+		return arbeiterMap;
+	}
+	
+	public model.Arbeiter findArbeiter(Integer id) {
+		EntityManager em = JpaUtil.getEntityManager();
+		model.Arbeiter arbeiter = em.find(model.Arbeiter.class, id);
+		em.close();
 		return arbeiter;
 	}
 	

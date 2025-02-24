@@ -70,19 +70,22 @@
 				</div>
 				
 				<div class="current-user flex">
-					<h:form>
-						<p:selectOneMenu id="select" value="#{arbeiterService.aktuellerMitarbeiter}" >
-							<f:selectItem itemLabel="Bitte wählen..." itemValue="" />
-		      		        <f:selectItems value="#{arbeiterService.arbeiterListe}" var="mitarbeiter"  itemLabel="#{mitarbeiter.vorname}" itemValue="#{mitarbeiter}"/>
-	                	</p:selectOneMenu>
-	            		
-					</h:form>
+				
 					
+					
+					<h:form>
+					 <p:outputLabel for="@next" value="Basic"/>
+               		 <p:selectOneMenu id="arbeiter" value="#{arbeiterController.aktuellerMitarbeiter}" required="true" converter="#{arbeiterConverter}">
+						<p:ajax listener="#{arbeiterController.onArbeiterSelect()}"/>
+				        <f:selectItem itemLabel="Select One" itemValue=""/>
+				        <f:selectItems value="#{arbeiterController.arbeiter}" var="ar" itemValue="#{ar}" itemLabel="#{ar.vorname}"/>
+				    </p:selectOneMenu>
+               		 
+				</h:form>
 					</div>
 				
 			</div>
-			
-			 		 	
+				
 			 <div class="content">
 		 		<ui:insert name="content">
 		 		</ui:insert>
@@ -90,11 +93,7 @@
 		</div>
 		 		 	
 	  </div>
-	  
-	  
-	  
-	  
-	    
+	 
 	  
 </h:body>
 </ui:composition>

@@ -2,6 +2,8 @@ package service;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
@@ -16,7 +18,10 @@ public class ArbeiterService implements Serializable{
 	private dao.ArbeiterDao dao;
 	
 	private model.Arbeiter arbeiter = new model.Arbeiter();
-	private model.Arbeiter aktuellerMitarbeiter = new model.Arbeiter();
+	private model.Arbeiter aktuellerMitarbeiter;
+
+    private Map<Integer, model.Arbeiter> arbeiterAsMap;
+
 	public static List<model.Arbeiter> arbeiterListe = new ArrayList<>();
 	
 	
@@ -26,7 +31,13 @@ public class ArbeiterService implements Serializable{
 		//model.Arbeiter arbeiter2 = new model.Arbeiter("laura", "zimmer", "email", "url");
 		//arbeiterListe.add(arbeiter2);
 		//dao.createArbeiter(arbeiter2);
-		arbeiterListe.addAll(dao.alleArbeiter());
+		arbeiterAsMap = dao.alleArbeiter();
+		
+		System.out.println(aktuellerMitarbeiter);
+		aktuellerMitarbeiter = new model.Arbeiter();
+		System.out.println(aktuellerMitarbeiter);
+		onSubmit();
+
 	}
 	
 	
@@ -38,7 +49,17 @@ public class ArbeiterService implements Serializable{
 		return aktuellerMitarbeiter;
 	}
 	
-	public void setAktuellerMitarbeiter(model.Arbeiter arbeiter ) {
+	public void setAktuellerMitarbeiter(model.Arbeiter arbeiter) {
 		this.aktuellerMitarbeiter = arbeiter;
+		System.out.println("geänderter Mitarbeiter:" + arbeiter.getArbeiterId());
 	}
-	}
+	
+	public void onSubmit() {
+		System.out.println("Ausgewählter Arbeiter: ");
+
+	
+	
+	
+	
+	
+	}}
