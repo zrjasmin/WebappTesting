@@ -5,13 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class ArbeiterController implements Serializable{
 	private static final long serialVersionUID = 1L; 
 	
@@ -35,23 +37,14 @@ public class ArbeiterController implements Serializable{
 		}
 
 		}
-	
-	public void change() {
-		System.out.println("change Methode");
-		System.out.println(aktuellerMitarbeiter);
 
 	
-	}
 	
-	public void submit() {
-		
-		System.out.println("Aktueller Mitarbeiter: " );
-		  
-
-	}
 	
 	public void onArbeiterSelect() {
         System.out.println("Ausgewählter Arbeiter ID: " + aktuellerMitarbeiter.getArbeiterId());
+        System.out.println("Ausgewählter Arbeiter ID: " + aktuellerMitarbeiter);
+        
         // Hier kannst du weitere Logik hinzufügen
     }
 	
@@ -62,6 +55,8 @@ public class ArbeiterController implements Serializable{
 	
 	public void setAktuellerMitarbeiter(model.Arbeiter aktuellerMitarbeiter) {
 		this.aktuellerMitarbeiter = aktuellerMitarbeiter;
+		System.out.println(aktuellerMitarbeiter.getVorname());
+
 	}
 
 

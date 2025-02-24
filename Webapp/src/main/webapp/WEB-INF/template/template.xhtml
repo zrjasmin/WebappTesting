@@ -69,24 +69,26 @@
 					
 				</div>
 				
-				<div class="current-user flex">
-				<h1>neuer Branch</h1>
+				<p:commandButton value="Mitarbeiter wechseln" onclick="PF('dlg2').show()"/>
 					
-					
+				<p:dialog widgetVar="dlg2" showEffect="fade" modal="true" closeOnEscape="true">
 					<h:form>
-					 <p:outputLabel for="@next" value="Basic"/>
-               		 <p:selectOneMenu id="arbeiter" value="#{arbeiterController.aktuellerMitarbeiter}" required="true" converter="#{arbeiterConverter}">
-						<p:ajax listener="#{arbeiterController.onArbeiterSelect()}"/>
-				        <f:selectItem itemLabel="Select One" itemValue=""/>
-				        <f:selectItems value="#{arbeiterController.arbeiter}" var="ar" itemValue="#{ar}" itemLabel="#{ar.vorname}"/>
-				    </p:selectOneMenu>
-               		 
-				</h:form>
-					</div>
+						<h3>Wähle einen Mitarbeiter aus</h3>
+						
+						<p:outputLabel for="@next" value="Basic"/>
+	               		 <p:selectOneMenu id="arbeiter" value="#{arbeiterController.aktuellerMitarbeiter}" required="true" converter="#{arbeiterConverter}">
+							<p:ajax listener="#{arbeiterController.onArbeiterSelect()}"  />
+					        <f:selectItem itemLabel="Select One" itemValue=""/>
+					        <f:selectItems value="#{arbeiterController.arbeiter}" var="ar" itemValue="#{ar}" itemLabel="#{ar.vorname}"/>
+					    </p:selectOneMenu>
+					  
+					 </h:form>
+				</p:dialog>
 				
 			</div>
 				
 			 <div class="content">
+			 		
 		 		<ui:insert name="content">
 		 		</ui:insert>
 			 </div>
