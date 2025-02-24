@@ -29,6 +29,9 @@
  				 <div class="anf-ersteller flex">
 	   		 	 	<p class="tablet-up">Erstellt von </p>
    		 	 		<p:avatar label="U" styleClass="mr-2 avatar" style="background-color:#9c27b0; color:#fff" shape="circle"  id="list-Ersteller"/>
+   		 			<p:overlayPanel for="list-Ersteller" autoHide="false" showEvent="mouseover" hideEvent="mouseout">
+   		 				<h:outputText value="#{anforderungController.selectedAnf.ersteller.vorname}"/>
+   		 			</p:overlayPanel>
    		 			<!-- mitarbeiter to String nochmal überarbeiten -> kein zugriff -->
       		 	</div>
 

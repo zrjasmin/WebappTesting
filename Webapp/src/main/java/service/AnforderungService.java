@@ -21,13 +21,15 @@ public class AnforderungService implements Serializable{
 	
 	@Inject 
 	private controller.AnforderungController controller;
-	
+	@Inject 
+	private controller.ArbeiterController arbeiterController;
 
 	public static final List<model.Anforderung> anfListe = new ArrayList<>();
 	
 
 	
 	private static List<model.Akzeptanzkriterium> kriterien = new ArrayList<model.Akzeptanzkriterium>();
+	
 	
 
 	public  AnforderungService() {
@@ -67,7 +69,9 @@ public class AnforderungService implements Serializable{
 	
 	//erstellt neue Anforderung
 	public void anfErstellen(model.Anforderung neuerArtikel, List<model.Akzeptanzkriterium> kriterien) {
-		//Integer currentMitarbeiter = arbeiterService.getAktuellerMitarbeiter().getMitarbeiterId();
+		
+		
+		neuerArtikel.setErsteller(arbeiterController.getAktuellerMitarbeiter());
 		neuerArtikel.setAnfKriterien(kriterien);
 		neuerArtikel.setAnfNr(generateNumber());
 		anfDao.saveAnf(1, neuerArtikel);

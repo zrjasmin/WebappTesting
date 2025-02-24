@@ -13,7 +13,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 @Named
-@ViewScoped
+@SessionScoped
 public class ArbeiterController implements Serializable{
 	private static final long serialVersionUID = 1L; 
 	

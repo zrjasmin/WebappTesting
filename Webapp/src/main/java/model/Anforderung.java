@@ -117,13 +117,13 @@ public class Anforderung implements Serializable {
 		this.anfKriterien = anfKriterien;
 	}
 	
-	/*public Mitarbeiter getErsteller() {
-		return ersteller;
+	public model.Arbeiter getErsteller() {
+		return mitarbeiter;
 	}
 	
-	public void setErsteller(Mitarbeiter ersteller) {
-		this.ersteller = ersteller;
-	}*/
+	public void setErsteller(model.Arbeiter ersteller) {
+		this.mitarbeiter = ersteller;
+	}
 	
 	
 	
