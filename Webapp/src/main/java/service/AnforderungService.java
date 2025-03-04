@@ -70,11 +70,13 @@ public class AnforderungService implements Serializable{
 	//erstellt neue Anforderung
 	public void anfErstellen(model.Anforderung neuerArtikel, List<model.Akzeptanzkriterium> kriterien) {
 		
-		
+		System.out.println("service:" + arbeiterController.getAktuellerMitarbeiter().getVorname());
+
 		neuerArtikel.setErsteller(arbeiterController.getAktuellerMitarbeiter());
+		
 		neuerArtikel.setAnfKriterien(kriterien);
 		neuerArtikel.setAnfNr(generateNumber());
-		anfDao.saveAnf(1, neuerArtikel);
+		anfDao.saveAnf(neuerArtikel.getErsteller().getArbeiterId(), neuerArtikel);
 	}
 	
 	//updatet bestehende Anforderung

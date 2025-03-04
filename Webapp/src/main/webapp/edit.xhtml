@@ -25,19 +25,19 @@
  				 
  				 <p:outputLabel for="bezeichnung" value="Bezeichnung"/>
  				 <div>
-	 				  <p:inputText id="bezeichnung" value="#{anforderungController.selectedAnf.anfBezeichnung}" required="true" size="50" requiredMessage="Bitte einen Namen eingeben"/>
+	 				  <p:inputText id="bezeichnung" value="#{editController.selectedAnf.anfBezeichnung}" required="true" size="50" requiredMessage="Bitte einen Namen eingeben"/>
 	 				 
 	 				  <p:message for="bezeichnung"/>
  				 </div>
  				
  				 <p:outputLabel for="beschreibung" value="Beschreibung"/>
- 				 <p:inputTextarea id="beschreibung" value="#{anforderungController.selectedAnf.anfBeschreibung}" required="true"  rows="5" cols="55"  requiredMessage="Bitte einen Beschreibung eingeben"/>
+ 				 <p:inputTextarea id="beschreibung" value="#{editController.selectedAnf.anfBeschreibung}" required="true"  rows="5" cols="55"  requiredMessage="Bitte einen Beschreibung eingeben"/>
  				 
  				 <p:outputLabel for="ziel" value="Ziel/Absicht"/>
- 				 <p:inputTextarea id="ziel" value="#{anforderungController.selectedAnf.anfZiel}" required="true" rows="3" cols="55" maxlength="150"/>
+ 				 <p:inputTextarea id="ziel" value="#{editController.selectedAnf.anfZiel}" required="true" rows="3" cols="55" maxlength="150"/>
  				 
  				 <p:outputLabel for="risiko" value="Risiko/Kritikalität" />
-	             <p:selectOneMenu id="risiko" value="#{anforderungController.selectedAnf.anfRisiko}"
+	             <p:selectOneMenu id="risiko" value="#{editController.selectedAnf.anfRisiko}"
 	                                hideNoSelectionOption="#{not empty selectOneMenuView.hideNoSelectOption}">
 	                    <p:ajax update="@this" process="@this"/>
 	                    <f:selectItem itemLabel="Wähle eins" itemValue="#{null}" noSelectionOption="true"/>
@@ -49,17 +49,18 @@
  				 
  				 <p:outputLabel value="Akzeptanzkriterien"/>
  				 <div>
-	 				 <ui:repeat value="#{anforderungController.neueKriterien}" var="kriterium">
+	 				 <ui:repeat value="#{editController.neueKriterien}" var="kriterium">
 	 				 	<p:inputText value="#{kriterium.akzeptanzBeschr}"/>
-	 				 	<h:commandButton value="Löschen" action="#{anforderungController.deleteKriterium(kriterium)}" />
+	 				 	<h:commandButton value="Löschen" action="#{editController.deleteKriterium(kriterium)}" />
 	 				 </ui:repeat>
-	 				 <h:commandButton value="Neues Kriterium hinzufügen" action="#{anforderungController.addKriterium()}" />
+	 				 <h:commandButton value="Neues Kriterium hinzufügen" action="#{editController.addKriterium()}" />
  				 </div>
  				 
  			
  				
  				
- 				<h:commandButton value="Anforderung speichern" action="#{anforderungController.updateOrCreate}"/>
+ 				<h:commandButton value="Anforderung speichern" action="#{editController.updateOrCreate}"/>
+ 				
 
  			</p:panelGrid>
  			</h:form>

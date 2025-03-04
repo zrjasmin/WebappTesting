@@ -117,7 +117,7 @@ public class AnforderungDao implements Serializable{
 		
 		try {
 			//Mitarbeiter festlegen
-			//anf.setErsteller(em.find(model.Mitarbeiter.class, mitarbeiterID));
+			anf.setErsteller(em.find(model.Arbeiter.class, mitarbeiterID));
 			
 			if(anf.getAnfId() == null || em.find(model.Anforderung.class, anf.getAnfId()) == null) {
 				em.persist(anf);
@@ -159,29 +159,16 @@ public class AnforderungDao implements Serializable{
 		try {
 			em.getTransaction().begin();
 			anfToUpdate =  findAnf(anf.getAnfId());
-			if (anfToUpdate == null) {
-	            throw new IllegalArgumentException("Anforderung nicht gefunden: " + anf.getAnfId());
-	        }
+			prüfeAnf(anf, anf.getAnfId());
 			
 			anfToUpdate.setAnfNr(anf.getAnfNr());
 			anfToUpdate.setAnfBezeichnung(anf.getAnfBezeichnung());
 			anfToUpdate.setAnfBeschreibung(anf.getAnfBeschreibung());
 			anfToUpdate.setAnfRisiko(anf.getAnfRisiko());
+			//überarbeiten -> id wird nicht geladen
 			
-			List<model.Akzeptanzkriterium> kriterien = new ArrayList<>();
-			for(model.Akzeptanzkriterium kriterium : anf.getAnfKriterien()) {
-				model.Akzeptanzkriterium bestehendesKriterium = em.find(model.Akzeptanzkriterium.class, kriterium.getId());
-				
-				if(bestehendesKriterium != null) {
-					System.out.println("eine bearbeites Kriterium");
-					updateKriterium(bestehendesKriterium, kriterium);
-					kriterien.add(bestehendesKriterium);
-				} else {
-					System.out.println("eine neues Kriterium");
-					addKriterium(kriterium, anf);
-					kriterien.add(kriterium);
-				}
-			}
+			List<model.Akzeptanzkriterium> kriterien = updateKriterien(anf);
+			
 			
 			anfToUpdate.setAnfKriterien(kriterien);
 			em.merge(anfToUpdate);
@@ -194,8 +181,10 @@ public class AnforderungDao implements Serializable{
 	            em.getTransaction().rollback(); // Rollback bei Fehlern
 	        }
 			e.printStackTrace(); 
+		} finally {
+			em.close();
 		}
-		em.close();
+
 		return anfToUpdate;
 		
 	
@@ -219,29 +208,72 @@ public class AnforderungDao implements Serializable{
 		 em.close();
 	}
 	
+	//prüft die Existenz einer Anforderung
+	public void prüfeAnf(model.Anforderung anf, Integer id) {
+		if (anf == null) {
+            throw new IllegalArgumentException("Anforderung nicht gefunden: " + anf.getAnfId());
+        }
+	}
+	
 	public void addKriterium(model.Akzeptanzkriterium kriterium, model.Anforderung anf) {
 		EntityManager em = JpaUtil.getEntityManager();
-		em.getTransaction().begin();
-			kriterium.setAnforderung(anf);
+		kriterium.setAnforderung(anf);
+		
+		try {
+			em.getTransaction().begin();
 			em.persist(kriterium);
-		em.getTransaction().commit();
-		em.close();
-		System.out.println("kriterium wurde in DB gepspeichert");
+			em.getTransaction().commit();
+		} catch(Exception e) {
+			if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback bei Fehlern
+	        }
+		     e.printStackTrace();
+	    } finally {
+	        em.close();
+	    
+	    }	
+		
 	}
 
-	public model.Akzeptanzkriterium updateKriterium(model.Akzeptanzkriterium altKriterium, model.Akzeptanzkriterium neuKriterium) {
-		EntityManager em = JpaUtil.getEntityManager();
-		model.Akzeptanzkriterium kriteriumToUpdate = em.find(model.Akzeptanzkriterium.class, altKriterium.getId());
-		if(kriteriumToUpdate != null) {
-			em.getTransaction().begin();
-			kriteriumToUpdate = neuKriterium;
-			em.merge(kriteriumToUpdate);
-			em.getTransaction().commit();
-			em.close();
-		}
+	public void updateKriterium(model.Akzeptanzkriterium altKriterium, model.Akzeptanzkriterium neuKriterium) {
+		altKriterium.setAkzeptanzBeschr(neuKriterium.getAkzeptanzBeschr());
 		
-		return kriteriumToUpdate;
 	}
+	
+	
+	
+	private List<model.Akzeptanzkriterium> updateKriterien(model.Anforderung anf) {
+		EntityManager em = JpaUtil.getEntityManager();
+		List<model.Akzeptanzkriterium> kriterien = new ArrayList<>();
+		
+		for(model.Akzeptanzkriterium kriterium : anf.getAnfKriterien()) {
+			
+			if(kriterium.getId() == null) {
+				System.out.println("Kriterium hat  kein Id");
+				System.out.println(kriterium);
+				addKriterium(kriterium, anf);
+				kriterien.add(kriterium);
+			} else {
+				System.out.println("kriterium speichern: "+ kriterium.getId());
+				model.Akzeptanzkriterium bestehendesKriterium = em.find(model.Akzeptanzkriterium.class, kriterium.getId());
+				
+				if(bestehendesKriterium != null) {
+					System.out.println(kriterium);
+					System.out.println("eine bearbeites Kriterium");
+					updateKriterium(bestehendesKriterium, kriterium);
+					kriterien.add(bestehendesKriterium);
+				} else {
+					System.out.println("Kriterium nicht gefunden");
+				}
+			}
+			
+			
+			
+		}
+		return kriterien;
+		
+	}
+	
 	
 	public void deleteKriteriumFromAnf(model.Akzeptanzkriterium kriterium, model.Anforderung anf) {
 		EntityManager em = JpaUtil.getEntityManager();
@@ -307,6 +339,17 @@ public class AnforderungDao implements Serializable{
 		String maxNr =(String) query.getSingleResult();
 		return maxNr;
 	}
+	
+	
+	
+	public model.Anforderung getLetzteAnf() {
+		EntityManager em = JpaUtil.getEntityManager();
+        TypedQuery<Anforderung> query = em.createQuery(
+            "SELECT a FROM Anforderung a ORDER BY a.anfId DESC", Anforderung.class);
+        query.setMaxResults(1);
+        List<model.Anforderung> results = query.getResultList();
+        return results.isEmpty() ? null : results.get(0);
+    }
 
 	
 }

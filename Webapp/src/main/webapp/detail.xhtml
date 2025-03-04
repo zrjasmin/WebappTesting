@@ -19,13 +19,13 @@
  		
  		<div class="flex button-container">
 	 		<p:linkButton outcome="/anforderungen.xhtml" styleClass="ui-button-flat" value="zurück" ajax="false" icon="pi pi-angle-left"></p:linkButton>
-	 		<p:commandLink action="#{anforderungController.bearbeiten()}" value="Bearbeiten" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
+	 		<p:commandLink action="#{editController.bearbeiten()}" value="Bearbeiten" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
 	 		<p:commandLink action="#{anforderungController.deleteAnf()}" value="Löschen" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
  		</div>
  		
  		<p:card>
  			<div class="flex">
- 				 <h:outputText value="#{anforderungController.selectedAnf.anfNr}"/>
+ 				 <h:outputText value="#{editController.selectedAnf.anfNr}"/>
  				 <div class="anf-ersteller flex">
 	   		 	 	<p class="tablet-up">Erstellt von </p>
    		 	 		<p:avatar label="U" styleClass="mr-2 avatar" style="background-color:#9c27b0; color:#fff" shape="circle"  id="list-Ersteller"/>
@@ -36,28 +36,28 @@
       		 	</div>
 
  			</div>
-	 		<h3>#{anforderungController.selectedAnf.anfBezeichnung}</h3>
+	 		<h3>#{editController.selectedAnf.anfBezeichnung}</h3>
 	 		<div class="detail-content">
 	 			<h4>Beschreibung</h4>
-	 			<h:outputText value="#{anforderungController.selectedAnf.anfBeschreibung}"/>
+	 			<h:outputText value="#{editController.selectedAnf.anfBezeichnung}"/>
 	 			
 	 			<h4>Ziel/Absicht</h4>
-	 			<h:outputText value="#{anforderungController.selectedAnf.anfZiel}"/>
+	 			<h:outputText value="#{editController.selectedAnf.anfZiel}"/>
 	 			
 	 			<h4>Akzeptanzkriterien</h4>
-	 			<h:outputText value="#{anforderungController.selectedAnf.anfBezeichnung}"/>
+	 			<h:outputText value="#{editController.selectedAnf.anfBezeichnung}"/>
 	 			
 	 			<h4>Voraussetzungen</h4>
-	 			<p:dataList value="#{anforderungController.selectedAnf.anfKriterien}" var="kriterium">
+	 			<p:dataList value="#{editController.selectedAnf.anfKriterien}" var="kriterium">
 	 				<div class="product-list-item">
 	 					<h:outputText value="#{kriterium.akzeptanzBeschr}"/>
 	 				</div>
 	 			
 	 			</p:dataList>
-	 			<h:outputText value="#{anforderungController.selectedAnf.anfBezeichnung}"/>
+	 			<h:outputText value="#{editController.selectedAnf.anfBezeichnung}"/>
 	 			
 	 			<h4>Testmethodik</h4>
-	 			<h:outputText value="#{anforderungController.selectedAnf.anfBezeichnung}"/>
+	 			<h:outputText value="#{editController.selectedAnf.anfBezeichnung}"/>
 	 		</div>
 		        
 		    

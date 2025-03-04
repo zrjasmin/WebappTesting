@@ -23,15 +23,10 @@ public class AnforderungController implements Serializable {
 	private model.Anforderung selectedAnf;
 	private List<model.Akzeptanzkriterium> neueKriterien = new ArrayList<model.Akzeptanzkriterium>();
 
-	public void init() {
-        if (selectedId != null) {
-        	selectedAnf = anfDao.findAnf(selectedId);
-        } 
-      
-    }
+
 	
 	public AnforderungController() {
-		
+		selectedAnf = new model.Anforderung();
 	}
 	
 	public model.Anforderung getAnforderung(int index) {
@@ -48,28 +43,16 @@ public class AnforderungController implements Serializable {
 		this.selectedAnf = selectedAnf;
 	}
 	
-	public Integer getSelectedId() {
-		return selectedId;
-	}
 	
-	public void setSelectedId(Integer id) {
-		this.selectedId = id;
-		init();
-		
-	}
-	
-	
+
 	
 	public String selectAnforderung(Integer id) {
 		selectedAnf = anfDao.findAnf(id);
-		
-		System.out.println("ausgewählte Anforderung: ");
+		selectedId = id;
+		System.out.println("ausgewählte Anforderung: " + selectedAnf.getAnfId());
 		return "detail?faces-redirect=true&id=" + selectedAnf.getAnfId();
 			
 	}
-	
-	
-	
 	
 	public String showAnfNr() {
 		String nummer;
@@ -93,23 +76,6 @@ public class AnforderungController implements Serializable {
 	}
 	
 	
-	
-	
-	
-	
-	public String updateOrCreate(){	
-		String redirect;
-		if(selectedAnf.getAnfId() == null || anfDao.exist(selectedAnf.getAnfId())) {
-			redirect = neueAnfSpeichern();
-		} else {
-			System.out.println("wir müssen die anforderungen updaten");
-			service.anfUpdaten(selectedAnf, neueKriterien);
-			redirect =  "detail?faces-redirect=true&id=" + selectedAnf.getAnfId();
-		
-		}
-		return redirect;
-	}
-	
 
 
 	//wechselt zur Bearbeiten Seite (neue Anforderung)
@@ -125,16 +91,7 @@ public class AnforderungController implements Serializable {
 	
 
 	//Speichert neue Anforderung
-	public String neueAnfSpeichern() {
-		Integer redirectLink;
-		System.out.println("neue Anforderung wird erstellt");
-		service.anfErstellen(selectedAnf, neueKriterien);
-		redirectLink = selectedAnf.getAnfId();
-		selectedAnf = new model.Anforderung();
-		neueKriterien = new ArrayList<model.Akzeptanzkriterium>();
-		
-		return "/detail.xhtml?faces-redirect=true&id=" + redirectLink;
-		}
+	
 	
 	public String deleteAnf() {
 		anfDao.deleteAnf(selectedAnf);
@@ -142,18 +99,15 @@ public class AnforderungController implements Serializable {
 	}
 	
 	
-	public String bearbeiten() {
-			neueKriterien.clear();
-			neueKriterien.addAll(selectedAnf.getAnfKriterien());
-			System.out.println("Anforderung " + selectedAnf.getAnfId());
-		
-		return "edit.xhtml?faces-redirect=true&id=" + selectedAnf.getAnfId();
-	}
+
 	
-	public String deleteKriterium(model.Akzeptanzkriterium kriterium) {
-		neueKriterien.remove(kriterium);
-		anfDao.deleteKriteriumFromAnf(kriterium, getSelectedAnf());
-		return "";
+
+	public Integer getSelectedId() {
+		return selectedId;
+	}
+
+	public void setSelectedId(Integer selectedId) {
+		this.selectedId = selectedId;
 	}
 	
 	
