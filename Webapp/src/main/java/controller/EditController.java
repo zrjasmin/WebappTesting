@@ -24,7 +24,7 @@ public class EditController implements Serializable {
 	dao.AnforderungDao anfDao;
 	@Inject 
 	service.AnforderungService service;
-	
+	 
 	
 	private model.Anforderung selectedAnf;	
 	private Integer selectedId;
