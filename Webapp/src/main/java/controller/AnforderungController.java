@@ -27,6 +27,7 @@ public class AnforderungController implements Serializable {
 	
 	public AnforderungController() {
 		selectedAnf = new model.Anforderung();
+		
 	}
 	
 	public model.Anforderung getAnforderung(int index) {
@@ -94,8 +95,9 @@ public class AnforderungController implements Serializable {
 	
 	
 	public String deleteAnf() {
-		anfDao.deleteAnf(selectedAnf);
-		return "/anforderung.xhtml?faces-redirect=true";
+		anfDao.deleteRequirement(selectedAnf.getAnfId());
+		System.out.println("ID zum löschen: " + selectedAnf.getAnfId());
+		return "/anforderungen.xhtml?faces-redirect=true";
 	}
 	
 	

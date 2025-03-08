@@ -28,6 +28,9 @@ public class Arbeiter implements Serializable {
 	
 	@OneToMany(mappedBy="mitarbeiter", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<model.Anforderung> anforderungen = new ArrayList<>();
+	
+	@OneToMany(mappedBy="mitarbeiter", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<model.Testfall> testfall = new ArrayList<>();
 
 	public Arbeiter() {
 		

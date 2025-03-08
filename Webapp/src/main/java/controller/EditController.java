@@ -43,8 +43,7 @@ public class EditController implements Serializable {
     	        System.out.println("initialisierung: ID " + selectedId);
             
             } catch (NumberFormatException e) {
-                // Fehlerbehandlung, falls die ID ungültig ist
-                // z.B. Fehlermeldung setzen oder zur Übersicht umleiten
+             
             }
         }
 
@@ -103,12 +102,16 @@ public class EditController implements Serializable {
 		System.out.println(selectedId);
 
 		
-		service.anfErstellen(selectedAnf, anfController.getNeueKriterien());
+		service.anfErstellen(selectedAnf, neueKriterien);
 		selectedAnf = new model.Anforderung();
+		neueKriterien.clear();
 		
 		
 		
 		}
+	
+	
+	
 	
 	
 	
@@ -132,7 +135,7 @@ public class EditController implements Serializable {
 	
 	public String deleteKriterium(model.Akzeptanzkriterium kriterium) {
 		neueKriterien.remove(kriterium);
-		anfDao.deleteKriteriumFromAnf(kriterium, getSelectedAnf());
+		anfDao.deleteKriterium(kriterium.getId());
 		return "";
 	}
 

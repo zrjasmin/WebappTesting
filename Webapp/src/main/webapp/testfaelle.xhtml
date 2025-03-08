@@ -22,9 +22,10 @@
 	
 	<div class="anf-view card">
 		<h:form id="form">
-			<p:commandLink action="#{anforderungController.neueAnfErstellen}" value="neue Anforderung"/>
+			<p:commandLink action="#{testfallController.neuerTest}" value="neuen Test erstellen"/>
+		
 			
-			<p:dataView var="anf" value="#{anforderungService.anfListe}" rows="12" paginator="true"
+			<p:dataView var="test" value="#{testfallService.testListe}" rows="12" paginator="true"
 	                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 	                    layout="grid" gridIcon="pi pi-th-large" listIcon="pi pi-bars"
 	                     flex="true">
@@ -34,21 +35,20 @@
 	        		<div class="grid-card">
 	        		 	<div class="anf_top flex">
 	        		 		<div class="tags">
-	        		 			<p:chip label="#{anf.anfNr}" styleClass="mr-2 chip"/>
-	        		 			<p:chip label="#{anf.anfRisiko}" class="mr-2 chip" />
+	        		 			<p:chip label="#{test.nr}" styleClass="mr-2 chip"/>
 	        		 		</div>
 	        		 	</div>
 	        		 	
 	        		 	<div class="anf_content">
-		        		 	<p:commandLink action="#{anforderungController.selectAnforderung(anf.anfId)}" class="link">
-		        		 		<h4 class="bold">#{anf.anfBezeichnung}</h4>
-		        		 	 	<p>#{anf.anfBeschreibung}</p>
+		        		 	<p:commandLink action="#{testfallController.selectTestfall(test.testId)}" class="link">
+		        		 		<h4 class="bold">#{test.bezeichnung}</h4>
+		        		 	 	<p>#{test.beschreibung}</p>
 		        		 	 	
 		        		 	</p:commandLink>
 	        		 	 </div>
 	        		 	 
 	        		 	 <div class="anf_bottom flex">
-	        		 	 	<p class="small">Erstellt von #{anf.ersteller.vorname} #{anf.ersteller.nachname}</p>
+	        		 	 	<p class="small">Erstellt von #{test.ersteller.vorname} #{test.ersteller.nachname}</p>
 						 </div>
 	        		</div>
 	        	</p:dataViewGridItem>
@@ -58,14 +58,11 @@
 	            <p:dataViewListItem>
 	           		 <div class="list-item">
 	           		 	<div class="anf-info">
-	           		 		<h4 class="bold">#{anf.anfBezeichnung}</h4>
-	        		 	 	<p>#{anf.anfBeschreibung}</p>
+	           		 		<h4 class="bold">#{test.bezeichnung}</h4>
+	        		 	 	<p>#{test.beschreibung}</p>
 	           		 	</div>
 	           		 	<div class="mobile-view">
-		           		 	<div class="tags">
-			           		 	<p:chip label="#{anf.anfNr}" styleClass="mr-2 chip"/>
-			        		 	<p:chip label="#{anf.anfRisiko}" styleClass="mr-2 custom-chip" icon="pi pi-info-circle"/>
-		        		 	</div>
+		           		 
 		        		 	<div class=" flex">
 	        		 	 		
 		        		 	</div>

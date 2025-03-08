@@ -19,18 +19,11 @@ public class AnforderungService implements Serializable{
 	@Inject
 	private dao.AnforderungDao anfDao;
 	
-	@Inject 
-	private controller.AnforderungController controller;
+
 	@Inject 
 	private controller.ArbeiterController arbeiterController;
 
-	public static final List<model.Anforderung> anfListe = new ArrayList<>();
-	
-
-	
-	private static List<model.Akzeptanzkriterium> kriterien = new ArrayList<model.Akzeptanzkriterium>();
-	
-	
+	public static final List<model.Anforderung> anfListe = new ArrayList<>();	
 
 	public  AnforderungService() {
 		
@@ -53,6 +46,7 @@ public class AnforderungService implements Serializable{
 	
 	}
 	
+	//Laden aus der Datenbank
 	public List<model.Anforderung> getAnfListe() {
 		return anfDao.findAll();
 	}

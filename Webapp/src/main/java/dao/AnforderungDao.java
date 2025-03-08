@@ -164,6 +164,7 @@ public class AnforderungDao implements Serializable{
 			anfToUpdate.setAnfNr(anf.getAnfNr());
 			anfToUpdate.setAnfBezeichnung(anf.getAnfBezeichnung());
 			anfToUpdate.setAnfBeschreibung(anf.getAnfBeschreibung());
+			anfToUpdate.setAnfZiel(anf.getAnfZiel());
 			anfToUpdate.setAnfRisiko(anf.getAnfRisiko());
 			//überarbeiten -> id wird nicht geladen
 			
@@ -192,20 +193,73 @@ public class AnforderungDao implements Serializable{
 	
 	public void deleteAnf(model.Anforderung anf) {
 		EntityManager em = JpaUtil.getEntityManager();
-		em.getTransaction().begin();
+		
+		System.out.println("anforderung löschen: " + anf.getAnfId());
+		
 		try {
-		model.Anforderung löschendeAnf = em.find(model.Anforderung.class, anf.getAnfId());
-		if(löschendeAnf != null) {
-			em.remove(löschendeAnf);
-		} 
-		em.getTransaction().commit();
+			em.getTransaction().begin();
+			
+			model.Anforderung löschendeAnf = em.find(model.Anforderung.class, anf.getAnfId());
+			if(löschendeAnf != null) {
+				em.remove(löschendeAnf);
+			} 
+			em.getTransaction().commit();
+			
+			//Verfikation
+			
+			
 		} catch(Exception e) {
 			if (em.getTransaction().isActive()) {
 	            em.getTransaction().rollback(); // Rollback bei Fehlern
 	        }
 	        e.printStackTrace();
 		}
-		 em.close();
+		finally {
+			em.close();
+		}
+		 
+	}
+	
+	
+	public void deleteRequirement(Integer requirementId) {
+		EntityManager em = JpaUtil.getEntityManager();
+
+	    try {
+	        em.getTransaction().begin();
+
+	        // Anforderung finden
+	        model.Anforderung requirement = em.find(model.Anforderung.class, requirementId);
+	        if (requirement == null) {
+	            throw new IllegalArgumentException("Anforderung nicht gefunden.");
+	        }
+
+	        
+	        for(model.Akzeptanzkriterium kriterium : requirement.getAnfKriterien()) {
+	        	deleteKriterium(kriterium.getId());
+	        }
+	        // Alle verbundenen Kriterien werden automatisch gelöscht,
+	        // wenn CascadeType.ALL und orphanRemoval=true gesetzt sind.
+	        em.remove(requirement); // Anforderung löschen
+
+	        em.getTransaction().commit();
+	    } catch (IllegalArgumentException e) {
+	        if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback();
+	        }
+	        System.out.println(e.getMessage());
+	    } catch (PersistenceException e) {
+	        if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback();
+	        }
+	        System.out.println("Fehler beim Löschen: " + e.getMessage());
+	    } catch (Exception e) {
+	        if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback();
+	        }
+	        e.printStackTrace();
+	    } finally {
+	        em.close(); // EntityManager schließen
+	    }
 	}
 	
 	//prüft die Existenz einer Anforderung
@@ -275,6 +329,7 @@ public class AnforderungDao implements Serializable{
 	}
 	
 	
+	
 	public void deleteKriteriumFromAnf(model.Akzeptanzkriterium kriterium, model.Anforderung anf) {
 		EntityManager em = JpaUtil.getEntityManager();
 		em.getTransaction().begin();
@@ -292,6 +347,38 @@ public class AnforderungDao implements Serializable{
 		
 		
 	}
+	
+	public void deleteKriterium(Integer id) {
+		EntityManager em = JpaUtil.getEntityManager();
+		try {
+			em.getTransaction().begin();
+			model.Akzeptanzkriterium kriterium = em.find(model.Akzeptanzkriterium.class, id);
+			System.out.println("kriterium (Methode): "+  kriterium.getId() );
+			if(kriterium != null ) {
+				em.remove(kriterium);
+			}
+			
+			
+			model.Akzeptanzkriterium proof = em.find(model.Akzeptanzkriterium.class, id);
+			if(proof == null) {
+				System.out.println("K gelöscht");
+
+			} else {
+				System.out.println("K gelöscht");
+			}
+	        em.getTransaction().commit();
+
+		} catch(Exception e) {
+			 if (em.getTransaction().isActive()) {
+		            em.getTransaction().rollback();
+		        }
+		        e.printStackTrace();
+	    } finally {
+	        em.close(); // EntityManager schließen
+	    }
+		
+	}
+
 
 	public model.Anforderung getAnfAtIndex(int pos) {
 		EntityManager em = JpaUtil.getEntityManager();

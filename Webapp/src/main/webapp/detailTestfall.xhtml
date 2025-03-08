@@ -13,50 +13,42 @@
  	<h:form>
  	
 	 	<f:metadata>
-	    	<f:viewParam name="id" value="#{anforderungController.selectedId}" />
+	    	<f:viewParam name="id" value="#{testfallController.selectedId}" />
 		</f:metadata>
  		
  		
+ 
+ 		
  		<div class="button-container detail-button">
-	 		<p:linkButton outcome="/anforderungen.xhtml" styleClass="ui-button-flat" value="zurück" ajax="false" icon="pi pi-angle-left"></p:linkButton>
-	 		<p:commandLink action="#{editController.bearbeiten()}" value="Bearbeiten" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
-	 		<p:commandLink action="#{anforderungController.deleteAnf()}" value="Löschen" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
+	 		<p:linkButton outcome="/testfaelle.xhtml" styleClass="ui-button-flat" value="zurück" ajax="false" icon="pi pi-angle-left"></p:linkButton>
+	 		<p:commandLink action="#{testEditController.bearbeiten()}" value="Bearbeiten" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
+	 		<p:commandLink action="#{testfallController.deleteTest()}" value="Löschen" styleClass="ui-button-outlined rounded-button ui-button-secondary"/>
  		</div>
  		
  		<p:card class="detail-card">
  			<div class="flex card-top">
- 				 <h:outputText value="#{editController.selectedAnf.anfNr}"/>
+ 				 <h:outputText value="#{testEditController.selectedTest.nr}"/>
  				 <div class="anf-ersteller flex">
 	   		 	 	<p class="tablet-up">Erstellt von </p>
    		 	 		<p:avatar label="U" styleClass="mr-2 avatar" style="background-color:#9c27b0; color:#fff" shape="circle"  id="list-Ersteller"/>
    		 			<p:overlayPanel for="list-Ersteller" autoHide="false" showEvent="mouseover" hideEvent="mouseout">
-   		 				<h:outputText value="#{anforderungController.selectedAnf.ersteller.vorname}"/>
+   		 				<h:outputText value="#{testEditController.selectedTest.ersteller.vorname}"/>
    		 			</p:overlayPanel>
    		 			<!-- mitarbeiter to String nochmal überarbeiten -> kein zugriff -->
       		 	</div>
 
  			</div>
-	 		<h3>#{editController.selectedAnf.anfBezeichnung}</h3>
+	 		<h3>#{testEditController.selectedTest.bezeichnung}</h3>
 	 		<div class="detail-content">
 	 			<h4>Beschreibung</h4>
-	 			<h:outputText value="#{editController.selectedAnf.anfBezeichnung}"/>
+	 			<h:outputText value="#{testEditController.selectedTest.beschreibung}"/>
 	 			
 	 			<h4>Ziel/Absicht</h4>
-	 			<h:outputText value="#{editController.selectedAnf.anfZiel}"/>
+	 			<h:outputText value="#{testEditController.selectedTest.ziel}"/>
 	 			
-	 			<h4>Akzeptanzkriterien</h4>
-	 			<h:outputText value="#{editController.selectedAnf.anfBezeichnung}"/>
+	 		
 	 			
-	 			<h4>Voraussetzungen</h4>
-	 			<p:dataList value="#{editController.selectedAnf.anfKriterien}" var="kriterium">
-	 				<div class="product-list-item">
-	 					<h:outputText value="#{kriterium.akzeptanzBeschr}"/>
-	 				</div>
 	 			
-	 			</p:dataList>
-	 			
-	 			<h4>Testmethodik</h4>
-	 			<h:outputText value="#{editController.selectedAnf.anfBezeichnung}"/>
 	 		</div>
 		        
 		    
