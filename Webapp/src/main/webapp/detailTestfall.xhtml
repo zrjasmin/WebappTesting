@@ -6,9 +6,9 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
      
  <ui:composition template="WEB-INF/template/template.xhtml">
- 	<ui:define name="title">Details: Anforderung</ui:define>
+ 	<ui:define name="title">Details: Testfall</ui:define>
  	
- 	<ui:define name="pagename">Details: Anforderungen</ui:define>
+ 	<ui:define name="pagename">Details: Testfall</ui:define>
  	<ui:define name="content">
  	<h:form>
  	
@@ -46,8 +46,29 @@
 	 			<h4>Ziel/Absicht</h4>
 	 			<h:outputText value="#{testEditController.selectedTest.ziel}"/>
 	 			
-	 		
+	 			<h4>Voraussetzungen</h4>
+	 			<p:dataList value="#{testEditController.selectedTest.voraussetzungen}" var="voraussetzung">
+	 				<div class="product-list-item">
+	 					<h:outputText value="#{voraussetzung.voraussetzungBeschr}"/>
+	 				</div>
 	 			
+	 			</p:dataList>
+	 			
+	 			<h4>Testschritte</h4>
+	 			<p:dataList value="#{testEditController.selectedTest.testschritte}" var="testschritt">
+	 				<div class="product-list-item">
+	 					<h:outputText value="#{testschritt.schrittBeschr}"/>
+	 				</div>
+	 			
+	 			</p:dataList>
+	 			
+	 			
+	 		
+	 			<h4>Erwartetes Ergebnis</h4>
+	 			<h:outputText value="#{testEditController.selectedTest.erwartetesErgebnis}"/>
+	 			
+	 			<h4>Anmerkungen zum Testfall</h4>
+	 			<h:outputText value="#{testEditController.selectedTest.anmerkung}"/>
 	 			
 	 		</div>
 		        

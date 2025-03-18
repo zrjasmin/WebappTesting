@@ -33,10 +33,37 @@
  				 <p:outputLabel for="ziel" value="Ziel/Absicht"/>
  				 <p:inputTextarea id="ziel" value="#{testEditController.selectedTest.ziel}" required="true" rows="3" cols="55" maxlength="150"/>
  				 
+ 				 <p:outputLabel value="Voraussetzung"/>
+ 				 <div>
+	 				 <ui:repeat value="#{testEditController.voraussetzungen}" var="voraussetzung">
+	 				 	<p:inputText value="#{voraussetzung.voraussetzungBeschr}"/>
+	 				 	<h:commandButton value="Löschen" action="#{testEditController.deleteVoraussetzung(voraussetzung)}" />
+	 				 </ui:repeat>
+	 					<h:commandButton value="neuer Schritt" action="#{testEditController.addVoraussetzung()}" />
+	 				
+ 				 </div>
+ 				
+ 				
+ 				 <p:outputLabel value="Testschritte"/>
+ 				 <div>
+	 				 <ui:repeat value="#{testEditController.schritte}" var="schritt">
+	 				 	<p:inputText value="#{schritt.schrittBeschr}"/>
+	 				 	<h:commandButton value="Löschen" action="#{testEditController.deleteSchritt(schritt)}" />
+	 				 </ui:repeat>
+	 				 <h:commandButton value="neuer Schritt" action="#{testEditController.addSchritt()}" />
+	 				
+ 				 </div>
+ 				 
+ 				 
  				
  				 
- 				 
  			
+ 				<p:outputLabel for="ergebnis" value="erwartetes Ergebnis"/>
+ 				<p:inputTextarea id="ergebnis" value="#{testEditController.selectedTest.erwartetesErgebnis}" rows="3" cols="55" maxlength="150"/>
+ 				 
+ 				<p:outputLabel for="anmerkung" value="Anmerkungen zum Testfall"/>
+ 				<p:inputTextarea id="anmerkung" value="#{testEditController.selectedTest.anmerkung}" rows="3" cols="55" maxlength="150"/>
+ 				 
  				
  				
  				<h:commandButton value="Anforderung speichern" action="#{testEditController.updateOrCreate}"/>

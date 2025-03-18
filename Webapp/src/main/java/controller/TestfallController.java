@@ -2,6 +2,9 @@ package controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.Hibernate;
+
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -39,9 +42,11 @@ public class TestfallController implements Serializable {
 	}
 	
 	public String selectTestfall(Integer id) {
+		
 		selectedTest = testDao.findTest(id);
 		setSelectedId(id);
 		System.out.println("ausgewählte Anforderung: " + selectedTest.getTestId());
+
 		return "detailTestfall?faces-redirect=true&id=" + selectedTest.getTestId();
 			
 	}

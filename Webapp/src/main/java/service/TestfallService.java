@@ -24,10 +24,16 @@ public class TestfallService implements Serializable{
 	public static final List<model.Testfall> testListe = new ArrayList<>();
 	
 	
+	
 	public TestfallService() {
 		testDao = new dao.TestfallDao();
-		/*model.Testfall t1 = new model.Testfall("hdh", "hh", "hfh", "hh");
+		
+		/*model.Testschritte schritt = new model.Testschritte("jfjf");
+		List<model.Testschritte> schritte = new ArrayList<>();
+		schritte.add(schritt);
+		model.Testfall t1 = new model.Testfall("hdh", "hh", "hfh", "hh", schritte);
 		testListe.add(t1);*/
+		testListe.clear();
 		testListe.addAll(getTestListe());
 		//testDao.addTest(1, t1);
 	}
@@ -53,32 +59,37 @@ public class TestfallService implements Serializable{
 	               
 	            }
 	        }
-			
-			
 		}
-		
-	
-        
-		
+
 		return String.format("TF-%03d", nextNumber);
 	}
 	
 	
-	public void anfErstellen(model.Testfall neuerTest) {
-			
-			System.out.println("service:" + arbeiterController.getAktuellerMitarbeiter().getVorname());
-	
+	public void anfErstellen(model.Testfall neuerTest, List<model.Testschritte> schritte, List<model.Voraussetzung> voraussetzungen) {
 			neuerTest.setErsteller(arbeiterController.getAktuellerMitarbeiter());
-			
+			neuerTest.setTestschritte(schritte);
+			neuerTest.setVoraussetzungen(voraussetzungen);
 			neuerTest.setNr(generateNumber());
 			testDao.addTest(neuerTest.getErsteller().getArbeiterId(), neuerTest);
 		}
 
-	public void testUpdaten(model.Testfall test) {
-		System.out.println("wir updatet die Anforderung");
-		//test.setAnfKriterien(kriterien);
+	public void testUpdaten(model.Testfall test, List<model.Testschritte> schritte, List<model.Voraussetzung> voraussetzungen) {
+		System.out.println("wir updatet den Testfall");
+		test.setTestschritte(schritte);
+		test.setVoraussetzungen(voraussetzungen);
 		
 		testDao.updateTest(test);
+	}
+	
+	
+	public model.Testfall getTestfall(Integer id) {
+		model.Testfall testfall = testDao.findTest(id);
+		
+		if(testfall != null && testfall.getTestschritte() != null) {
+			testfall.getTestschritte().size();
+			}
+		
+		return testfall;
 	}
 	
 	

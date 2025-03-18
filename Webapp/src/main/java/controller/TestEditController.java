@@ -22,6 +22,8 @@ public class TestEditController implements Serializable {
 	
 	private model.Testfall selectedTest;	
 	private Integer selectedId;
+	private List<model.Testschritte> schritte = new ArrayList<model.Testschritte>();
+	private List<model.Voraussetzung> voraussetzungen = new ArrayList<model.Voraussetzung>();
 	
 	@PostConstruct
 	 public void init() {
@@ -32,7 +34,10 @@ public class TestEditController implements Serializable {
            try {
            	selectedId = Integer.valueOf(idParam);
            	setSelectedTest(testDao.findTest(selectedId));
+           	schritte.addAll(selectedTest.getTestschritte());
+           	voraussetzungen.addAll(selectedTest.getVoraussetzungen());
    	        System.out.println("initialisierung: ID " + selectedId);
+   	       
            
            } catch (NumberFormatException e) {
             
@@ -53,10 +58,12 @@ public class TestEditController implements Serializable {
 	}
 	
 	public String bearbeiten() {
-		//neueKriterien.clear();
-		//neueKriterien.addAll(selectedAnf.getAnfKriterien());
-		
-		System.out.println("Anforderung bearbeiten " + selectedTest.getTestId() );
+		schritte.clear();
+		schritte.addAll(selectedTest.getTestschritte());
+		voraussetzungen.clear();
+		voraussetzungen.addAll(selectedTest.getVoraussetzungen());
+
+		System.out.println("Anforderung bearbeiten " + selectedTest.getTestId());
 	
 	return "editTestfall.xhtml?faces-redirect=true&id=" + selectedTest.getTestId();
 }
@@ -67,19 +74,12 @@ public class TestEditController implements Serializable {
 		System.out.println("Updaten oder Speichern");
 		
 		if(selectedTest.getTestId() == null || !(testDao.exist(selectedId))) {
-			//selectedAnf
-			System.out.println("selectedID: "+  selectedId);
 			testSpeichern();
-			
 			Integer lastCreated = testDao.getLetzteAnf().getTestId();
-			System.out.println(lastCreated);
-			
 			redirect = "detailTestfall?faces-redirect=true&id=" + lastCreated;
 					
-			System.out.println("Testfall wird neu erstellt");
 		} else {
-			
-			service.testUpdaten(selectedTest);
+			service.testUpdaten(selectedTest, schritte, voraussetzungen);
 			redirect =  "detailTestfall?faces-redirect=true&id=" + selectedTest.getTestId();
 		}
 	
@@ -92,10 +92,49 @@ public class TestEditController implements Serializable {
 		System.out.println(selectedId);
 
 		
-		service.anfErstellen(selectedTest);
+		service.anfErstellen(selectedTest, schritte, voraussetzungen);
 		selectedTest = new model.Testfall();
-		
+		schritte.clear();
+		voraussetzungen.clear();
 		
 		
 		}
+	
+	
+	public List<model.Testschritte> getSchritte() {
+		return schritte;
+	}
+	
+	
+	
+	public void addSchritt() {
+		schritte.add(new model.Testschritte());
+	}
+	
+	public String deleteSchritt(model.Testschritte schritt) {
+		schritte.remove(schritt);
+		testDao.deleteSchritt(schritt.getId());
+		return "";
+	}
+
+	public List<model.Voraussetzung> getVoraussetzungen() {
+		return voraussetzungen;
+	}
+
+	public void setVoraussetzungen(List<model.Voraussetzung> voraussetzungen) {
+		this.voraussetzungen = voraussetzungen;
+	}
+	
+	
+	public void addVoraussetzung() {
+		voraussetzungen.add(new model.Voraussetzung());
+	}
+	
+	public String deleteVoraussetzung(model.Voraussetzung voraussetzung) {
+		voraussetzungen.remove(voraussetzung);
+		testDao.deleteVoraussetzung(voraussetzung.getId());
+		return "";
+	}
+	
+	
 }
