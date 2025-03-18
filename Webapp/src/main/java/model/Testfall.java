@@ -40,8 +40,6 @@ public class Testfall implements Serializable {
 	@OneToMany(mappedBy="test", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<model.Testschritte> testschritte = new ArrayList<>();
 	
-	@OneToMany(mappedBy="test", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<model.Voraussetzung> voraussetzungen = new ArrayList<>();
 	
 	
 
@@ -125,20 +123,13 @@ public class Testfall implements Serializable {
 	}
 	
 	public String getErwartetesErgebnis() {
-		return anmerkung;
+		return erwartetesErgebnis;
 	}
 
 	public void setErwartetesErgebnis(String erwartetesErgebnis) {
 		this.erwartetesErgebnis = erwartetesErgebnis;
 	}
 	
-	public List<model.Voraussetzung> getVoraussetzungen() {
-		return voraussetzungen;
-	}
-	
-	public void setVoraussetzungen(List<model.Voraussetzung> voraussetzungen) {
-		this.voraussetzungen = voraussetzungen;
-	}
-	
+
 	
 }

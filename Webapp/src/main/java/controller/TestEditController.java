@@ -23,7 +23,7 @@ public class TestEditController implements Serializable {
 	private model.Testfall selectedTest;	
 	private Integer selectedId;
 	private List<model.Testschritte> schritte = new ArrayList<model.Testschritte>();
-	private List<model.Voraussetzung> voraussetzungen = new ArrayList<model.Voraussetzung>();
+//	private List<model.Voraussetzung> voraussetzungen = new ArrayList<model.Voraussetzung>();
 	
 	@PostConstruct
 	 public void init() {
@@ -35,7 +35,7 @@ public class TestEditController implements Serializable {
            	selectedId = Integer.valueOf(idParam);
            	setSelectedTest(testDao.findTest(selectedId));
            	schritte.addAll(selectedTest.getTestschritte());
-           	voraussetzungen.addAll(selectedTest.getVoraussetzungen());
+        //   	voraussetzungen.addAll(selectedTest.getVoraussetzungen());
    	        System.out.println("initialisierung: ID " + selectedId);
    	       
            
@@ -50,6 +50,7 @@ public class TestEditController implements Serializable {
 	}
 
 	public model.Testfall getSelectedTest() {
+		System.out.println(selectedTest.getErwartetesErgebnis());
 		return selectedTest;
 	}
 
@@ -60,8 +61,8 @@ public class TestEditController implements Serializable {
 	public String bearbeiten() {
 		schritte.clear();
 		schritte.addAll(selectedTest.getTestschritte());
-		voraussetzungen.clear();
-		voraussetzungen.addAll(selectedTest.getVoraussetzungen());
+		//voraussetzungen.clear();
+		//voraussetzungen.addAll(selectedTest.getVoraussetzungen());
 
 		System.out.println("Anforderung bearbeiten " + selectedTest.getTestId());
 	
@@ -79,7 +80,7 @@ public class TestEditController implements Serializable {
 			redirect = "detailTestfall?faces-redirect=true&id=" + lastCreated;
 					
 		} else {
-			service.testUpdaten(selectedTest, schritte, voraussetzungen);
+			service.testUpdaten(selectedTest, schritte);
 			redirect =  "detailTestfall?faces-redirect=true&id=" + selectedTest.getTestId();
 		}
 	
@@ -92,10 +93,10 @@ public class TestEditController implements Serializable {
 		System.out.println(selectedId);
 
 		
-		service.anfErstellen(selectedTest, schritte, voraussetzungen);
+		service.anfErstellen(selectedTest, schritte);
 		selectedTest = new model.Testfall();
 		schritte.clear();
-		voraussetzungen.clear();
+		//voraussetzungen.clear();
 		
 		
 		}
@@ -117,7 +118,7 @@ public class TestEditController implements Serializable {
 		return "";
 	}
 
-	public List<model.Voraussetzung> getVoraussetzungen() {
+	/*public List<model.Voraussetzung> getVoraussetzungen() {
 		return voraussetzungen;
 	}
 
@@ -135,6 +136,6 @@ public class TestEditController implements Serializable {
 		testDao.deleteVoraussetzung(voraussetzung.getId());
 		return "";
 	}
-	
+	*/
 	
 }

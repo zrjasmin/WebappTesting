@@ -33,15 +33,7 @@
  				 <p:outputLabel for="ziel" value="Ziel/Absicht"/>
  				 <p:inputTextarea id="ziel" value="#{testEditController.selectedTest.ziel}" required="true" rows="3" cols="55" maxlength="150"/>
  				 
- 				 <p:outputLabel value="Voraussetzung"/>
- 				 <div>
-	 				 <ui:repeat value="#{testEditController.voraussetzungen}" var="voraussetzung">
-	 				 	<p:inputText value="#{voraussetzung.voraussetzungBeschr}"/>
-	 				 	<h:commandButton value="Löschen" action="#{testEditController.deleteVoraussetzung(voraussetzung)}" />
-	 				 </ui:repeat>
-	 					<h:commandButton value="neuer Schritt" action="#{testEditController.addVoraussetzung()}" />
-	 				
- 				 </div>
+ 				
  				
  				
  				 <p:outputLabel value="Testschritte"/>

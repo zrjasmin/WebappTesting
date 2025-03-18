@@ -32,8 +32,11 @@ public class ArbeiterController implements Serializable{
 	public ArbeiterController() {
 		dao = new dao.ArbeiterDao();
 		arbeiter = dao.alleArbeiter();
+		
 		if(!arbeiter.isEmpty()) {
 			aktuellerMitarbeiter = arbeiter.get(0);
+		} else {
+			System.out.println("keine Mitarbeiter gefunden");
 		}
 
 		}

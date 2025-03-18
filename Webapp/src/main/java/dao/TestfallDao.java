@@ -103,7 +103,7 @@ public class TestfallDao implements Serializable{
 				}
 			}
 			
-			for(model.Voraussetzung voraussetzung : test.getVoraussetzungen()) {
+			/*for(model.Voraussetzung voraussetzung : test.getVoraussetzungen()) {
 				voraussetzung.setTest(test);
 				model.Voraussetzung bestehendeVoraussetzung; 
 				System.out.println("voraussetzung:  " + voraussetzung);
@@ -115,7 +115,7 @@ public class TestfallDao implements Serializable{
 					bestehendeVoraussetzung = em.find(model.Voraussetzung.class, voraussetzung.getId());
 					updateVoraussetzung(bestehendeVoraussetzung, voraussetzung);
 				}
-			}
+			}*/
 			
 			em.getTransaction().commit();
 				
@@ -138,10 +138,10 @@ public class TestfallDao implements Serializable{
             // Initialisiere die Testschritte
             Hibernate.initialize(test.getTestschritte());
         } 
-		if (test != null && test.getVoraussetzungen() != null) {
+		/*if (test != null && test.getVoraussetzungen() != null) {
             // Initialisiere die Voraussetzungen
             Hibernate.initialize(test.getVoraussetzungen());
-        }
+        }*/
 		
 		em.close();
 		return test;
@@ -164,7 +164,8 @@ public class TestfallDao implements Serializable{
 			testToUpdate.setZiel(test.getZiel());
 			testToUpdate.setAnmerkung(test.getAnmerkung());
 			testToUpdate.setTestschritte(updateSchritte(test));
-			testToUpdate.setVoraussetzungen(updateVoraussetzungen(test));
+			testToUpdate.setErwartetesErgebnis(test.getErwartetesErgebnis());
+			//testToUpdate.setVoraussetzungen(updateVoraussetzungen(test));
 
 			em.merge(testToUpdate);
 			em.getTransaction().commit();
@@ -320,7 +321,7 @@ public class TestfallDao implements Serializable{
 	
 	
 	
-	private List<model.Voraussetzung> updateVoraussetzungen(model.Testfall test) {
+	/*private List<model.Voraussetzung> updateVoraussetzungen(model.Testfall test) {
 		EntityManager em = JpaUtil.getEntityManager();
 		List<model.Voraussetzung> voraussetzungen = new ArrayList<>();
 		
@@ -401,7 +402,7 @@ public class TestfallDao implements Serializable{
 	        em.close(); // EntityManager schließen
 	    }
 		
-	}
+	}*/
 	
 	
 	

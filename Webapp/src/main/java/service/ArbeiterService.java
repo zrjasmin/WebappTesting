@@ -28,14 +28,18 @@ public class ArbeiterService implements Serializable{
 	
 	public ArbeiterService() {
 		dao = new dao.ArbeiterDao();
-		//model.Arbeiter arbeiter2 = new model.Arbeiter("laura", "zimmer", "email", "url");
-		//arbeiterListe.add(arbeiter2);
-		//dao.createArbeiter(arbeiter2);
+		/*model.Arbeiter arbeiter1 = new model.Arbeiter("Jasmin", "Zimmer", "email", "url");
+		model.Arbeiter arbeiter2 = new model.Arbeiter("Laura", "Zimmer", "email", "url");
+		arbeiterListe.add(arbeiter2);
+		dao.createArbeiter(arbeiter2);
+		arbeiterListe.add(arbeiter1);
+		dao.createArbeiter(arbeiter1);
+		System.out.println(arbeiterListe);*/
 		arbeiterAsMap = dao.alleArbeiter();
 		
-		System.out.println(aktuellerMitarbeiter);
+		
 		aktuellerMitarbeiter = new model.Arbeiter();
-		System.out.println(aktuellerMitarbeiter);
+
 		onSubmit();
 
 	}

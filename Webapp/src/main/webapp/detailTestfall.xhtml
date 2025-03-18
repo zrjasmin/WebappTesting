@@ -46,13 +46,7 @@
 	 			<h4>Ziel/Absicht</h4>
 	 			<h:outputText value="#{testEditController.selectedTest.ziel}"/>
 	 			
-	 			<h4>Voraussetzungen</h4>
-	 			<p:dataList value="#{testEditController.selectedTest.voraussetzungen}" var="voraussetzung">
-	 				<div class="product-list-item">
-	 					<h:outputText value="#{voraussetzung.voraussetzungBeschr}"/>
-	 				</div>
 	 			
-	 			</p:dataList>
 	 			
 	 			<h4>Testschritte</h4>
 	 			<p:dataList value="#{testEditController.selectedTest.testschritte}" var="testschritt">
