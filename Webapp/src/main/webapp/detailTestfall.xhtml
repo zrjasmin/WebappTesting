@@ -56,6 +56,15 @@
 	 			
 	 			</p:dataList>
 	 			
+	 			<h4>Voraussetzung</h4>
+	 			<p:dataList value="#{testEditController.selectedTest.voraussetzungen}" var="v">
+	 				<div class="product-list-item">
+	 					<h:outputText value="#{v.voraussetzungBeschr}"/>
+	 					
+	 				</div>
+	 			
+	 			</p:dataList>
+	 			
 	 			
 	 		
 	 			<h4>Erwartetes Ergebnis</h4>

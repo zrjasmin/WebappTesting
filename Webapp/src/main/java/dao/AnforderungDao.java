@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.processing.Find;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -104,6 +105,12 @@ public class AnforderungDao implements Serializable{
 	public model.Anforderung findAnf(Integer id) {
 		EntityManager em = JpaUtil.getEntityManager();
 		model.Anforderung anf = em.find(model.Anforderung.class, id);
+		
+		if (anf != null && anf.getAnfKriterien() != null) {
+            // Initialisiere die anf
+            Hibernate.initialize(anf.getAnfKriterien());
+        } 
+		
 		em.close();
 		return anf;
 	}

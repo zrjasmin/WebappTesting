@@ -46,6 +46,16 @@
 	 				
  				 </div>
  				 
+ 				 <p:outputLabel value="Voraussetzung"/>
+ 				 <div>
+	 				 <ui:repeat value="#{testEditController.voraussetzungen}" var="v">
+	 				 	<p:inputText value="#{v.voraussetzungBeschr}"/>
+	 				 	<h:commandButton value="Löschen" action="#{testEditController.deleteVoraussetzung(v)}" />
+	 				 	
+	 				 </ui:repeat>
+	 				<h:commandButton value="neuer Schritt" action="#{testEditController.addVoraussetzung()}" />
+ 				 </div>
+ 				 
  				 
  				
  				 

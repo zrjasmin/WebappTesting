@@ -9,6 +9,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import model.Voraussetzung;
 
 @Named
 @ViewScoped
@@ -23,7 +24,7 @@ public class TestEditController implements Serializable {
 	private model.Testfall selectedTest;	
 	private Integer selectedId;
 	private List<model.Testschritte> schritte = new ArrayList<model.Testschritte>();
-//	private List<model.Voraussetzung> voraussetzungen = new ArrayList<model.Voraussetzung>();
+	private List<model.Voraussetzung> voraussetzungen= new ArrayList<model.Voraussetzung>();
 	
 	@PostConstruct
 	 public void init() {
@@ -35,22 +36,20 @@ public class TestEditController implements Serializable {
            	selectedId = Integer.valueOf(idParam);
            	setSelectedTest(testDao.findTest(selectedId));
            	schritte.addAll(selectedTest.getTestschritte());
-        //   	voraussetzungen.addAll(selectedTest.getVoraussetzungen());
-   	        System.out.println("initialisierung: ID " + selectedId);
-   	       
-           
+           	voraussetzungen.addAll(selectedTest.getVoraussetzungen());
+
            } catch (NumberFormatException e) {
             
            }
+       	}
        }
-}
 	
 	public TestEditController() {
 		selectedTest = new model.Testfall();
+		
 	}
 
-	public model.Testfall getSelectedTest() {
-		System.out.println(selectedTest.getErwartetesErgebnis());
+	public model.Testfall getSelectedTest() {	
 		return selectedTest;
 	}
 
@@ -61,26 +60,25 @@ public class TestEditController implements Serializable {
 	public String bearbeiten() {
 		schritte.clear();
 		schritte.addAll(selectedTest.getTestschritte());
-		//voraussetzungen.clear();
-		//voraussetzungen.addAll(selectedTest.getVoraussetzungen());
+		voraussetzungen.clear();
+		voraussetzungen.addAll(selectedTest.getVoraussetzungen());
 
-		System.out.println("Anforderung bearbeiten " + selectedTest.getTestId());
-	
 	return "editTestfall.xhtml?faces-redirect=true&id=" + selectedTest.getTestId();
 }
 	
 	
 	public String updateOrCreate(){	
 		String redirect;
-		System.out.println("Updaten oder Speichern");
-		
+				
 		if(selectedTest.getTestId() == null || !(testDao.exist(selectedId))) {
 			testSpeichern();
 			Integer lastCreated = testDao.getLetzteAnf().getTestId();
+			
 			redirect = "detailTestfall?faces-redirect=true&id=" + lastCreated;
 					
 		} else {
-			service.testUpdaten(selectedTest, schritte);
+			service.testUpdaten(selectedTest, schritte, voraussetzungen);
+			
 			redirect =  "detailTestfall?faces-redirect=true&id=" + selectedTest.getTestId();
 		}
 	
@@ -88,15 +86,10 @@ public class TestEditController implements Serializable {
 	}
 	
 	public void testSpeichern() {
-		
-		System.out.println("neue Anforderung wird erstellt");
-		System.out.println(selectedId);
-
-		
-		service.anfErstellen(selectedTest, schritte);
+		service.anfErstellen(selectedTest, schritte, voraussetzungen);
 		selectedTest = new model.Testfall();
 		schritte.clear();
-		//voraussetzungen.clear();
+		voraussetzungen.clear();
 		
 		
 		}
@@ -117,25 +110,24 @@ public class TestEditController implements Serializable {
 		testDao.deleteSchritt(schritt.getId());
 		return "";
 	}
-
-	/*public List<model.Voraussetzung> getVoraussetzungen() {
+	
+	
+	public List<model.Voraussetzung> getVoraussetzungen() {
+		for(model.Voraussetzung v : voraussetzungen) {
+			System.out.println("voraussetzungen: " + v.getVoraussetzungBeschr());
+		}
 		return voraussetzungen;
 	}
 
-	public void setVoraussetzungen(List<model.Voraussetzung> voraussetzungen) {
-		this.voraussetzungen = voraussetzungen;
-	}
-	
-	
 	public void addVoraussetzung() {
 		voraussetzungen.add(new model.Voraussetzung());
 	}
-	
-	public String deleteVoraussetzung(model.Voraussetzung voraussetzung) {
-		voraussetzungen.remove(voraussetzung);
-		testDao.deleteVoraussetzung(voraussetzung.getId());
+	public String deleteVoraussetzung(model.Voraussetzung v) {
+		voraussetzungen.remove(v);
+		testDao.deleteVoraussetzung(v.getId());
 		return "";
 	}
-	*/
+	
+	
 	
 }

@@ -65,19 +65,20 @@ public class TestfallService implements Serializable{
 	}
 	
 	
-	public void anfErstellen(model.Testfall neuerTest, List<model.Testschritte> schritte) {
+	public void anfErstellen(model.Testfall neuerTest, List<model.Testschritte> schritte, List<model.Voraussetzung> voraussetzungen) {
 			neuerTest.setErsteller(arbeiterController.getAktuellerMitarbeiter());
 			neuerTest.setTestschritte(schritte);
-			//neuerTest.setVoraussetzungen(voraussetzungen);
+			neuerTest.setVoraussetzungen(voraussetzungen);
 			neuerTest.setNr(generateNumber());
 			testDao.addTest(neuerTest.getErsteller().getArbeiterId(), neuerTest);
 		}
 
-	public void testUpdaten(model.Testfall test, List<model.Testschritte> schritte) {
+	
+	public void testUpdaten(model.Testfall test, List<model.Testschritte> schritte, List<model.Voraussetzung> voraussetzungen) {
 		System.out.println("wir updatet den Testfall");
 		test.setTestschritte(schritte);
-		//test.setVoraussetzungen(voraussetzungen);
-		
+		test.setVoraussetzungen(voraussetzungen);
+	
 		testDao.updateTest(test);
 	}
 	
@@ -87,6 +88,10 @@ public class TestfallService implements Serializable{
 		
 		if(testfall != null && testfall.getTestschritte() != null) {
 			testfall.getTestschritte().size();
+			}
+		
+		if(testfall != null && testfall.getVoraussetzungen() != null) {
+			testfall.getVoraussetzungen().size();
 			}
 		
 		return testfall;

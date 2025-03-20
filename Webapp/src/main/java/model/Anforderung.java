@@ -27,7 +27,7 @@ public class Anforderung implements Serializable {
 	private String anfZiel;
 	private String anfRisiko;
 	
-	@OneToMany(mappedBy="anforderung", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy="anforderung", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<model.Akzeptanzkriterium> anfKriterien = new ArrayList<>();
 	
 	@ManyToOne

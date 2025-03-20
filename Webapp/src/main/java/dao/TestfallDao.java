@@ -103,19 +103,25 @@ public class TestfallDao implements Serializable{
 				}
 			}
 			
-			/*for(model.Voraussetzung voraussetzung : test.getVoraussetzungen()) {
-				voraussetzung.setTest(test);
-				model.Voraussetzung bestehendeVoraussetzung; 
-				System.out.println("voraussetzung:  " + voraussetzung);
-				addVoraussetzung(voraussetzung, test);
+			for(model.Voraussetzung v : test.getVoraussetzungen()) {
+				v.setTest(test);
+				model.Voraussetzung bestehendeV; 
+
+				addVoraussetzung(v, test);
 				
-				if(voraussetzung.getId() == null ||  em.find(model.Voraussetzung.class, voraussetzung.getId()) == null) {
-					addVoraussetzung(voraussetzung, test);
+				if(v.getId() == null ||  em.find(model.Voraussetzung.class, v.getId()) == null) {
+					addVoraussetzung(v, test);
 				} else {
-					bestehendeVoraussetzung = em.find(model.Voraussetzung.class, voraussetzung.getId());
-					updateVoraussetzung(bestehendeVoraussetzung, voraussetzung);
+					bestehendeV = em.find(model.Voraussetzung.class, v.getId());
+					updateVoraussetzung(bestehendeV, v);
 				}
-			}*/
+			}
+			
+			for(model.Voraussetzung v : test.getVoraussetzungen()) {
+				v.setTest(test);
+				System.out.println("add Test: " + v.getVoraussetzungBeschr());
+			}
+			
 			
 			em.getTransaction().commit();
 				
@@ -138,10 +144,13 @@ public class TestfallDao implements Serializable{
             // Initialisiere die Testschritte
             Hibernate.initialize(test.getTestschritte());
         } 
-		/*if (test != null && test.getVoraussetzungen() != null) {
+		
+
+		if (test != null && test.getVoraussetzungen() != null) {
             // Initialisiere die Voraussetzungen
             Hibernate.initialize(test.getVoraussetzungen());
-        }*/
+        } 
+	
 		
 		em.close();
 		return test;
@@ -156,7 +165,7 @@ public class TestfallDao implements Serializable{
 		try {
 			em.getTransaction().begin();
 			testToUpdate =  findTest(test.getTestId());
-			
+			System.out.println("updateTest " + test.getVoraussetzungen());
 			
 			
 			testToUpdate.setBeschreibung(test.getBeschreibung());
@@ -165,7 +174,7 @@ public class TestfallDao implements Serializable{
 			testToUpdate.setAnmerkung(test.getAnmerkung());
 			testToUpdate.setTestschritte(updateSchritte(test));
 			testToUpdate.setErwartetesErgebnis(test.getErwartetesErgebnis());
-			//testToUpdate.setVoraussetzungen(updateVoraussetzungen(test));
+			testToUpdate.setVoraussetzungen(test.getVoraussetzungen());
 
 			em.merge(testToUpdate);
 			em.getTransaction().commit();
@@ -263,6 +272,8 @@ public class TestfallDao implements Serializable{
 		
 	}
 	
+	
+	
 	public void intialisiereTestschritte(Integer id) {
 		EntityManager em = JpaUtil.getEntityManager();
 		model.Testfall test= em.find(model.Testfall.class, id);
@@ -318,48 +329,13 @@ public class TestfallDao implements Serializable{
 	}
 	
 	
-	
-	
-	
-	/*private List<model.Voraussetzung> updateVoraussetzungen(model.Testfall test) {
+	public void addVoraussetzung(model.Voraussetzung v, model.Testfall test) {
 		EntityManager em = JpaUtil.getEntityManager();
-		List<model.Voraussetzung> voraussetzungen = new ArrayList<>();
-		
-		for(model.Voraussetzung voraussetzung : test.getVoraussetzungen()) {
-			
-			if(voraussetzung.getId() == null) {
-				
-				addVoraussetzung(voraussetzung, test);
-				voraussetzungen.add(voraussetzung);
-			} else {
-				
-				model.Voraussetzung bestehendesKriterium = em.find(model.Voraussetzung.class, voraussetzung.getId());
-				
-				if(bestehendesKriterium != null) {
-					updateVoraussetzung(bestehendesKriterium, voraussetzung);
-					voraussetzungen.add(bestehendesKriterium);
-				} else {
-					System.out.println("Kriterium nicht gefunden");
-				}
-			}
-			
-		}
-		return voraussetzungen;
-		
-	}
-	
-	
-	
-	
-	
-	public void addVoraussetzung(model.Voraussetzung voraussetzung, model.Testfall test) {
-		EntityManager em = JpaUtil.getEntityManager();
-		System.out.println("Schritte zu Test: " + test.getTestId());
-		voraussetzung.setTest(test);
+		v.setTest(test);
 		
 		try {
 			em.getTransaction().begin();
-			em.persist(voraussetzung);
+			em.persist(v);
 			em.getTransaction().commit();
 		} catch(Exception e) {
 			if (em.getTransaction().isActive()) {
@@ -371,26 +347,49 @@ public class TestfallDao implements Serializable{
 	    
 	    }	
 		
+
 	}
-	public void updateVoraussetzung(model.Voraussetzung altVoraussetzung, model.Voraussetzung neuVoraussetzung) {
-		altVoraussetzung.setVoraussetzungBeschr(neuVoraussetzung.getVoraussetzungBeschr());
+	
+	public void updateVoraussetzung(model.Voraussetzung altV, model.Voraussetzung neuV) {
+		altV.setVoraussetzungBeschr(neuV.getVoraussetzungBeschr());
 		
 	}
 	
-	
+	private List<model.Voraussetzung> updateVoraussetzung(model.Testfall test) {
+		EntityManager em = JpaUtil.getEntityManager();
+		List<model.Voraussetzung> voraussetzungen = new ArrayList<>();
+		
+		for(model.Voraussetzung v : test.getVoraussetzungen()) {
+			
+			if(v.getId() == null) {
+				
+				addVoraussetzung(v, test);
+				voraussetzungen.add(v);
+			} else {
+				
+				model.Voraussetzung bestehendeVoraussetzung = em.find(model.Voraussetzung.class, v.getId());
+				
+				if(bestehendeVoraussetzung != null) {
+					updateVoraussetzung(bestehendeVoraussetzung, v);
+					voraussetzungen.add(bestehendeVoraussetzung);
+				} else {
+					System.out.println("Kriterium nicht gefunden");
+				}
+			}
+			
+		}
+		return voraussetzungen;
+		
+	}
 	
 	public void deleteVoraussetzung(Integer id) {
 		EntityManager em = JpaUtil.getEntityManager();
 		try {
 			em.getTransaction().begin();
 			model.Voraussetzung voraussetzung = em.find(model.Voraussetzung.class, id);
-			System.out.println("voraussetzung (Methode): "+  voraussetzung.getId() );
 			if(voraussetzung != null ) {
 				em.remove(voraussetzung);
 			}
-			
-			
-			
 	        em.getTransaction().commit();
 
 		} catch(Exception e) {
@@ -402,7 +401,10 @@ public class TestfallDao implements Serializable{
 	        em.close(); // EntityManager schließen
 	    }
 		
-	}*/
+	}
+	
+	
+	
 	
 	
 	

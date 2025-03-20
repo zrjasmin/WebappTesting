@@ -45,7 +45,6 @@ public class TestfallController implements Serializable {
 		
 		selectedTest = testDao.findTest(id);
 		setSelectedId(id);
-		System.out.println("ausgewählte Anforderung: " + selectedTest.getTestId());
 
 		return "detailTestfall?faces-redirect=true&id=" + selectedTest.getTestId();
 			
