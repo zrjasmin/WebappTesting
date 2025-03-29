@@ -57,13 +57,19 @@
 	 			
 	 			<h4>Testmethodik</h4>
 	 			<h:outputText value="#{editController.selectedAnf.anfBezeichnung}"/>
+	 			
+	 			<h4>verknüpfte Anforderungen</h4>
+	 			<p:dataList value="#{editController.selectedAnf.verknüpfteAnforderungen}" var="a">
+	 				<div class="product-list-item">
+	 					<h:outputText value="#{a.anfBezeichnung}"/>
+	 				</div>
+	 			</p:dataList>
+	 			
+	 			 <p:button href="editTestfall.xhtml" value="Testfall erstellen" styleClass="rounded-button ui-button-help" />
+	 			
 	 		</div>
-		        
-		    
-	    
 	 		
-	 		
- 		</p:card>
+ 			</p:card>
  		
  		</h:form>
 

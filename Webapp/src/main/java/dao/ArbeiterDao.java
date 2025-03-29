@@ -9,11 +9,9 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import model.Arbeiter;
-import service.ArbeiterChange;
 
 @Named
 @ApplicationScoped
@@ -43,6 +41,7 @@ public class ArbeiterDao implements Serializable{
                 	em.persist(arbeiter);
                 }
                 
+                
                 t.commit();
                 em.close();
                 
@@ -61,6 +60,7 @@ public class ArbeiterDao implements Serializable{
         cq.select(criteriaBuilder.count(cq.from(model.Arbeiter.class)));
         return em.createQuery(cq).getSingleResult();
 	}
+	
 	
 	public Map<Integer, model.Arbeiter> alleArbeiter() {
 		EntityManager em = JpaUtil.getEntityManager();
@@ -81,6 +81,13 @@ public class ArbeiterDao implements Serializable{
 		return arbeiter;
 	}
 	
+/*	public List<model.Rolle> alleRollen() {
+		EntityManager em = JpaUtil.getEntityManager();
+		Query abfrage = em.createQuery("select a from Rolle a", model.Rolle.class);
+		List<model.Rolle> rollen = abfrage.getResultList();
+		return rollen;
+	}
+	*/
 	
 	public void createArbeiter(model.Arbeiter arbeiter) {
 		EntityManager em = JpaUtil.getEntityManager();
@@ -107,4 +114,74 @@ public class ArbeiterDao implements Serializable{
 	
 		
 	}
+	
+	/*public void saveRolle(model.Rolle rolle) {
+		EntityManager em = JpaUtil.getEntityManager();
+		em.getTransaction().begin();
+		try {
+			
+			if(rolle.getId() == null || em.find(model.Rolle.class, rolle.getId()) == null ) {
+				em.persist(rolle);
+			} else {
+				em.merge(rolle);
+			}
+			em.getTransaction().commit();
+			
+		} catch(Exception e) {
+			
+			if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback bei Fehlern
+	        }
+	        e.printStackTrace();
+		}
+		em.close();
+		
+	}*/
+	
+/*	public List<String> getBerechtigungen(Integer id) {
+		EntityManager em = JpaUtil.getEntityManager();
+	
+		 try {
+		        Rolle rolle = em.find(Rolle.class, id);
+
+		        if (rolle != null) {
+		            return rolle.getBerechtigungen(); // Gibt die Liste der Berechtigungen zurück
+		        } else {
+		            System.out.println("Die angegebene Rolle existiert nicht.");
+		            return null;
+		        }
+
+		    } finally {
+		        em.close(); // Stelle sicher, dass der EntityManager immer geschlossen wird
+		    }
+	}*/
+	
+/*	public boolean checkBerechtigung(model.Arbeiter arbeiter, String taetigkeit) {
+		EntityManager em = JpaUtil.getEntityManager();
+		em.getTransaction().begin();
+		boolean check =false;
+		try {
+			System.out.println(arbeiter.getRolle());
+			model.Rolle rolle = arbeiter.getRolle();
+			for(String b : rolle.getBerechtigungen()) {
+				System.out.print(b);
+						}
+			if(rolle != null)  {
+				rolle = em.find(model.Rolle.class, arbeiter.getRolle().getId());
+			}
+			 
+			 if (rolle != null && rolle.getBerechtigungen().contains(taetigkeit)) {
+	                check = true;
+	            }
+			
+		}  catch(Exception e) {
+			
+			if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback bei Fehlern
+	        }
+	        e.printStackTrace();
+		}
+		em.close();
+		return check;		
+	}*/
 }

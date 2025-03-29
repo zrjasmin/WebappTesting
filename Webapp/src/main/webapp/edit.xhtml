@@ -21,7 +21,7 @@
  			<p:panelGrid columns="1">
  				
  				<p:outputLabel value="Anforderungsnummer"/>
- 				<h:outputText value="#{anforderungController.showAnfNr()}"/>
+ 				<h:outputText value="#{anforderungService.generateNumber()}"/>
  				 
  				 <p:outputLabel for="bezeichnung" value="Bezeichnung"/>
  				 <div>
@@ -56,9 +56,19 @@
 	 				 <h:commandButton value="Neues Kriterium hinzufügen" action="#{editController.addKriterium()}" />
  				 </div>
  				 
- 			
- 				
- 				
+ 				 <p:outputLabel value="verknüpfte Anforderungen"/>
+ 				 <p:selectManyMenu id="verknüpfteAnf" value="#{editController.verknüpfteAnf}"
+                            converter="anfConverter"
+                        	filter="true" filterMatchMode="contains" filterNormalize="true"
+                            showCheckbox="true" styleClass="manymenu-advanced">
+		            <f:selectItems value="#{editController.alleAnf}" var="req" itemLabel="#{req.anfBezeichnung}"
+		                            itemValue="#{req}"/>
+						
+	        	</p:selectManyMenu>
+				<p:messages id="msgs" autoUpdate="true" />
+				
+					
+
  				<h:commandButton value="Anforderung speichern" action="#{editController.updateOrCreate}"/>
  				
 

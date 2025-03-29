@@ -1,8 +1,10 @@
 package service;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import jakarta.enterprise.context.SessionScoped;
@@ -17,30 +19,56 @@ public class ArbeiterService implements Serializable{
 	@Inject
 	private dao.ArbeiterDao dao;
 	
-	private model.Arbeiter arbeiter = new model.Arbeiter();
+	
 	private model.Arbeiter aktuellerMitarbeiter;
 
-    private Map<Integer, model.Arbeiter> arbeiterAsMap;
+  
 
 	public static List<model.Arbeiter> arbeiterListe = new ArrayList<>();
 	
 	
-	
 	public ArbeiterService() {
 		dao = new dao.ArbeiterDao();
-		/*model.Arbeiter arbeiter1 = new model.Arbeiter("Jasmin", "Zimmer", "email", "url");
-		model.Arbeiter arbeiter2 = new model.Arbeiter("Laura", "Zimmer", "email", "url");
-		arbeiterListe.add(arbeiter2);
+		/*String[] reBerechtigung = {"ANFORDERUNGEN_ERSTELLEN","ANFORDERUNGEN_AENDERN", "ANFORDERUNGEN_LOESCHEN"};
+		model.Rolle re = new model.Rolle("RE", reBerechtigung);
+		
+		String[] testerBerechtigung = {};
+		model.Rolle tester = new model.Rolle("TESTER", testerBerechtigung);
+		
+		String[] testfallErstellerBerechtigung = {"TESTFAELLE_ERSTELLEN", "TESTFAELLE_AENDERN", "TESTFAELLE_LOESCHEN"};
+		model.Rolle testfallErsteller = new model.Rolle("TESTFALLERSTELLER", testfallErstellerBerechtigung);
+		
+		String[] managerBerechtigung = {};
+		model.Rolle manager = new model.Rolle("MANAGER", managerBerechtigung);
+		
+		
+		dao.saveRolle(testfallErsteller);
+		dao.saveRolle(re);
+		dao.saveRolle(tester);
+		dao.saveRolle(manager);
+*/
+		/*model.Arbeiter arbeiter1 = new model.Arbeiter("Tester", "ee", "email", "url");
+	
+		model.Arbeiter arbeiter2 = new model.Arbeiter("RE", "ee", "email", "url");
+		
+		model.Arbeiter arbeiter3 = new model.Arbeiter("Manager", "ee", "email", "url");
+	
+		model.Arbeiter arbeiter4 = new model.Arbeiter("Testfallersteller", "ee", "email", "url");
+		
+		
+		dao.createArbeiter(arbeiter4);
 		dao.createArbeiter(arbeiter2);
-		arbeiterListe.add(arbeiter1);
+
+		dao.createArbeiter(arbeiter3);
 		dao.createArbeiter(arbeiter1);
-		System.out.println(arbeiterListe);*/
-		arbeiterAsMap = dao.alleArbeiter();
+		*/
+		arbeiterListe.clear();
+		arbeiterListe.addAll(getArbeiterListe());
+		
 		
 		
 		aktuellerMitarbeiter = new model.Arbeiter();
 
-		onSubmit();
 
 	}
 	
@@ -48,6 +76,7 @@ public class ArbeiterService implements Serializable{
 	public List<model.Arbeiter> getArbeiterListe() {
 		return arbeiterListe;
 	}
+
 	
 	public model.Arbeiter getAktuellerMitarbeiter() {
 		return aktuellerMitarbeiter;
@@ -58,12 +87,13 @@ public class ArbeiterService implements Serializable{
 		System.out.println("geänderter Mitarbeiter:" + arbeiter.getArbeiterId());
 	}
 	
-	public void onSubmit() {
-		System.out.println("Ausgewählter Arbeiter: ");
+	
+	//Berechtigungen managen
+	
+	
+	
+	
+}
+	
 
-	
-	
-	
-	
-	
-	}}
+

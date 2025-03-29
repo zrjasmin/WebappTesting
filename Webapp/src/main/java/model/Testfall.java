@@ -3,7 +3,6 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import jakarta.inject.Named;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -14,10 +13,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 @Named
-public class Testfall implements Serializable {
+public class Testfall implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,7 +43,9 @@ public class Testfall implements Serializable {
 	@OneToMany(mappedBy="test", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<model.Voraussetzung> voraussetzungen = new ArrayList<>();
 	
-	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "anf_id", referencedColumnName = "anfId")
+    private model.Anforderung anf;
 
 	public Testfall() {}
 	
@@ -140,4 +142,20 @@ public class Testfall implements Serializable {
 	public void setVoraussetzungen(List<model.Voraussetzung> voraussetzungen) {
 		this.voraussetzungen = voraussetzungen;
 	}
+	
+	public model.Anforderung getAnf() {
+		return anf;
+	}
+
+	public void setAnf(model.Anforderung anf) {
+		this.anf = anf;
+	}
+	
+	
+
+	 
+
+	   
+	
+	
 }

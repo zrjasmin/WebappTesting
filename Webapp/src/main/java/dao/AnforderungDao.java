@@ -3,8 +3,10 @@ package dao;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,6 +23,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import model.Anforderung;
+import model.Arbeiter;
 import service.AnforderungService;
 
 @Named
@@ -81,10 +84,6 @@ public class AnforderungDao implements Serializable{
 				
 	}
 	
-	
-	
-	
-	
 	public long getAnfCount() {
 		EntityManager em = JpaUtil.getEntityManager();
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
@@ -101,6 +100,7 @@ public class AnforderungDao implements Serializable{
 		return anforderungen;
 	}
 	
+
 	//bestimmte Anforderung finden
 	public model.Anforderung findAnf(Integer id) {
 		EntityManager em = JpaUtil.getEntityManager();
@@ -110,9 +110,37 @@ public class AnforderungDao implements Serializable{
             // Initialisiere die anf
             Hibernate.initialize(anf.getAnfKriterien());
         } 
+		if (anf != null && anf.getVerknüpfteAnforderungen() != null) {
+            // Initialisiere die anf
+            Hibernate.initialize(anf.getVerknüpfteAnforderungen());
+        } 
 		
 		em.close();
 		return anf;
+	}
+	
+	public void intialisiereKriterien(Integer id) {
+		EntityManager em = JpaUtil.getEntityManager();
+		model.Anforderung anf= em.find(model.Anforderung.class, id);
+		
+		if (anf != null && anf.getAnfKriterien() != null) {
+            // Initialisiere die Testschritte
+            Hibernate.initialize(anf);
+        } 
+           
+        
+	}
+	
+	public void intialisiereVerknüpfteAnf(Integer id) {
+		EntityManager em = JpaUtil.getEntityManager();
+		model.Anforderung anf= em.find(model.Anforderung.class, id);
+	
+		if (anf != null && anf.getVerknüpfteAnforderungen() != null) {
+            // Initialisiere die Testschritte
+            Hibernate.initialize(anf);
+        }
+           
+        
 	}
 
 	
@@ -120,17 +148,19 @@ public class AnforderungDao implements Serializable{
 	/*speichert Anforderung und deren Ersteller*/
 	public void saveAnf(long mitarbeiterID, model.Anforderung anf) {
 		EntityManager em = JpaUtil.getEntityManager();
-		em.getTransaction().begin();
 		
 		try {
+			em.getTransaction().begin();
 			//Mitarbeiter festlegen
 			anf.setErsteller(em.find(model.Arbeiter.class, mitarbeiterID));
 			
-			if(anf.getAnfId() == null || em.find(model.Anforderung.class, anf.getAnfId()) == null) {
+			
+			if(anf.getAnfId() == null) {
 				em.persist(anf);
-			} else {
+			}else {
 				em.merge(anf);
 			}
+			
 			
 			for(model.Akzeptanzkriterium kriterium : anf.getAnfKriterien()) {
 				kriterium.setAnforderung(anf);
@@ -143,25 +173,29 @@ public class AnforderungDao implements Serializable{
 					updateKriterium(bestehendesKriterium, kriterium);
 				}
 			}
+			
+			
+			
+			
+	
 			em.getTransaction().commit();
-				
 		} catch (Exception e) {
 			if (em.getTransaction().isActive()) {
 	            em.getTransaction().rollback(); // Rollback bei Fehlern
 	        }
 	        e.printStackTrace();
 		}
-	
-		
+
 		em.close();
 	}
-	
+		
 
 	public model.Anforderung updateAnf(model.Anforderung anf) {
 		System.out.println("wird updaten in der Datenbank");
 		EntityManager em = JpaUtil.getEntityManager();
 		model.Anforderung anfToUpdate = null; 
-		
+		System.out.println("updaten" + anf.getVerknüpfteAnforderungen());
+
 		
 		try {
 			em.getTransaction().begin();
@@ -176,9 +210,9 @@ public class AnforderungDao implements Serializable{
 			//überarbeiten -> id wird nicht geladen
 			
 			List<model.Akzeptanzkriterium> kriterien = updateKriterien(anf);
-			
-			
 			anfToUpdate.setAnfKriterien(kriterien);
+			
+			manageVerknüpfteAnforderungen(anf, anf.getVerknüpfteAnforderungen());
 			em.merge(anfToUpdate);
 			em.getTransaction().commit();
 			
@@ -227,52 +261,153 @@ public class AnforderungDao implements Serializable{
 		 
 	}
 	
-	
-	public void deleteRequirement(Integer requirementId) {
+	public void manageVerknüpfteAnforderungen(model.Anforderung anf,  List<model.Anforderung> verknüpfteAnf) {
 		EntityManager em = JpaUtil.getEntityManager();
+		
+		try {
+			 System.out.println("abgeänderte Anf: " +verknüpfteAnf);
+			em.getTransaction().begin();
+			 //Liste der alten Verknüpfungen
+			if(anf.getAnfId() != null) {
+				System.out.println(anf.getAnfId());
 
+				model.Anforderung existingAnf = em.find(Anforderung.class, anf.getAnfId());
+				
+				 if(existingAnf != null) {
+					 
+					 List<model.Anforderung> alteVerknüpfungen = existingAnf.getVerknüpfteAnforderungen();			 
+						System.out.println("in DB gespeichert: " + alteVerknüpfungen);
+						
+					 
+					 //fügt neue Verknüpfungen hinzu
+					 for (model.Anforderung a : verknüpfteAnf) {
+						 model.Anforderung gesuchteAnf = em.find(model.Anforderung.class, a.getAnfId());
+			                if (gesuchteAnf != null &&!alteVerknüpfungen.contains(a)) {
+			                	System.out.println("hinzugefügte Anforderung: "+ a.getAnfBezeichnung());
+			                	alteVerknüpfungen.add(gesuchteAnf);
+			                	gesuchteAnf.getVerknüpfteAnforderungen().add(existingAnf);		                
+			                	}
+			            }
+					 
+					 //löschte veraltete Verknüpfungen
+					 for(model.Anforderung a : new ArrayList<>(alteVerknüpfungen)) {
+						 if(!verknüpfteAnf.contains(a)) {
+							 System.out.println("zulöschen Anforderung: "+ a.getAnfBezeichnung());
+							 alteVerknüpfungen.remove(a);
+			                	a.getVerknüpfteAnforderungen().remove(existingAnf);		               
+			                	}
+
+						
+						 }
+					 existingAnf.setVerknüpfteAnforderungen(alteVerknüpfungen);
+					 em.merge(existingAnf);
+					 } else {
+						System.out.println("gibt es nicht");
+					 }
+			} else  {
+				List<model.Anforderung> neueVerknüpfungen = anf.getVerknüpfteAnforderungen();
+				
+				for(model.Anforderung a : neueVerknüpfungen) {
+					if(a.getAnfId() == null) {
+						em.persist(a);
+					}
+					a.getVerknüpfteAnforderungen().add(anf);
+					
+				}
+				
+				anf.setVerknüpfteAnforderungen(neueVerknüpfungen);
+			}
+	
+			 em.getTransaction().commit();
+		} catch(Exception e) {
+			 if (em.getTransaction().isActive()) {
+		            em.getTransaction().rollback();
+		        }
+		        throw e; // Oder handle den Fehler entsprechend
+		    } finally {
+		        em.close();
+		    }
+		}
+		 
+	
+	public void deleteAnforderung(model.Anforderung anf) {
+	    EntityManager em = JpaUtil.getEntityManager();
 	    try {
 	        em.getTransaction().begin();
 
 	        // Anforderung finden
-	        model.Anforderung requirement = em.find(model.Anforderung.class, requirementId);
-	        if (requirement == null) {
+	        model.Anforderung anforderung = em.find(model.Anforderung.class, anf.getAnfId());
+	        if (anforderung == null) {
 	            throw new IllegalArgumentException("Anforderung nicht gefunden.");
 	        }
 
-	        
-	        for(model.Akzeptanzkriterium kriterium : requirement.getAnfKriterien()) {
-	        	deleteKriterium(kriterium.getId());
+	        // Akzeptanzkriterien löschen
+	        List<model.Akzeptanzkriterium> akzeptanzKriterien = anforderung.getAnfKriterien();
+	        for (model.Akzeptanzkriterium kriterium : akzeptanzKriterien) {
+	            em.remove(em.contains(kriterium) ? kriterium : em.merge(kriterium));
 	        }
-	        // Alle verbundenen Kriterien werden automatisch gelöscht,
-	        // wenn CascadeType.ALL und orphanRemoval=true gesetzt sind.
-	        em.remove(requirement); // Anforderung löschen
 
-	        em.getTransaction().commit();
-	    } catch (IllegalArgumentException e) {
-	        if (em.getTransaction().isActive()) {
-	            em.getTransaction().rollback();
+	        manageVerknüpfteAnforderungen(anforderung, new ArrayList<>());
+
+	        // Sicherstellen, dass anforderung verwaltet wird
+	        if (!em.contains(anforderung)) {
+	            anforderung = em.merge(anforderung);
 	        }
-	        System.out.println(e.getMessage());
-	    } catch (PersistenceException e) {
+
+	        // Anforderung löschen
+	        em.remove(anforderung);
+
+	        // Commit der Transaktion
 	        if (em.getTransaction().isActive()) {
-	            em.getTransaction().rollback();
+	            em.getTransaction().commit();
+	            System.out.println("Transaktion erfolgreich committed.");
+	        } else {
+	            System.out.println("Die Transaktion war nicht aktiv beim Commit-Versuch.");
 	        }
-	        System.out.println("Fehler beim Löschen: " + e.getMessage());
+
 	    } catch (Exception e) {
+	        System.out.println("Ein Fehler ist aufgetreten: " + e.getMessage());
+
 	        if (em.getTransaction().isActive()) {
 	            em.getTransaction().rollback();
+	            System.out.println("Transaktion zurückgerollt.");
 	        }
-	        e.printStackTrace();
+
 	    } finally {
-	        em.close(); // EntityManager schließen
+	        em.close(); // Schließe den EntityManager im finally-Block
 	    }
 	}
+	
+	
+	/*public void deletAnf(model.Anforderung anf) {
+		EntityManager em = JpaUtil.getEntityManager();
+		
+		System.out.println("Test löschen: " + anf.getAnfId());
+		
+		try {
+			em.getTransaction().begin();
+			model.Testfall deleteTest = em.find(model.Testfall.class, test.getTestId());
+			if(deleteTest != null) {
+				em.remove(deleteTest);
+			} 
+			em.getTransaction().commit();
+	
+		} catch(Exception e) {
+			if (em.getTransaction().isActive()) {
+	            em.getTransaction().rollback(); // Rollback bei Fehlern
+	        }
+	        e.printStackTrace();
+		}
+		finally {
+			em.close();
+		}
+		 
+	}*/
 	
 	//prüft die Existenz einer Anforderung
 	public void prüfeAnf(model.Anforderung anf, Integer id) {
 		if (anf == null) {
-            throw new IllegalArgumentException("Anforderung nicht gefunden: " + anf.getAnfId());
+            throw new IllegalArgumentException("Anforderung nicht gefunden: ");
         }
 	}
 	
@@ -295,6 +430,8 @@ public class AnforderungDao implements Serializable{
 	    }	
 		
 	}
+	
+
 
 	public void updateKriterium(model.Akzeptanzkriterium altKriterium, model.Akzeptanzkriterium neuKriterium) {
 		altKriterium.setAkzeptanzBeschr(neuKriterium.getAkzeptanzBeschr());
@@ -385,6 +522,7 @@ public class AnforderungDao implements Serializable{
 	    }
 		
 	}
+	
 
 
 	public model.Anforderung getAnfAtIndex(int pos) {

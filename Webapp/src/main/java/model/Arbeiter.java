@@ -2,7 +2,9 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.inject.Named;
 import jakarta.persistence.CascadeType;
@@ -11,7 +13,12 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+
+
+
 
 @Entity
 @Named
@@ -25,6 +32,9 @@ public class Arbeiter implements Serializable {
 	private String nachname;
 	private String email;
 	private String bildUrl;
+
+	
+	
 	
 	@OneToMany(mappedBy="mitarbeiter", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<model.Anforderung> anforderungen = new ArrayList<>();
@@ -79,7 +89,8 @@ public class Arbeiter implements Serializable {
 		this.bildUrl = bildUrl;
 	}
 	
-	
+
+
 	@Override
 	public boolean equals(Object obj) {
 	    if (this == obj) return true;
@@ -89,6 +100,5 @@ public class Arbeiter implements Serializable {
 
 	    return this.arbeiterId == other.arbeiterId; // Vergleich nach ID
 	}
-
 	
 }

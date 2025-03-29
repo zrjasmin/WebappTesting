@@ -66,7 +66,14 @@
  				<p:outputLabel for="anmerkung" value="Anmerkungen zum Testfall"/>
  				<p:inputTextarea id="anmerkung" value="#{testEditController.selectedTest.anmerkung}" rows="3" cols="55" maxlength="150"/>
  				 
- 				
+ 				<p:outputLabel for="anforderung" value="Anforderungen"/>
+               	<p:selectOneMenu id="anforderung" value="#{testEditController.basisAnf}" converter="#{anfConverter}" required="false">
+                    <f:selectItem itemLabel="Wähle eine Anforderung aus" itemValue=""/>
+                    <f:selectItems value="#{editController.alleAnf}" var="reqi" itemLabel="#{reqi.anfBezeichnung}"
+		                            itemValue="#{reqi.anfId}"/>
+                   
+                </p:selectOneMenu>
+                <p:messages id="msgs" autoUpdate="true" />
  				
  				<h:commandButton value="Anforderung speichern" action="#{testEditController.updateOrCreate}"/>
  				

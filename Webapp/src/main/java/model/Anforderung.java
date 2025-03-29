@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import jakarta.enterprise.context.RequestScoped;
@@ -13,7 +14,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Named
-public class Anforderung implements Serializable {
+public class Anforderung implements Serializable,  Comparable<model.Anforderung> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,13 +35,16 @@ public class Anforderung implements Serializable {
 	@JoinColumn(name="ersteller") 
 	private Arbeiter mitarbeiter;
 	
-	
-	//@ManyToOne(optional = false)
-	//@JoinColumn(name="ersteller_id", nullable=false)
-	//private Mitarbeiter ersteller;
-//	@ManyToMany(mappedBy = "anforderung")
-	//private Set<Testfall> testfall = new HashSet<>();
-	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "anforderung_verweis",
+        joinColumns = @JoinColumn(name = "anf_id"),
+        inverseJoinColumns = @JoinColumn(name = "verknüpfte_anf_id")
+    )
+    private List<model.Anforderung> verknüpfteAnforderungen = new ArrayList<>();
+
+	@OneToOne(mappedBy = "anf")
+    private model.Testfall testfall;
 	
 	
 	public Anforderung() {}
@@ -54,13 +58,14 @@ public class Anforderung implements Serializable {
 		
 	}
 	
-	public Anforderung(String anfNr, String anfBezeichnung, String anfBeschreibung, String anfZiel, String anfRisiko, List<Akzeptanzkriterium> anfKriterien) {
+	public Anforderung(String anfNr, String anfBezeichnung, String anfBeschreibung, String anfZiel, String anfRisiko, List<Akzeptanzkriterium> anfKriterien, List<model.Anforderung> verknüpfteAnf) {
 		this.anfNr = anfNr;
 		this.anfBezeichnung = anfBezeichnung;
 		this.anfBeschreibung = anfBeschreibung;
 		this.anfZiel = anfZiel;
 		this.anfRisiko = anfRisiko;
 		this.anfKriterien = anfKriterien;
+		this.verknüpfteAnforderungen = verknüpfteAnf;
 
 		
 		}
@@ -126,9 +131,48 @@ public class Anforderung implements Serializable {
 	}
 	
 	
+	public List<Anforderung> getVerknüpfteAnforderungen() {
+		return verknüpfteAnforderungen;
+	}
+	
+	public void setVerknüpfteAnforderungen(List<Anforderung> anforderungen) {
+		this.verknüpfteAnforderungen = anforderungen;
+	}
+	
+
 	
 	
 	
+	
+	  @Override
+	    public boolean equals(Object o) {
+	        if (this == o) {
+	            return true;
+	        }
+	        if (o == null || getClass() != o.getClass()) {
+	            return false;
+	        }
+	        model.Anforderung anf = (model.Anforderung) o;
+	        return Objects.equals(anfId, anf.anfId);               
+	        		
+	    }
+	
+	 @Override
+	    public int hashCode() {
+	        return Objects.hash(anfId);
+	    }
+
+	    @Override
+	    public String toString() {
+	        return anfBezeichnung;
+	    }
+	    
+	    @Override
+	    public int compareTo(model.Anforderung anf) {
+	        return Integer.compare(this.anfId, anf.anfId);
+	    }
+
+	   
 	
 	
 	

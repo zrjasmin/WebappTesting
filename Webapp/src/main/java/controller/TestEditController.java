@@ -2,7 +2,9 @@ package controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.context.FacesContext;
@@ -24,7 +26,8 @@ public class TestEditController implements Serializable {
 	private model.Testfall selectedTest;	
 	private Integer selectedId;
 	private List<model.Testschritte> schritte = new ArrayList<model.Testschritte>();
-	private List<model.Voraussetzung> voraussetzungen= new ArrayList<model.Voraussetzung>();
+	private List<model.Voraussetzung> voraussetzungen = new ArrayList<model.Voraussetzung>();
+	private model.Anforderung basisAnf;
 	
 	@PostConstruct
 	 public void init() {
@@ -57,6 +60,8 @@ public class TestEditController implements Serializable {
 		this.selectedTest = selectedTest;
 	}
 	
+	
+	
 	public String bearbeiten() {
 		schritte.clear();
 		schritte.addAll(selectedTest.getTestschritte());
@@ -88,8 +93,10 @@ public class TestEditController implements Serializable {
 	public void testSpeichern() {
 		service.anfErstellen(selectedTest, schritte, voraussetzungen);
 		selectedTest = new model.Testfall();
+		
 		schritte.clear();
 		voraussetzungen.clear();
+		
 		
 		
 		}
@@ -127,6 +134,17 @@ public class TestEditController implements Serializable {
 		testDao.deleteVoraussetzung(v.getId());
 		return "";
 	}
+
+	public model.Anforderung getBasisAnf() {
+		return basisAnf;
+	}
+
+	public void setBasisAnf(model.Anforderung basisAnf) {
+		this.basisAnf = basisAnf;
+	}
+
+
+
 	
 	
 	

@@ -55,17 +55,7 @@ public class AnforderungController implements Serializable {
 			
 	}
 	
-	public String showAnfNr() {
-		String nummer;
-		if(selectedAnf == null) {
-			nummer = service.generateNumber();
-			System.out.println("nummer "+nummer);
-		} else {
-			nummer = selectedAnf.getAnfNr();
-		}
-		
-		return nummer;
-	}
+
 	
 	public List<model.Akzeptanzkriterium> getNeueKriterien() {
 		return neueKriterien;
@@ -76,32 +66,27 @@ public class AnforderungController implements Serializable {
 		System.out.println("neues kriterium erstellt");
 	}
 	
-	
 
-
-	//wechselt zur Bearbeiten Seite (neue Anforderung)
-	public String neueAnfErstellen() {
-		selectedAnf = new model.Anforderung();
-		selectedAnf.setAnfNr(service.generateNumber());
-		if(neueKriterien != null) {
-			neueKriterien.clear();
-		}
-		System.out.println(selectedAnf.getAnfId());
-		return "edit.xhtml?faces-redirect=true";
-	}
-	
-
-	//Speichert neue Anforderung
-	
 	
 	public String deleteAnf() {
-		anfDao.deleteRequirement(selectedAnf.getAnfId());
-		System.out.println("ID zum löschen: " + selectedAnf.getAnfId());
+		anfDao.deleteAnforderung(selectedAnf);
 		return "/anforderungen.xhtml?faces-redirect=true";
 	}
 	
 	
-
+	public String showAnfNr() {
+		String nummer;
+		System.out.println("showAnf:" + selectedAnf);
+		if(selectedAnf == null) {
+			nummer = service.generateNumber();
+			
+			System.out.println("nummer "+ nummer);
+		} else {
+			nummer = selectedAnf.getAnfNr();
+		}
+		
+		return nummer;
+	}
 	
 
 	public Integer getSelectedId() {

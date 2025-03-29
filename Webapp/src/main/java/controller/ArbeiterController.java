@@ -35,9 +35,11 @@ public class ArbeiterController implements Serializable{
 		
 		if(!arbeiter.isEmpty()) {
 			aktuellerMitarbeiter = arbeiter.get(0);
+		
 		} else {
 			System.out.println("keine Mitarbeiter gefunden");
 		}
+        System.out.println(arbeiter);
 
 		}
 
@@ -45,6 +47,8 @@ public class ArbeiterController implements Serializable{
 	
 	
 	public void onArbeiterSelect() {
+        System.out.println("Wechsel");
+
         System.out.println("Ausgewählter Arbeiter ID: " + aktuellerMitarbeiter.getArbeiterId());
         System.out.println("Ausgewählter Arbeiter ID: " + aktuellerMitarbeiter);
         
@@ -57,12 +61,11 @@ public class ArbeiterController implements Serializable{
 	}
 	
 	public void setAktuellerMitarbeiter(model.Arbeiter aktuellerMitarbeiter) {
+		System.out.println("setting");
 		this.aktuellerMitarbeiter = aktuellerMitarbeiter;
 		System.out.println(aktuellerMitarbeiter.getVorname());
 
 	}
-
-
 
     public Map<Integer, model.Arbeiter> getArbeiter() {
         return arbeiter;
@@ -84,10 +87,15 @@ public class ArbeiterController implements Serializable{
 	        return selectedArbeiterId;
 	    }
 
-	    public void setSelectedArbeiterId(Integer selectedArbeiterId) {
-	        this.selectedArbeiterId = selectedArbeiterId;
-	    }
-
+    public void setSelectedArbeiterId(Integer selectedArbeiterId) {
+        this.selectedArbeiterId = selectedArbeiterId;
+    }
+    
+    public void checkBerechtigung() {
+		System.out.println(aktuellerMitarbeiter.getVorname());
+		
+		
+	}
 
 }
 

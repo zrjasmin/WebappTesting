@@ -2,6 +2,10 @@ package service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -24,24 +28,14 @@ public class AnforderungService implements Serializable{
 	private controller.ArbeiterController arbeiterController;
 
 	public static final List<model.Anforderung> anfListe = new ArrayList<>();	
+	private Map<Integer, model.Anforderung> anfAsMap;
 
 	public  AnforderungService() {
-		
 		anfDao = new dao.AnforderungDao();
 		
-		//	arbeiterService = new service.MitarbeiterService();
-		/*
-		model.Akzeptanzkriterium k1 = new model.Akzeptanzkriterium("Alle Produkte müssen mit Bild, Name und Preis angezeigt werden");
-		model.Akzeptanzkriterium k2 = new model.Akzeptanzkriterium("Die Produkte sollen nach Kategorien filterbar sein");
-		kriterien.add(k1);
-		kriterien.add(k2);
-		model.Anforderung a1 = new model.Anforderung("AR-004", "Produktkatalog anzeigen","Die Plattform soll einen Katalog aller verfügbaren Produkte anzeigen", 
-				" Benutzern ermöglichen, Produkte zu durchsuchen und auszuwählen.", "Hoch", kriterien );
-		anfListe.add(a1);
-		*/
-		anfListe.addAll(getAnfListe());
 		
-		//anfDao.saveAnf(2, a1);
+		anfListe.clear();
+		anfListe.addAll(getAnfListe());
 		
 	
 	}
@@ -62,24 +56,32 @@ public class AnforderungService implements Serializable{
 	}
 	
 	//erstellt neue Anforderung
-	public void anfErstellen(model.Anforderung neuerArtikel, List<model.Akzeptanzkriterium> kriterien) {
+	public void anfErstellen(model.Anforderung neuerArtikel, List<model.Akzeptanzkriterium> kriterien, List<model.Anforderung> verknüpfteAnf) {
 		
-		System.out.println("service:" + arbeiterController.getAktuellerMitarbeiter().getVorname());
-
 		neuerArtikel.setErsteller(arbeiterController.getAktuellerMitarbeiter());
 		
 		neuerArtikel.setAnfKriterien(kriterien);
+		
 		neuerArtikel.setAnfNr(generateNumber());
+
+	
+		System.out.println("service: " + verknüpfteAnf);
+
 		anfDao.saveAnf(neuerArtikel.getErsteller().getArbeiterId(), neuerArtikel);
+		System.out.println("service: " + verknüpfteAnf);
+		anfDao.manageVerknüpfteAnforderungen(neuerArtikel, verknüpfteAnf);
 	}
 	
 	//updatet bestehende Anforderung
-	public void anfUpdaten(model.Anforderung anf, List<model.Akzeptanzkriterium> kriterien) {
-		System.out.println("wir updatet die Anforderung");
+	public void anfUpdaten(model.Anforderung anf, List<model.Akzeptanzkriterium> kriterien, List<model.Anforderung> verknüpfteAnf) {		
 		anf.setAnfKriterien(kriterien);
-		
+		anf.setVerknüpfteAnforderungen(verknüpfteAnf);
 		anfDao.updateAnf(anf);
+		anfDao.manageVerknüpfteAnforderungen(anf, verknüpfteAnf);
+
 	}
+	
+	
 	
 	
 
@@ -92,9 +94,18 @@ public class AnforderungService implements Serializable{
 			String number = maxNr.substring(3);
 			nextNumber = Integer.parseInt(number) + 1;
 		}
-
-		
 		return String.format("AR-%03d", nextNumber);
+	}
+
+	public Map<Integer, model.Anforderung> getAnfAsMap() {
+		if(anfAsMap == null) {
+			anfAsMap = anfListe.stream().collect(Collectors.toMap(model.Anforderung::getAnfId, anforderung -> anforderung, (existing, replacement) -> existing));
+		}
+		return anfAsMap;
+	}
+
+	public void setAnfAsMap(Map<Integer, model.Anforderung> anfAsMap) {
+		this.anfAsMap = anfAsMap;
 	}
 	
 	
