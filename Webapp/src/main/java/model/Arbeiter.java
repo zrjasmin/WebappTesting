@@ -41,6 +41,10 @@ public class Arbeiter implements Serializable {
 	
 	@OneToMany(mappedBy="mitarbeiter", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<model.Testfall> testfall = new ArrayList<>();
+	
+	@ManyToOne
+    @JoinColumn(name = "rolle_id", nullable = false)
+    private Rolle rolle;
 
 	public Arbeiter() {
 		
@@ -51,6 +55,7 @@ public class Arbeiter implements Serializable {
 		this.nachname = nachname;
 		this.email = email;
 		this.bildUrl = url;
+
 	}
 	
 	public Integer getArbeiterId() {
@@ -87,6 +92,14 @@ public class Arbeiter implements Serializable {
 
 	public void setBildUrl(String bildUrl) {
 		this.bildUrl = bildUrl;
+	}
+	
+	public model.Rolle getRolle() {
+		return rolle;
+	}
+	
+	public void setRolle(model.Rolle rolle) {
+		this.rolle = rolle;
 	}
 	
 

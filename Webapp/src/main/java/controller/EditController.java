@@ -57,12 +57,8 @@ public class EditController implements Serializable {
             	if(selectedAnf != null) {
                 	neueKriterien.addAll(selectedAnf.getAnfKriterien());
                 	verknüpfteAnf.addAll(selectedAnf.getVerknüpfteAnforderungen());
-
-
             	}
-            	
-    
-    	       
+
             } catch (NumberFormatException e) {
              
             }

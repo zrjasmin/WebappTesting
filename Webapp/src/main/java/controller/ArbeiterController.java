@@ -39,21 +39,9 @@ public class ArbeiterController implements Serializable{
 		} else {
 			System.out.println("keine Mitarbeiter gefunden");
 		}
-        System.out.println(arbeiter);
-
-		}
-
-	
-	
-	
-	public void onArbeiterSelect() {
-        System.out.println("Wechsel");
-
-        System.out.println("Ausgewählter Arbeiter ID: " + aktuellerMitarbeiter.getArbeiterId());
-        System.out.println("Ausgewählter Arbeiter ID: " + aktuellerMitarbeiter);
         
-        // Hier kannst du weitere Logik hinzufügen
-    }
+	}
+
 	
 
 	public model.Arbeiter getAktuellerMitarbeiter() {

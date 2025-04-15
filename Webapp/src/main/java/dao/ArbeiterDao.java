@@ -1,14 +1,18 @@
 package dao;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import model.Arbeiter;
@@ -115,15 +119,61 @@ public class ArbeiterDao implements Serializable{
 		
 	}
 	
-	/*public void saveRolle(model.Rolle rolle) {
+	
+	
+	
+	public void saveRolle(model.Rolle rolle) {
+		EntityManager em = JpaUtil.getEntityManager();
+		em.getTransaction().begin();
+		  try {
+		        // Überprüfen, ob es sich um eine neue Rolle handelt
+			  if(rolle.getId() == null) {
+				  Set<model.Berechtigung> berechtigungen = new HashSet<>();
+				  for(model.Berechtigung be : rolle.getBerechtigungen()) {
+				        
+			        	if(!em.contains(be)) {
+			        		be = em.merge(be);
+			        	} 
+			        	
+			        }
+				  
+		        	em.persist(rolle);
+		        } else {
+		        	em.merge(rolle);
+		        }
+
+		  
+		        em.getTransaction().commit(); // Transaktion abschließen
+
+		     }catch (Exception e) {
+		        if (em.getTransaction().isActive()) {
+		            em.getTransaction().rollback(); // Rollback bei Fehlern
+		        }
+		        e.printStackTrace();
+
+		    } finally {
+		        em.close(); // EntityManager schließen
+		    };
+		
+	}
+	
+	public model.Rolle findRolle(String rolle) {
+		EntityManager em = JpaUtil.getEntityManager();
+		TypedQuery<model.Rolle> q = em.createQuery("select a from Rolle a where a.name= :rolle", model.Rolle.class);
+		model.Rolle rolleAbfrage = q.setParameter("rolle", rolle).getSingleResult();
+		return rolleAbfrage;
+
+	}
+	
+	public void saveBerechtigung(model.Berechtigung berechtigung) {
 		EntityManager em = JpaUtil.getEntityManager();
 		em.getTransaction().begin();
 		try {
 			
-			if(rolle.getId() == null || em.find(model.Rolle.class, rolle.getId()) == null ) {
-				em.persist(rolle);
+			if(berechtigung.getId() == null || em.find(model.Berechtigung.class, berechtigung.getId()) == null ) {
+				em.persist(berechtigung);
 			} else {
-				em.merge(rolle);
+				em.merge(berechtigung);
 			}
 			em.getTransaction().commit();
 			
@@ -135,53 +185,13 @@ public class ArbeiterDao implements Serializable{
 	        e.printStackTrace();
 		}
 		em.close();
-		
-	}*/
+	}
 	
-/*	public List<String> getBerechtigungen(Integer id) {
+	public model.Berechtigung findBerechtigung(Integer id) {
 		EntityManager em = JpaUtil.getEntityManager();
-	
-		 try {
-		        Rolle rolle = em.find(Rolle.class, id);
-
-		        if (rolle != null) {
-		            return rolle.getBerechtigungen(); // Gibt die Liste der Berechtigungen zurück
-		        } else {
-		            System.out.println("Die angegebene Rolle existiert nicht.");
-		            return null;
-		        }
-
-		    } finally {
-		        em.close(); // Stelle sicher, dass der EntityManager immer geschlossen wird
-		    }
-	}*/
-	
-/*	public boolean checkBerechtigung(model.Arbeiter arbeiter, String taetigkeit) {
-		EntityManager em = JpaUtil.getEntityManager();
-		em.getTransaction().begin();
-		boolean check =false;
-		try {
-			System.out.println(arbeiter.getRolle());
-			model.Rolle rolle = arbeiter.getRolle();
-			for(String b : rolle.getBerechtigungen()) {
-				System.out.print(b);
-						}
-			if(rolle != null)  {
-				rolle = em.find(model.Rolle.class, arbeiter.getRolle().getId());
-			}
-			 
-			 if (rolle != null && rolle.getBerechtigungen().contains(taetigkeit)) {
-	                check = true;
-	            }
-			
-		}  catch(Exception e) {
-			
-			if (em.getTransaction().isActive()) {
-	            em.getTransaction().rollback(); // Rollback bei Fehlern
-	        }
-	        e.printStackTrace();
-		}
+		model.Berechtigung b = em.find(model.Berechtigung.class, id);
 		em.close();
-		return check;		
-	}*/
+		return b;
+	}
+
 }
